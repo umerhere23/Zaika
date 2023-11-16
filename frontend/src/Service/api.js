@@ -19,14 +19,7 @@ export const getApplicant = async () => {
     }
 }
 
-// export const login = async (loginData) => {
-//     try {
-//         const response = await axios.post(`${baseUrl}/loginApplicants1`, loginData);
-//         return response.data; // Return the response data
-//     } catch (error) {
-//         throw error; // Throw the error for handling in the calling code
-//     }
-// }
+
 export const onAddRecipe = async (recipedata) => {
     try {
         const response = await axios.post(`${baseUrl}/AddRecipe`, recipedata);
@@ -66,27 +59,24 @@ export const fetchRecipes = async () => {
 export const loginApi = async (loginData) => {
   try {
     const response = await axios.post(`${baseUrl}/Loginroute`, loginData);
-
-    if (response.data) {
-      console.log('User Credentials:', response.data.email); // Log email address
-
-      return response.data;
-    } else {
-      console.error('Login response data is empty');
-      throw 'Login response data is empty';
-    }
+    return response.data;
   } catch (error) {
     if (error.response) {
-      console.error('Server returned an error:', error.response.data);
-      throw error.response.data; // Throw the server's error response data
-    } else if (error.request) {
-      console.error('No response received from the server');
-      throw 'No response received from the server'; // Throw a custom error message
+      // Handle response error from server
+      throw error.response.data;
     } else {
-      console.error('Error sending the request:', error.message);
-      throw 'Error sending the request'; // Throw a custom error message
+      // Handle other errors
+      throw new Error('An error occurred during the login request');
     }
   }
 };
-
-
+export const fetchUserDetails = async (email) => {
+  try {
+    const response = await axios.get(`${baseUrl}/UserData`, { params: { email } });
+    console.log("Succesful")
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    throw error;
+  }
+};

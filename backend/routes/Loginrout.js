@@ -1,11 +1,7 @@
-
 import express from 'express';
-import {  loginApplication } from '../controller/LoginController.js';
+import { login } from '../controller/LoginController.js';
 
 const router = express.Router();
-
-
-router.get("/", loginApplication);
-
+router.post('/', login); // Changed to match the root of the mounted route
 
 export default router;

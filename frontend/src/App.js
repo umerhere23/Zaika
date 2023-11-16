@@ -6,6 +6,8 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import AddRecipe from './components/AddRecipe';
 import AboutUS from './components/AboutUs';
+import Dashboard from './components/Dashboard.jsx';
+
 
 
 const App=()=>{
@@ -21,6 +23,8 @@ const App=()=>{
   <Route path="/login" element={<Login />}  />
   <Route path="/AddRecpie" element={<AddRecipe />}  />
   <Route path="/aboutUS" element={<AboutUS />}  />
+  <Route path="/dashboard" element={<Dashboard />}  />
+
 
 
 

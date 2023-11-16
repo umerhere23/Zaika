@@ -21,6 +21,8 @@ const Footer = () => {
                             <li><a href="/signup">Signup</a></li>
                             <li><a href="/AddRecpie">AddRecipe</a></li>
                             <li><a href="/login">Login</a></li>
+                            <li><a href="/dashboard">Dashboard</a></li>
+
 
 
 
