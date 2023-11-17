@@ -6,6 +6,7 @@ import Footer from './footer';
 const AddApplicant = () => {
     const [applicantData, setApplicantData] = useState({
       email: "",
+      Username:"",
       password: "",
       address: "",
       city: "",
@@ -16,7 +17,7 @@ const AddApplicant = () => {
     const [errors, setErrors] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false); // State to track if the form is submitted
 
-    const { email, password, address, city, state, zip } = applicantData;
+    const { email,Username, password, address, city, state, zip } = applicantData;
 
     const handleChange = (e) => {
         setApplicantData({ ...applicantData, [e.target.name]: e.target.value });
@@ -40,7 +41,9 @@ const AddApplicant = () => {
         if (!address.trim()) {
             errors.address = "Address is required";
         }
-
+        if (!Username.trim()) {
+            errors.address = "Username is required";
+        }
         if (!city.trim()) {
             errors.city = "City is required";
         }
@@ -97,6 +100,17 @@ const AddApplicant = () => {
                         onChange={(e) => handleChange(e)}
                     />
                     {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">UserName</label>
+                    <input
+                        type="text"
+                        className={`form-control ${errors.Username ? "is-invalid" : ""}`}
+                        name="Username"
+                        value={Username}
+                        onChange={(e) => handleChange(e)}
+                    />
+                    {errors.Username && <div className="invalid-feedback">{errors.Username}</div>}
                 </div>
                 {/* Password validation */}
                 <div className="mb-3">

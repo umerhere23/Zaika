@@ -1,4 +1,6 @@
 import Signup from "../Models/Login.js";
+import bcrypt from 'bcrypt';
+
 export const getApplications = async (req, res) => {
   try {
       const query = { "email": "444" };
@@ -11,20 +13,23 @@ export const getApplications = async (req, res) => {
 };
 
 export const createApplication = async (req, res) => {
-  const { email, password, address, city, state, zip } = req.body;
-
-  const newApplicant = new Signup({
-      email: email,
-      password: password,
-      address: address,
-      city: city,
-      state: state,
-      zip: zip
-  });
+  const { email, password, Username, address, city, state, zip } = req.body;
 
   try {
+      const hashedPassword = await bcrypt.hash(password, 12); // Hash the password
+
+      const newApplicant = new Signup({
+          email: email,
+          password: hashedPassword, // Store the hashed password
+          Username: Username,
+          address: address,
+          city: city,
+          state: state,
+          zip: zip
+      });
+
       await newApplicant.save();
-      res.status(201).json(newApplicant); // Respond with 201 for successful creation
+      res.status(201).json(newApplicant);
   } catch (error) {
       console.log("Error: Application not saved.");
       res.status(500).json({ message: "Failed to create application." });

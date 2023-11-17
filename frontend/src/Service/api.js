@@ -48,14 +48,7 @@ export const fetchRecipes = async () => {
         throw error; // Throw the error for handling in the calling code
     }
 }
-// export const loginApi = async (loginData) => {
-//   try {
-//     const response = await axios.post(`${baseUrl}/loginroute`, loginData);
-// return response.data; // Return the response data
-//   } catch (error) {
-//       throw error; // Throw the error for handling in the calling code
-//   }
-// }
+
 export const loginApi = async (loginData) => {
   try {
     const response = await axios.post(`${baseUrl}/Loginroute`, loginData);
@@ -70,13 +63,17 @@ export const loginApi = async (loginData) => {
     }
   }
 };
+
 export const fetchUserDetails = async (email) => {
   try {
-    const response = await axios.get(`${baseUrl}/UserData`, { params: { email } });
-    console.log("Succesful")
+    const response = await axios.get(`${baseUrl}/UserData`, {
+      params: { email }
+    });
+    console.log("Successful");
     return response.data;
   } catch (error) {
     console.error('Error fetching user details:', error);
+    console.log("unSuccessful");
     throw error;
   }
 };

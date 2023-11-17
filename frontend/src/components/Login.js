@@ -30,22 +30,22 @@ const Login = () => {
     });
   };
 
-  const showSuccessAndNavigate = (message) => {
-    toast.success(message, {
-      position: "top-center",
-      autoClose: 5000,
-      onClose: () => navigate("/dashboard", {
-        state: {
-          userEmail: email
-        }
-      }),
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
+
+    const showSuccessAndNavigate = (message) => {
+        toast.success(message, {
+            position: "top-center",
+            autoClose: 1000,            onClose: () => navigate("/dashboard", {
+              state: {
+                  userEmail: email
+              }
+          }),
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+    };
 
   const handleLogin = async (e) => {
     e.preventDefault();

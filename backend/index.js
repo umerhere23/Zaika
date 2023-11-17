@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import loginApplication from './routes/loginroutes.js'; 
 import recipeRoutes from './routes/recpie.js'; 
 import Loginroute from './routes/Loginrout.js';
-import FetchUserDetails from './routes/UserDetails.js';
+import UserData from './routes/UserDetails.js';
 const app = express(); 
 
 const connectionURL = "mongodb://127.0.0.1:27017/Zaika"; 
@@ -30,5 +30,4 @@ app.use('/loginApplicants1', loginApplication);
 app.use('/AddRecipe', recipeRoutes);
 app.use('/recipes', recipeRoutes); 
 app.use('/Loginroute', Loginroute);
-app.use('/UserData', FetchUserDetails);
-
+app.use('/UserData', UserData);
