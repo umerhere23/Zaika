@@ -7,27 +7,41 @@ import img4 from './img/img4.jpg';
 import Footer from './footer';
 import React, { useEffect, useState } from 'react';
 import { fetchRecipes } from '../Service/api';
-
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
+import "../components/CSS/Style.css"
 const Recipe = () => {
-    const [recipedetails, setRecipeDetails] = useState([]);
+  const [recipedetails, setRecipeDetails] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-    const fetchData = async () => {
-        try {
-            // Fetch recipes and set the state with the data
-            const result = await fetchRecipes();
-            setRecipeDetails(result);
-        } catch (error) {
-            console.error('Error:', error);
-        }
+  const fetchData = async () => {
+    try {
+      // Fetch recipes and set the state with the data
+      const result = await fetchRecipes();
+      setRecipeDetails(result);
+    } catch (error) {
+      console.error('Error:', error);
     }
+  };
 
+  const filteredRecipes = recipedetails.filter((recipe) =>
+    recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  useEffect(() => {
+    // Show toast when no recipes are found
+    if (filteredRecipes.length === 0 && searchTerm.trim() !== '') {
+      toast.error('No recipes found for the entered keyword.',{ autoClose: 1000 });
+    }
+  }, [filteredRecipes, searchTerm]);
     return (
         <>
-        
+       
+
         <div className="carousel-container">
         <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-inner">
@@ -71,33 +85,62 @@ const Recipe = () => {
         </div>
       </div>
     <div>
-    <h1>Avilable Recpies</h1>
+    <h1 className='fonts'>Avilable Recpies</h1>
     <div class="alert alert-warning " role="alert">
     <p className='msg'>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
 </div>
-                <div className="row">
-                    {recipedetails.map(details => (
-                        <div className="col-md-3 mb-2 box" key={details._id}>
-<div className="card" style={{ width: '300px', height: '350px',  }}>
+<div className="row">
+<div className="input-group mb-3 " style={{width:"30%",marginLeft:"30%"}}>
+        <label htmlFor="recipeSearch" className="visually-hidden">
+          Search by Recipe Name:
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="recipeSearch"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          placeholder="Search by Recipe Name"
+          aria-label="Search by Recipe Name"
+          aria-describedby="searchIcon"
+        />
+        <button
+          className="btn btn-primary"
+          type="button"
+          id="searchIcon"
+          style={{height:"46px"}}
 
-                                <div className="card-body">
-                                <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
+          onClick={() => toast('Recipe Found', { autoClose: 1000 })}
+        >
+          <i className="fas fa-search"></i>
+        </button>
+      </div>
 
-                                    <h5 className="card-title">Name: {details.name}</h5>
-                                    <p className="card-text">User Name: {details.userName}</p>
-                                    <p className="card-text">Ingredients: {details.ingredients}</p>
-                                    <p className="card-text">Instructions: {details.instructions}</p>
-                                    <p className="card-text">Time to Cook: {details.timeToCook}</p>
-                                    <p className="card-text">Email: {details.email}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+
+          {/* Toast for no recipe found */}
+          <ToastContainer />
+<br></br>          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+          {filteredRecipes.map((details) => (
+            <div className="col-md-3 mb-2 box" key={details._id}>
+              <div className="card" style={{ width: '300px', height: '350px' }}>
+                <div className="card-body">
+                  <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
+                  <h5 className="card-title">Name: {details.name}</h5>
+                  <p className="card-text">User Name: {details.userName}</p>
+                  <p className="card-text">Ingredients: {details.ingredients}</p>
+                  <p className="card-text">Instructions: {details.instructions}</p>
+                  <p className="card-text">Time to Cook: {details.timeToCook}</p>
+                  <p className="card-text">Email: {details.email}</p>
                 </div>
+              </div>
             </div>
-            <Footer />
-        </>
-    );
+          ))}
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 };
 
 export default Recipe;
