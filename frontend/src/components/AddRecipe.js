@@ -96,7 +96,7 @@ const AddRecipe = () => {
           reader.readAsDataURL(imageBlob);
       
           reader.onloadend = () => {
-            const base64String = reader.result;
+            const base64String = reader.result;   
         // Save the base64 string to Local Storage
         localStorage.setItem(imagePath, base64String);
       };
