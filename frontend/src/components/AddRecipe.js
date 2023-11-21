@@ -84,8 +84,26 @@ const AddRecipe = () => {
     const addDetails = async (e) => {
         e.preventDefault();
 
-        if (validateForm()) {
-            await onAddRecipe(recipedata);
+        if (validateForm()) { 
+
+          const basePath = './img/'; // Replace with your desired path
+          const fileName = `${recipedata.name.replace(/\s+/g, '_')}.png`; // Using the recipe name as the filename
+          const imagePath = `${basePath}/${fileName}`;
+      
+          const imageBlob = recipedata.image;
+          const reader = new FileReader();
+      
+          reader.readAsDataURL(imageBlob);
+      
+          reader.onloadend = () => {
+            const base64String = reader.result;
+        // Save the base64 string to Local Storage
+        localStorage.setItem(imagePath, base64String);
+      };
+        console.log(`Image "${fileName}" saved to Local Storage`);
+
+        await onAddRecipe(recipedata);
+
             setIsSubmitted(true);
         }
     }

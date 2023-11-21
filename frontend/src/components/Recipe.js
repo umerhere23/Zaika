@@ -5,6 +5,8 @@ import a2 from './img/a2.webp';
 import b3 from './img/b3.jpg';
 import img4 from './img/img4.jpg';
 import Footer from './footer';
+import { Link, useNavigate } from 'react-router-dom';
+
 import React, { useEffect, useState } from 'react';
 import { fetchRecipes } from '../Service/api';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +15,7 @@ import "../components/CSS/Style.css"
 const Recipe = () => {
   const [recipedetails, setRecipeDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -38,6 +41,20 @@ const Recipe = () => {
       toast.error('No recipes found for the entered keyword.',{ autoClose: 1000 });
     }
   }, [filteredRecipes, searchTerm]);
+  const handleRecipeClick = (details) => {
+    navigate(`/recipes`, {
+      state: {
+        recipeName: details.name,
+        recipeId: details._id,
+        userName: details.userName,
+        ingredients: details.ingredients,
+        instructions: details.instructions,
+        timeToCook: details.timeToCook,
+        email: details.email,
+        
+      }
+    });
+  };
     return (
         <>
        
@@ -120,23 +137,21 @@ const Recipe = () => {
           {/* Toast for no recipe found */}
           <ToastContainer />
 <br></br>          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-
+<div className="row">
           {filteredRecipes.map((details) => (
-            <div className="col-md-3 mb-2 box" key={details._id}>
-              <div className="card" style={{ width: '300px', height: '350px' }}>
+            <div className="col-md-4 mb-4 " key={details._id} onClick={() => handleRecipeClick(details)}>
+              <div className="card h-100">
+                <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
                 <div className="card-body">
-                  <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
-                  <h5 className="card-title">Name: {details.name}</h5>
-                  <p className="card-text">User Name: {details.userName}</p>
-                  <p className="card-text">Ingredients: {details.ingredients}</p>
-                  <p className="card-text">Instructions: {details.instructions}</p>
-                  <p className="card-text">Time to Cook: {details.timeToCook}</p>
-                  <p className="card-text">Email: {details.email}</p>
+                  <h5 className="card-title">{details.name}</h5>
+                  <p className="card-text">User: {details.userName}</p>
+                  <p className="card-text">ID: {details._id}</p>
                 </div>
               </div>
             </div>
           ))}
-        </div>
+        </div>        </div>
+
       </div>
       <Footer />
     </>

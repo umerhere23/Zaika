@@ -77,3 +77,17 @@ export const fetchUserDetails = async (email) => {
     throw error;
   }
 };
+export const fetchRecipeById = async (id) => {
+  try {
+    const response = await fetch(`${baseUrl}/recipes/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching recipe by ID: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data; // Assuming the response is in JSON format
+  } catch (error) {
+    console.error('Error in fetchRecipeById:', error);
+    throw error;
+  }
+};

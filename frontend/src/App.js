@@ -7,8 +7,9 @@ import Login from './components/Login';
 import AddRecipe from './components/AddRecipe';
 import AboutUS from './components/AboutUs';
 import Dashboard from './components/Dashboard.jsx';
+import Recipes from './components/Recipe';
 
-
+import RecipeDetails from './components/RecipeDetails.jsx';
 
 const App=()=>{
   return(
@@ -25,6 +26,7 @@ const App=()=>{
   <Route path="/aboutUS" element={<AboutUS />}  />
   <Route path="/dashboard" element={<Dashboard />}  />
 
+  <Route path="/recipes" element={<RecipeDetails />} />
 
 
 
