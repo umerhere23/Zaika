@@ -9,7 +9,6 @@ const RecipeDetails = () => {
 
 
 
-  // Access recipe details from location state
   const { recipeName, recipeId ,userName,ingredients,instructions,timeToCook,email} = location.state || {};
 
   return (
@@ -22,7 +21,6 @@ const RecipeDetails = () => {
       <p>Time to Cook: {timeToCook}</p>
       <p>Email: {email}</p>
 
-      {/* Display additional details passed from Recipe component */}
       {recipeId && <p>Recipe ID from Recipe component: {recipeId}</p>}
     </div>
   );
