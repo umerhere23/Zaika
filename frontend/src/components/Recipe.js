@@ -134,24 +134,24 @@ const Recipe = () => {
       </div>
 
 
-          {/* Toast for no recipe found */}
           <ToastContainer />
 <br></br>          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 <div className="row">
-          {filteredRecipes.map((details) => (
-            <div className="col-md-4 mb-4 " key={details._id} onClick={() => handleRecipeClick(details)}>
-              <div className="card h-100">
-                <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
-                <div className="card-body">
-                  <h5 className="card-title">{details.name}</h5>
-                  <p className="card-text">User: {details.userName}</p>
-                  <p className="card-text">ID: {details._id}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>        </div>
+  {filteredRecipes.map((details) => (
+    <div className="col-md-4 mb-4" key={details._id} onClick={() => handleRecipeClick(details)}>
+      <div className="card h-100">
+        <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
+        <div className="card-body">
+          <h5 className="card-title">{details.name}</h5>
+          <p className="card-text">User: {details.userName}</p>
+          <p className="card-text">ID: {details._id}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
+        </div>
       </div>
       <Footer />
     </>
