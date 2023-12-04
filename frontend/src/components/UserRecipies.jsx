@@ -13,7 +13,7 @@ const UserRecipes = () => {
     if (userName) {
       fetchUserRecipesData(userName);
     }
-  }, [userName]); // Fix the dependency array
+  }, [userName]); // Include userName in the dependency array
 
   const fetchUserRecipesData = async (userName) => {
     try {
@@ -44,7 +44,7 @@ const UserRecipes = () => {
                 <h2>Your Recipes: {userName}</h2>
                 <ul>
                   {userRecipes.map((recipe) => (
-                    <li key={recipe._id}>{recipe.recipeName}</li>
+                    <li key={recipe._id}>{recipe.name}</li>
                   ))}
                 </ul>
               </div>

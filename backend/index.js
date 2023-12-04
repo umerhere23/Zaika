@@ -6,7 +6,7 @@ import loginApplication from './routes/loginroutes.js';
 import recipeRoutes from './routes/recpie.js'; 
 import Loginroute from './routes/Loginrout.js';
 import UserData from './routes/UserDetails.js';
-import UserDatas from './routes/UserDetails.js';
+import Feedback from './routes/FeedBack.js';
 
 const app = express(); 
 
@@ -35,3 +35,4 @@ app.use('/Loginroute', Loginroute);
 app.use('/UserData', UserData);
 app.use('/updateUser', UserData);
 app.use('/fetchUserRecipes', recipeRoutes);
+app.use('/saveFeedback',Feedback)

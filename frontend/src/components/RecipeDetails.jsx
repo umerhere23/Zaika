@@ -3,14 +3,18 @@ import { useParams, useLocation } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
 import Footer from './footer';
 import { toast } from 'react-toastify';
+import { saveFeedback } from '../Service/api';  
 
 const RecipeDetails = () => {
+  // Get recipe details from the location state
   const { id } = useParams();
   const location = useLocation();
-
   const { recipeName, userName, ingredients, instructions, timeToCook, email } = location.state || {};
+
+  // State for feedback form
   const [feedbackRating, setFeedbackRating] = useState(0);
   const [feedback, setFeedback] = useState('');
+  const [emailInput, setEmailInput] = useState(email || ''); // Added email input state
   const [isFeedbackValid, setIsFeedbackValid] = useState(true);
 
   // Handle rating change
@@ -18,40 +22,62 @@ const RecipeDetails = () => {
     setFeedbackRating(newRating);
   };
 
-  // Handle feedback change
+  // Handle feedback text change
   const handleFeedbackChange = (e) => {
     const feedbackValue = e.target.value;
     setFeedback(feedbackValue);
 
-    // Validate feedback (e.g., not empty)
     setIsFeedbackValid(feedbackValue.trim() !== '');
   };
 
+  // Handle email input change
+  const handleEmailChange = (e) => {
+    const emailValue = e.target.value;
+    setEmailInput(emailValue);
+  };
+
   // Handle feedback submission
-  const handleFeedbackSubmit = () => {
+  const handleFeedbackSubmit = async () => {
     if (isFeedbackValid) {
-      console.log('Submitting feedback:', feedback);
+      try {
+        // Submit feedback with email
+        await saveFeedback({ feedback, rating: feedbackRating, email: emailInput });
 
-      toast.success('Feedback submitted successfully!', {
-        position: "top-center",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-
+        if (location.pathname === `/recipe/${id}`) {
+          toast.success('Feedback submitted successfully!', {
+            position: "top-center",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+      } catch (error) {
+        console.error('Error submitting feedback:', error);
+        toast.error('Failed to submit feedback. Please try again later.', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } else {
-      toast.error('Invalid feedback. Please provide valid feedback.', {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      if (location.pathname === `/recipe/${id}`) {
+        toast.error('Invalid feedback. Please provide valid feedback.', {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     }
   };
 
@@ -60,7 +86,6 @@ const RecipeDetails = () => {
       <div className="container mt-4">
         <div className="row">
           <div className="col-md-8">
-            <h1>Recipe ID: {id}</h1>
             <h2>{recipeName}</h2>
             <p>User Name: {userName}</p>
             <p>Ingredients: {ingredients}</p>
@@ -99,6 +124,13 @@ const RecipeDetails = () => {
                 value={feedback}
                 onChange={handleFeedbackChange}
               ></textarea>
+              <input
+                type="email"
+                className="form-control mt-2"
+                placeholder="Your Email"
+                value={emailInput}
+                onChange={handleEmailChange}
+              />
               <div className="invalid-feedback">Please provide valid feedback.</div>
               <button
                 className="btn btn-primary mt-2"

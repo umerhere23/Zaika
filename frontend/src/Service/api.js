@@ -70,20 +70,7 @@ export const fetchUserDetails = async (email) => {
     throw error;
   }
 };
-export const fetchRecipeById = async (id) => {
-  try {
-    const response = await fetch(`${baseUrl}/recipes/${id}`);
-    if (!response.ok) {
-      throw new Error(`Error fetching recipe by ID: ${response.status}`);
-    }
 
-    const data = await response.json();
-    return data; 
-  } catch (error) {
-    console.error('Error in fetchRecipeById:', error);
-    throw error;
-  }
-};
 export const updateUserDetails = async (userId, userData) => {
   try {
       const response = await axios.put(`${baseUrl}/updateUser/${userId}`, userData);
@@ -114,3 +101,27 @@ export const fetchUserRecipes = async (userName) => {
   }
 };
 
+export const fetchRecipeById = async (id) => {
+  try {
+    const response = await fetch(`${baseUrl}/recipes/${id}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching recipe by ID: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data; 
+  } catch (error) {
+    console.error('Error in fetchRecipeById:', error);
+    throw error;
+  }
+};
+export const saveFeedback = async (feedbackData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/saveFeedback`, feedbackData);
+
+    return response.data;
+  } catch (error) {
+    console.error('Error saving feedback:', error);
+    throw error;
+  }
+};

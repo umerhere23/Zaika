@@ -52,5 +52,4 @@ export const getRecipes = async (req, res) => {
       console.error('Error:', error);
       res.status(500).json({ message: 'Failed to fetch recipes.' });
     }
-  };
-  
+};

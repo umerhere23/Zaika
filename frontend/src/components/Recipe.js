@@ -42,11 +42,10 @@ const Recipe = () => {
     }
   }, [filteredRecipes, searchTerm]);
   const handleRecipeClick = (details) => {
-    navigate(`/recipes`, {
+    navigate(`/recipes/${details._id}`, {
       state: {
         recipeName: details.name,
-        id_: details._id,  
-
+        id_: details._id,
         userName: details.userName,
         ingredients: details.ingredients,
         instructions: details.instructions,
