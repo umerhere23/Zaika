@@ -14,12 +14,11 @@ const Footer = () => {
                     <div className="col-md-4">
                         <h5>Quick Links</h5>
                         <ul className="list-unstyled">
-                            <li><a href="#">Home</a></li>
+                            <li><a href="/home">Home</a></li>
                             <li><a href="#">Services</a></li>
                             <li><a href="#">Portfolio</a></li>
                             <li><a href="#">Contact</a></li>
                             <li><a href="/signup">Signup</a></li>
-                            <li><a href="/AddRecpie">AddRecipe</a></li>
                             <li><a href="/login">Login</a></li>
                             <li><a href="/dashboard">Dashboard</a></li>
 

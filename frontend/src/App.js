@@ -8,6 +8,7 @@ import AddRecipe from './components/AddRecipe';
 import AboutUS from './components/AboutUs';
 import Dashboard from './components/Dashboard.jsx';
 import Recipes from './components/Recipe';
+import UserRecipes from './components/UserRecipies.jsx';
 
 import RecipeDetails from './components/RecipeDetails.jsx';
 
@@ -25,8 +26,9 @@ const App=()=>{
   <Route path="/AddRecpie" element={<AddRecipe />}  />
   <Route path="/aboutUS" element={<AboutUS />}  />
   <Route path="/dashboard" element={<Dashboard />}  />
-
   <Route path="/recipes" element={<RecipeDetails />} />
+
+  <Route path="/UserRecipes" element={<UserRecipes />} />
 
 
 

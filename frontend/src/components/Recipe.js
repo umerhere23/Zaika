@@ -45,15 +45,16 @@ const Recipe = () => {
     navigate(`/recipes`, {
       state: {
         recipeName: details.name,
-        recipeId: details._id,
+        id_: details._id,  
+
         userName: details.userName,
         ingredients: details.ingredients,
         instructions: details.instructions,
         timeToCook: details.timeToCook,
         email: details.email,
-        
       }
     });
+    
   };
     return (
         <>

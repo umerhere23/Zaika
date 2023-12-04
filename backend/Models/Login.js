@@ -7,7 +7,6 @@ const SignupApplicationStructure = new mongoose.Schema({
         unique: true,
         trim: true,
         lowercase: true,
-        // Add email validation here
     },
     password: {
         type: String,

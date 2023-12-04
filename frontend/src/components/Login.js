@@ -46,26 +46,26 @@ const Login = () => {
             progress: undefined,
         });
     };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    if (!email || !password) {
-      showError("Please provide both email and password.");
-      return;
-    }
-
-    try {
-      const response = await loginApi({ email, password });
-      if (response.message === "Login successful") {
-        localStorage.setItem("userSession", JSON.stringify(response.user));
-        showSuccessAndNavigate("Login Successful");
-      } else {
-        showError(response.message || "Authentication failed.");
+    const handleLogin = async (e) => {
+      e.preventDefault();
+      if (!email || !password) {
+        showError("Please provide both email and password.");
+        return;
       }
-    } catch (err) {
-      showError("An error occurred during authentication.");
-    }
-  };
+  
+      try {
+        const response = await loginApi({ email, password });
+        if (response.message === "Login successful") {
+          localStorage.setItem("userToken", response.token); // Save token to local storage
+          localStorage.setItem("userSession", JSON.stringify(response.user));
+          showSuccessAndNavigate("Login Successful");
+        } else {
+          showError(response.message || "Authentication failed.");
+        }
+      } catch (err) {
+        showError("An error occurred during authentication.");
+      }
+    };
 
   return (
     <>
