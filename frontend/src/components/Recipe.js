@@ -23,7 +23,6 @@ const Recipe = () => {
 
   const fetchData = async () => {
     try {
-      // Fetch recipes and set the state with the data
       const result = await fetchRecipes();
       setRecipeDetails(result);
     } catch (error) {
@@ -36,7 +35,6 @@ const Recipe = () => {
   );
 
   useEffect(() => {
-    // Show toast when no recipes are found
     if (filteredRecipes.length === 0 && searchTerm.trim() !== '') {
       toast.error('No recipes found for the entered keyword.',{ autoClose: 1000 });
     }

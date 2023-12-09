@@ -125,3 +125,20 @@ export const saveFeedback = async (feedbackData) => {
     throw error;
   }
 };
+
+
+
+export const fetchfeedback = async (id) => {
+  try {
+    const response = await axios.get(`${baseUrl}/feedbacks/${id}`);
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching feedback by ID: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error in fetchfeedback:', error);
+    throw error;
+  }
+};
+

@@ -48,8 +48,11 @@
     text-decoration:none;
     background-color: rgb(0, 153, 255);
     border: none;
+    margin-left: 45%;
   }
-
+.txt2{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
   .new h2{
     font-size: medium;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

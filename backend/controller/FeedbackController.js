@@ -8,7 +8,6 @@ export const saveFeedback = async (req, res) => {
     if (!recipeId || !rating || !feedbackText || !email) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
-    
 
     const newFeedback = new Feedback({
       recipeId,
@@ -23,5 +22,16 @@ export const saveFeedback = async (req, res) => {
   } catch (error) {
     console.error('Error saving feedback:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+};
+export const fetchfeedback = async (req, res) => {
+  const { recipeId } = req.params;
+
+  try {
+    const feedbacks = await Feedback.find({ recipeId });
+    res.status(200).json(feedbacks);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ message: 'Failed to fetch feedback.' });
   }
 };

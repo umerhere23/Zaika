@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { fetchUserRecipes } from '../Service/api';
 import { useLocation, Navigate } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
+import Footer from './footer';
 
 const UserRecipes = () => {
   const [userRecipes, setUserRecipes] = useState([]);
@@ -37,29 +39,39 @@ const UserRecipes = () => {
   return (
     <>
       <div className="container py-5">
-        {userRecipes.length > 0 ? (
-          <div className="container">
-            <div className="row justify-content-center">
-              <div className="col-md-8">
-                <h2>Your Recipes: {userName}</h2>
-                <ul>
+        <div className="row justify-content-center">
+          <div className="col-md-8">
+            <h2 className="text-center mb-4">Your Recipes: {userName}</h2>
+            {userRecipes.length > 0 ? (
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Ingredients</th>
+                    <th>Instructions</th>
+                  </tr>
+                </thead>
+                <tbody>
                   {userRecipes.map((recipe) => (
-                    <li key={recipe._id}>{recipe.name}</li>
+                    <tr key={recipe._id}>
+                      <td>{recipe.name}</td>
+                      <td>{recipe.ingredients}</td>
+                      <td>{recipe.instructions}</td>
+                    </tr>
                   ))}
-                </ul>
-              </div>
-            </div>
+                </tbody>
+              </Table>
+            ) : (
+              <p className="text-center">No recipes found for the user.</p>
+            )}
           </div>
-        ) : (
-          <p>No recipes found for the user. Your Recipes: {userName}</p>
-        )}
+        </div>
         <div className="flex justify-center mt-4 btnedit">
-          {/* Add your button or edit functionality here */}
+       
         </div>
       </div>
-      <footer className="bg-dark text-white p-5">
-        {/* Your footer content */}
-      </footer>
+      <Footer />
+
     </>
   );
 };
