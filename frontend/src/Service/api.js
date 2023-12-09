@@ -142,3 +142,11 @@ export const fetchfeedback = async (id) => {
   }
 };
 
+export const removeRecipe = async (name) => {
+  try {
+    const response = await axios.delete(`${baseUrl}/removeRecipe/${name}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

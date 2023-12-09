@@ -37,3 +37,4 @@ app.use('/updateUser', UserData);
 app.use('/fetchUserRecipes', recipeRoutes);
 app.use('/saveFeedback',Feedback)
 app.use('/feedbacks',Feedback)
+app.use('/removeRecipe',recipeRoutes)

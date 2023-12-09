@@ -53,3 +53,20 @@ export const getRecipes = async (req, res) => {
       res.status(500).json({ message: 'Failed to fetch recipes.' });
     }
 };
+
+export const removeRecipe = async (req, res) => {
+  const { recipeId } = req.params;
+
+  try {
+    const deletedRecipe = await RecipeModel.findByIdAndDelete(recipeId);
+
+    if (!deletedRecipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    res.json({ message: 'Recipe deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting recipe:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+};

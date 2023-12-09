@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { fetchUserDetails, updateUserDetails, fetchUserRecipes } from '../Service/api'; 
+import { fetchUserDetails, updateUserDetails, fetchUserRecipes,removeRecipe } from '../Service/api'; 
 import { useLocation, Link, Navigate } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import "./CSS/Dashboard.css";
@@ -30,10 +30,20 @@ const Dashboard = () => {
         }
     };
 
-    const handleRemoveRecipe = (recipeId) => {
-        // Add logic to remove the recipe, you may need an API call here
-        console.log(`Remove recipe with ID: ${recipeId}`);
-    };
+    const handleRemoveRecipe = async (recipeId) => {
+      try {
+          await removeRecipe(recipeId);
+  
+          // Updating the state to reflect the removal
+          const updatedRecipes = userRecipes.filter(recipe => recipe._id !== recipeId);
+          setUserRecipes(updatedRecipes);
+  
+          toast.success("Recipe removed successfully");
+      } catch (error) {
+          console.error('Error removing recipe:', error);
+          toast.error('Failed to remove recipe');
+      }
+  };
 
     useEffect(() => {
         if (userEmail) {
