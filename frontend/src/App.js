@@ -9,13 +9,30 @@ import AboutUS from './components/AboutUs';
 import Dashboard from './components/Dashboard.jsx';
 import Recipes from './components/Recipe';
 import UserRecipes from './components/UserRecipies.jsx';
+import React, { useEffect, useState } from 'react';
 
 import RecipeDetails from './components/RecipeDetails.jsx';
+import LoadingSpinner from '../src/components/loading.jsx';
 
 const App=()=>{
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      await new Promise(resolve => setTimeout(resolve, 3200));
+
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, []);
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
   return(
     <>
-    {/* <h1 className="bg-primary text-danger text-center">Hello this is Zayeka</h1> */}
 <Navbar />   
 
 <Routes>

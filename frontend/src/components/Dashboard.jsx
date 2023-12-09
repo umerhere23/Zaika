@@ -1,43 +1,79 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { fetchUserDetails, updateUserDetails, fetchUserRecipes,removeRecipe } from '../Service/api'; 
-import { useLocation, Link, Navigate } from 'react-router-dom';
+import { useLocation, Link, Navigate } from 'react-router-dom'; 
+
 import { Table } from 'react-bootstrap';
 import "./CSS/Dashboard.css";
+import LoadingSpinner from '../components/loading.jsx';
 
 const Dashboard = () => {
-    const [userData, setUserData] = useState(null);
-    const [editMode, setEditMode] = useState(false);
-    const location = useLocation();
-    const userEmail = location.state?.userEmail;
-    const [userRecipes, setUserRecipes] = useState([]);
-    const userName = userData?.Username || '';
+  const [userData, setUserData] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [userRecipes, setUserRecipes] = useState([]);
+  const location = useLocation();
+  const userEmail = location.state?.userEmail;
+  const userName = userData?.Username || '';
+  const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        if (userName) {
-            fetchUserData(userName);
-            fetchUserRecipesData(userName);
-        }
-    }, [userName]);
+  useEffect(() => {
+      if (userName) {
+          fetchUserData(userName);
+          fetchUserRecipesData(userName);
+      }
+  }, [userName]);
+  useEffect(() => {
+    if (!isLoggedIn()) {
+      return <Navigate to="/login" />;
+    }
+  }, []);
+  
+  useEffect(() => {
+    const fetchData = async () => {
 
-    const fetchUserRecipesData = async (userName) => {
-        try {
-            const recipes = await fetchUserRecipes(userName);
-            setUserRecipes(recipes);
-        } catch (error) {
-            console.error('Error fetching user recipes:', error);
-            toast.error('Failed to fetch user recipes');
-        }
+      await new Promise(resolve => setTimeout(resolve, 3200));
+
+      setIsLoading(false);
     };
 
-    const handleRemoveRecipe = async (recipeId) => {
+    fetchData();
+  }, []);
+
+  const fetchUserRecipesData = async (userName) => {
+      try {
+          const recipes = await fetchUserRecipes(userName);
+          setUserRecipes(recipes);
+      } catch (error) {
+          console.error('Error fetching user recipes:', error);
+          toast.error('Failed to fetch user recipes');
+      }
+  };
+  useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      if (!isLoggedIn()) {
+        event.returnValue = true; 
+        return true; 
+      }
+    };
+  
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
+  const isLoggedIn = () => {
+    const token = localStorage.getItem("userToken");
+    return !!token;
+  };
+  const handleRemoveRecipe = async (recipeId) => {
       try {
           await removeRecipe(recipeId);
-  
-          // Updating the state to reflect the removal
+
           const updatedRecipes = userRecipes.filter(recipe => recipe._id !== recipeId);
           setUserRecipes(updatedRecipes);
-  
+
           toast.success("Recipe removed successfully");
       } catch (error) {
           console.error('Error removing recipe:', error);
@@ -45,48 +81,49 @@ const Dashboard = () => {
       }
   };
 
-    useEffect(() => {
-        if (userEmail) {
-            fetchUserData(userEmail);
-        }
-    }, [userEmail]);
+  useEffect(() => {
+      if (userEmail) {
+          fetchUserData(userEmail);
+      }
+  }, [userEmail]);
 
-    const fetchUserData = async (email) => {
-        try {
-            const result = await fetchUserDetails(email);
-            setUserData(result);
-        } catch (error) {
-            console.error('Error:', error);
-            toast.error("Failed to fetch user data");
-        }
-    };
+  const fetchUserData = async (email) => {
+      try {
+          const result = await fetchUserDetails(email);
+          setUserData(result);
+      } catch (error) {
+          console.error('Error:', error);
+          toast.error("Failed to fetch user data");
+      }
+  };
 
-    const isLoggedIn = () => {
-        const token = localStorage.getItem("userToken");
-        return !!token;
-    };
 
-    if (!isLoggedIn()) {
-        return <Navigate to="/login" />;
-    }
 
-    const handleEditClick = () => {
-        setEditMode(!editMode);
-    };
+  if (!isLoggedIn()) {
+      return <Navigate to="/login" />;
+  }
 
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await updateUserDetails(userData._id, userData);
-            toast.success("Profile updated successfully");
-        } catch (error) {
-            console.error('Error updating user details:', error);
-            toast.error("Failed to update user data");
-        }
-    };
+  const handleEditClick = () => {
+      setEditMode(!editMode);
+  };
 
+  const handleFormSubmit = async (e) => {
+      e.preventDefault();
+      try {
+          await updateUserDetails(userData._id, userData);
+          toast.success("Profile updated successfully");
+      } catch (error) {
+          console.error('Error updating user details:', error);
+          toast.error("Failed to update user data");
+      }
+  };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
     return (
         <>
+        
             <div className="container py-5">
                 <div class="alert alert-success" role="alert">
                     <h4 class="alert-heading">Welcome to Your User Profile!</h4>
@@ -95,9 +132,11 @@ const Dashboard = () => {
                     <p class="mb-0">If you have any questions or need assistance, don't hesitate to reach out. Enjoy your time in your user profile!</p>
                 </div>
                 <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/AddRecpie">AddRecipe</a>
-                    </li>
+                <Link to={{ pathname: "/AddRecpie", state: { userData } }} className="nav-link active">
+  AddRecipe
+</Link>
+
+
                     <li class="nav-item">
                         <a class="nav-link active"href="#recp" >User Recipes</a>
                     </li>

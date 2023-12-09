@@ -1,6 +1,9 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import './img/AddRecipe.css';
+import { useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+
 import React, { useState } from "react";
 import { onAddRecipe } from '../Service/api';
 
@@ -8,20 +11,27 @@ import { onAddRecipe } from '../Service/api';
 import Footer from './footer';
 
 const AddRecipe = () => {
-    console.log('Component rendered'); // Add this line to check if the component is rendered
+  const location = useLocation();
+  const userData = location.state?.userData;
+  
 
-    const [recipedata, setRecipe] = useState({
-      name: '',
-      ingredients: '',
-      instructions: '',
-      image: null,
-      timeToCook: '',
-      userName: '',
-      email: '',
-    });
+  const UserName = userData?.Username;
+  const userEmail = userData?.email;
+
+  const [recipedata, setRecipe] = useState({
+    name: '',
+    ingredients: '',
+    instructions: '',
+    image: null,
+    timeToCook: '',
+    userName: UserName, 
+    email: userEmail,   
+  });
   
     const [errors, setErrors] = useState({});
-
+    console.log('userName:', UserName);
+    console.log('userEmail:', userEmail);
+    
     const [isSubmitted, setIsSubmitted] = useState(false); // State to track if the form is submitted
   const{name,ingredients,instructions,image,timeToCook,userName,email}=recipedata;
     const handleChange = (e) => {
