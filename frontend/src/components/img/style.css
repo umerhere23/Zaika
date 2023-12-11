@@ -30,12 +30,16 @@
       border-radius: 4px;
       box-shadow: 2px 2px 20px 23px #FFBE7B;
       font-size:1vw;}
-/*
+
 nav{
+
     height: 60px;
-    color: rgb(0, 0, 0);
-    /* background-color: azure; */
-/* }
+height: 100px;}
+.nav-link {
+    color: aliceblue;
+
+}
+/* 
 .navhead{
     text-decoration: none;
     color: black;
@@ -54,8 +58,15 @@ nav div{
 .selected{
     color: chocolate;
 }  */ 
+
+nav ul li Link{
+    color: aliceblue;
+
+    
+   
+}
 nav ul li{
-    color: black;
+    color: aliceblue;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     padding: 3%;
     
@@ -160,3 +171,4 @@ footer{
         background-color: linear-gradient( #553c9a 45%, #ee4b2b);
 
     }
+    

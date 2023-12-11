@@ -29,6 +29,7 @@ const Recipe = () => {
       console.error('Error:', error);
     }
   };
+  
 
   const filteredRecipes = recipedetails.filter((recipe) =>
     recipe.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -55,7 +56,7 @@ const Recipe = () => {
   };
     return (
         <>
-       
+
 
         <div className="carousel-container">
         <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel">
@@ -136,13 +137,16 @@ const Recipe = () => {
 <br></br>          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 <div className="row">
   {filteredRecipes.map((details) => (
-    <div className="col-md-4 mb-4" key={details._id} onClick={() => handleRecipeClick(details)}>
-      <div className="card h-100">
+    <div className="col-md-4 mb-4 " key={details._id} onClick={() => handleRecipeClick(details)}>
+      <div className="card h-100 box">
         <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
         <div className="card-body">
           <h5 className="card-title">{details.name}</h5>
-          <p className="card-text">User: {details.userName}</p>
-          <p className="card-text">ID: {details._id}</p>
+          <p className="card-text"><i class="fa fa-user" aria-hidden="true"></i>
+: {details.userName}</p>
+
+      
+
         </div>
       </div>
     </div>

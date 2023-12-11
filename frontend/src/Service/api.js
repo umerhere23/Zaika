@@ -128,20 +128,21 @@ export const saveFeedback = async (feedbackData) => {
 
 
 
-export const fetchfeedback = async (id) => {
+
+export const fetchAllFeedbacks = async () => {
   try {
-    const response = await axios.get(`${baseUrl}/feedbacks/${id}`);
+    const response = await axios.get(`${baseUrl}/fetchfeedbacks`);
+    
     if (response.status >= 200 && response.status < 300) {
       return response.data;
     } else {
-      throw new Error(`Error fetching feedback by ID: ${response.status}`);
+      throw new Error(`Error fetching all feedbacks: ${response.status}`);
     }
   } catch (error) {
-    console.error('Error in fetchfeedback:', error);
+    console.error('Error in fetchAllFeedbacks:', error);
     throw error;
   }
 };
-
 export const removeRecipe = async (name) => {
   try {
     const response = await axios.delete(`${baseUrl}/removeRecipe/${name}`);

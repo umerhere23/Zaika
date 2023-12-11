@@ -67,4 +67,32 @@
     width: 50%;
     padding: 0 10px;
   }
+  .box{
+    border-radius: 5px 5px;
+    background-color: rgb(245, 243, 141);
+    font-family: 'Times New Roman', Times, serif;
+  }
+  .share{
+
+width: 50%;
+ }
+
+ .boxdb{
+  width: 100%;
+  background:linear-gradient( #e8f462,rgb(101, 232, 101));
+  border-radius: 15px 15px;
+  padding: 2%;
+
+ }
+ .boxdb h5{
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+ }
+ .boxdb{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+ }
+ .fd{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  text-align: center;
+  font-style: italic;
   
+ }

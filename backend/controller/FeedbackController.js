@@ -24,14 +24,14 @@ export const saveFeedback = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-export const fetchfeedback = async (req, res) => {
-  const { recipeId } = req.params;
 
+
+export const fetchAllFeedbacks = async (req, res) => {
   try {
-    const feedbacks = await Feedback.find({ recipeId });
-    res.status(200).json(feedbacks);
+    const allFeedbacks = await Feedback.find();
+
+    res.status(200).json(allFeedbacks);
   } catch (error) {
-    console.error('Error:', error);
-    res.status(500).json({ message: 'Failed to fetch feedback.' });
-  }
-};
+    console.error("Error:", error);
+    res.status(500).json({ message: "Failed to fetch feedback." });}}
+  

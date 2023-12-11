@@ -16,8 +16,8 @@ const Navbar=()=>{
         </nav> */}
        
 
-<nav class="navbar navbar-expand-lg navbar " >
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg navbar bg-dark " >
+  <div class="container-fluid bg-dark">
   <img src={logo} alt="Logo" className='logo' />
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -28,7 +28,8 @@ const Navbar=()=>{
         <Link to="/home" className="nav-link active" aria-current="page">Home</Link>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="./recipe">Recipe</a>
+        <Link to="./recipe" className="nav-link active" aria-current="page">Recipe</Link>
+
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Pricing</a>
