@@ -7,7 +7,7 @@ import { fetchAllFeedbacks } from '../Service/api';
 import { faShareAlt, faCommentAlt, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
-
+import '../components/CSS/feedback.css'
 const RecipeDetails = () => {
   const { id } = useParams();
   const location = useLocation();

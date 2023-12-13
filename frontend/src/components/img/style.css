@@ -31,47 +31,7 @@
       box-shadow: 2px 2px 20px 23px #FFBE7B;
       font-size:1vw;}
 
-nav{
 
-    height: 60px;
-height: 100px;}
-.nav-link {
-    color: aliceblue;
-
-}
-/* 
-.navhead{
-    text-decoration: none;
-    color: black;
-    padding: 3.5%;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    background:#ffffff;
-
-
-}
-nav div{
-    margin-left: 60%;
-    margin-top: 1.5%;
-    /* background: azure; */
-
-/* }
-.selected{
-    color: chocolate;
-}  */ 
-
-nav ul li Link{
-    color: aliceblue;
-
-    
-   
-}
-nav ul li{
-    color: aliceblue;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    padding: 3%;
-    
-   
-}
 nav:hover .nav-item:hover{
     filter:blur(0px);
 }

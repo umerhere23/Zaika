@@ -1,0 +1,23 @@
+nav{
+
+    height: 60px;
+height: 100px;}
+.nav-link {
+    color: aliceblue;
+
+}
+
+
+nav ul li a{
+    color: aliceblue;
+
+    
+   
+}
+nav ul li{
+    color: aliceblue;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    padding: 3%;
+    
+   
+}

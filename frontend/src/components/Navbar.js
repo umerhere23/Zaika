@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import './img/style.css';
+import './img/nav.css';
 import logo from './img/logo.png';
 import './img/style.css';
 
@@ -25,20 +25,20 @@ const Navbar=()=>{
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-        <Link to="/home" className="nav-link active" aria-current="page">Home</Link>
+        <a href="/home" className="nav-link " >Home</a>
         </li>
         <li class="nav-item">
-        <Link to="./recipe" className="nav-link active" aria-current="page">Recipe</Link>
+        <a href="/recipe" className="nav-link ">Recipe</a>
 
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Pricing</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./login" tabindex="-1" aria-disabled="true">Login</a>
+          <a class="nav-link " href="/login" tabindex="-1" aria-disabled="true">Login</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="./AboutUS" tabindex="-1" aria-disabled="true">AboutUS</a>
+          <a class="nav-link " href="/AboutUS" tabindex="-1" aria-disabled="true">AboutUS</a>
         </li>
        
       </ul>

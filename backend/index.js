@@ -38,3 +38,4 @@ app.use('/fetchUserRecipes', recipeRoutes);
 app.use('/saveFeedback',Feedback)
 app.use('/fetchfeedbacks',Feedback)
 app.use('/removeRecipe',recipeRoutes)
+app.use('/removefeedback',Feedback)

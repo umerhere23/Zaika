@@ -13,6 +13,8 @@ import {
   MDBInput,
 } from "mdb-react-ui-kit";
 
+import Cookies from 'js-cookie'; // Import the js-cookie library
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,42 +32,47 @@ const Login = () => {
     });
   };
 
-
-    const showSuccessAndNavigate = (message) => {
-        toast.success(message, {
-            position: "top-center",
-            autoClose: 1000,            onClose: () => navigate("/dashboard", {
-              state: {
-                  userEmail: email
-              }
-          }),
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-    };
-    const handleLogin = async (e) => {
-      e.preventDefault();
-      if (!email || !password) {
-        showError("Please provide both email and password.");
-        return;
-      }
-  
-      try {
-        const response = await loginApi({ email, password });
-        if (response.message === "Login successful") {
-          localStorage.setItem("userToken", response.token); // Save token to local storage
-          localStorage.setItem("userSession", JSON.stringify(response.user));
-          showSuccessAndNavigate("Login Successful");
-        } else {
-          showError(response.message || "Authentication failed.");
+  const showSuccessAndNavigate = (message) => {
+    toast.success(message, {
+      position: "top-center",
+      autoClose: 1000,
+      onClose: () => navigate("/dashboard", {
+        state: {
+          userEmail: email
         }
-      } catch (err) {
-        showError("An error occurred during authentication.");
-      }
-    };
+      }),
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+const handleLogin = async (e) => {
+  e.preventDefault();
+  if (!email || !password) {
+    showError("Please provide both email and password.");
+    return;
+  }
+
+  try {
+    const response = await loginApi({ email, password });
+    if (response.message === "Login successful") {
+      Cookies.set("userToken", response.token, { expires: 1 });
+      Cookies.set("userSession", JSON.stringify(response.user), { expires: 1 });
+      showSuccessAndNavigate("Login Successful");
+
+      // Disable forward navigation
+      window.history.forward = () => false;
+    } else {
+      showError(response.message || "Authentication failed.");
+    }
+  } catch (err) {
+    showError("An error occurred during authentication.");
+  }
+};
+
 
   return (
     <>

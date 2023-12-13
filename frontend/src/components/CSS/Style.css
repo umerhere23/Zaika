@@ -52,6 +52,7 @@
   }
 .txt2{
   font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size: medium;
 }
   .new h2{
     font-size: medium;
@@ -77,22 +78,4 @@
 width: 50%;
  }
 
- .boxdb{
-  width: 100%;
-  background:linear-gradient( #e8f462,rgb(101, 232, 101));
-  border-radius: 15px 15px;
-  padding: 2%;
-
- }
- .boxdb h5{
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
- }
- .boxdb{
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
- }
- .fd{
-  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  text-align: center;
-  font-style: italic;
-  
- }
+ 

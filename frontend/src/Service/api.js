@@ -151,3 +151,12 @@ export const removeRecipe = async (name) => {
     throw error;
   }
 };
+
+export const removefeedback = async (_id) => {
+  try {
+    const response = await axios.delete(`${baseUrl}/removefeedback/${_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

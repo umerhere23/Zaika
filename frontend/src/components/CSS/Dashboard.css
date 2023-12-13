@@ -1,3 +1,24 @@
 .icons{
 color: red;
 }
+.nav{
+background-color:#DBFF33;
+height: 50px;
+line-height: 50px;
+border-radius: 15px 15px;
+
+}
+.nav-item {
+    color: #000;
+    text-decoration: none;
+    margin-left: 5%;
+}
+.nav-item :hover {
+    color: #e22d2d;
+    text-decoration: none;
+}
+#fb{
+    width: 85%;
+    margin-left: 7.5%;
+    margin-top: -5%;
+}
