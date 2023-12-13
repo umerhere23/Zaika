@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { fetchUserDetails, updateUserDetails, fetchUserRecipes, removeRecipe } from '../Service/api';
-import { useLocation, Link, Navigate } from 'react-router-dom';
+import { useLocation, Link, Navigate ,useNavigate} from 'react-router-dom';
 import { fetchAllFeedbacks,removefeedback } from '../Service/api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import StarRating from '../components/icons/stars.jsx'; 
@@ -17,12 +17,13 @@ const Dashboard = () => {
     const userEmail = location.state?.userEmail;
     const userName = userData?.Username || '';
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
   const [feedbackdetails, setFeedbackDetails] = useState([]);
 
   const fetchData1 = async () => {
     try {
-      const result = await fetchAllFeedbacks(); // Change this line to fetch all feedbacks
+      const result = await fetchAllFeedbacks(); 
       setFeedbackDetails(result);
     } catch (error) {
       console.error('Error:', error);
@@ -146,22 +147,47 @@ const Dashboard = () => {
     if (isLoading) {
         return <LoadingSpinner />;
     }
+
+    const handleRecipeClick = (userData) => {
+        navigate(`/AddRecpie/${userData._id}`, {
+          state: {
+            Username: userData.Username,
+            useremail: userData.email,
+          }
+        });
+      };
+      
+    console.log(userData)
     return (
         <>
 
-            <div className="container py-5">
-                <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">Welcome to Your User Profile!</h4>
-                    <p>We're excited to have you here. This is your personal space where you can manage and update your profile information. Feel free to explore and make any changes you need.</p>
-                    <hr />
-                    <p class="mb-0">If you have any questions or need assistance, don't hesitate to reach out. Enjoy your time in your user profile!</p>
-                </div>
+<div className="container py-5">
+        <div className="alert alert-success" role="alert">
+          <h4 className="alert-heading">Welcome to Your User Profile!</h4>
+          <p>
+            We're excited to have you here. This is your personal space where you can manage and update your profile
+            information. Feel free to explore and make any changes you need.
+          </p>
+          <hr />
+          <p className="mb-0">
+            If you have any questions or need assistance, don't hesitate to reach out. Enjoy your time in your user
+            profile!
+          </p>
+        </div>
                 <ul class="nav">
                     
                     <li class="nav-item">
-                    <Link to={{ pathname: "/AddRecpie", state: { userData } }} class="navbar-brand " >
-                        AddRecipe
-                    </Link>                    </li> &nbsp;&nbsp;&nbsp;
+                    {/* <Link to={{ pathname: "/AddRecpie", state: { userId: userData?._id } }} className="navbar-brand">
+  AddRecipe
+</Link> */}
+
+<div className="col-md-4 mb-4" key={userData._id} onClick={() => handleRecipeClick(userData)}>
+  AddRecipe
+</div>
+
+
+
+                   </li> &nbsp;&nbsp;&nbsp;
 
                     <li class="nav-item">
                         <a class="navbar-brand " href="#recp" >User Recipes</a>
@@ -362,6 +388,8 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
+
+    
             <footer className="bg-dark text-white p-5">
                 <div className="container">
                     <div className="row">

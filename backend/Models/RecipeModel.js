@@ -3,33 +3,32 @@ import mongoose from 'mongoose';
 const RecipeModelStructure = new mongoose.Schema({
   name: {
     type: String,
-    required: false,
+    required: true,
   },
   ingredients: {
     type: String,
-    required: false,
+    required: true,
   },
   instructions: {
     type: String,
-    required: false,
+    required: true,
   },
   image: {
     type: String, 
-    required: false,
+    required: true,
   },
   timeToCook: {
     type: Number,
-    required: false,
+    required: true,
   },
   userName: {
     type: String,
-    required: false,
+    required: true,
   },
   email: {
     type: String,
-    required: false,
+    required: true,
   }
-  
 });
 
 const RecipeModel = mongoose.model('Recipes', RecipeModelStructure);

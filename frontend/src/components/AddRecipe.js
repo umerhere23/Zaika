@@ -12,11 +12,8 @@ import Footer from './footer';
 
 const AddRecipe = () => {
   const location = useLocation();
-  const userData = location.state?.userData;
+  const { Username, useremail } = location.state || {};
   
-
-  const UserName = userData?.Username;
-  const userEmail = userData?.email;
 
   const [recipedata, setRecipe] = useState({
     name: '',
@@ -24,13 +21,13 @@ const AddRecipe = () => {
     instructions: '',
     image: null,
     timeToCook: '',
-    userName: UserName, 
-    email: userEmail,   
+    userName: Username || '',
+    email: useremail || '',
   });
   
+  
     const [errors, setErrors] = useState({});
-    console.log('userName:', UserName);
-    console.log('userEmail:', userEmail);
+
     
     const [isSubmitted, setIsSubmitted] = useState(false); // State to track if the form is submitted
   const{name,ingredients,instructions,image,timeToCook,userName,email}=recipedata;
@@ -96,7 +93,7 @@ const AddRecipe = () => {
 
         if (validateForm()) { 
 
-          const basePath = './img/'; // Replace with your desired path
+          const basePath = './img'; // Replace with your desired path
           const fileName = `${recipedata.name.replace(/\s+/g, '_')}.png`; // Using the recipe name as the filename
           const imagePath = `${basePath}/${fileName}`;
       
@@ -126,6 +123,8 @@ const AddRecipe = () => {
                 <div className="text-center">
                     <h2>Thank you for your submission!</h2>
                     <p>Your recipe has been added.</p>
+                    <button  className="btn btn-primary"> <a href='/dashboard'>Save Changes</a></button>
+
                 </div>
         ) : (<form>
               <h2>Add Recipe</h2>
@@ -200,30 +199,33 @@ required
               />
             </div>
           )}
-          <div class="form-group">
-            <label>User name:</label>
-            <input
-              type="text"
-              class={`form-control ${errors.userName ? 'is-invalid' : ''}`}
-              name="userName"
-              value={userName}
-              onChange={(e) => handleChange(e)}
-              required
-            />
-            {errors.userName && <div class="invalid-feedback">{errors.userName}</div>}
-          </div>
-          <div class="form-group">
-            <label>Email:</label>
-            <input
-              type="email"
-              class={`form-control ${errors.email ? 'is-invalid' : ''}`}
-              name="email"
-              value={email}
-              onChange={(e) => handleChange(e)}
-              required
-            />
-            {errors.email && <div class="invalid-feedback">{errors.email}</div>}
-          </div>
+      <div class="form-group">
+  <label>User name:</label>
+  <input
+    type="text"
+    class={`form-control ${errors.userName ? 'is-invalid' : ''}`}
+    name="userName"
+    value={userName}
+    onChange={(e) => handleChange(e)}
+    required
+    disabled
+  />
+  {errors.userName && <div class="invalid-feedback">{errors.userName}</div>}
+</div>
+<div class="form-group">
+  <label>Email:</label>
+  <input
+    type="email"
+    class={`form-control ${errors.email ? 'is-invalid' : ''}`}
+    name="email"
+    value={email}
+    onChange={(e) => handleChange(e)}
+    required
+    disabled
+  />
+  {errors.email && <div class="invalid-feedback">{errors.email}</div>}
+</div>
+
           <br />
           <div className="form-group">
           <button className="btn btn-primary1" onClick={(e) => addDetails(e)}>Apply</button>

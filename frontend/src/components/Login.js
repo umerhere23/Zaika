@@ -5,13 +5,18 @@ import Footer from './footer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'animate.css/animate.min.css';
+import '../components/CSS/login.css'
 import {
+  MDBBtn,
   MDBContainer,
-  MDBTabs,
-  MDBTabsContent, 
-  MDBTabsPane,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
   MDBInput,
-} from "mdb-react-ui-kit";
+  MDBIcon
+}
+from 'mdb-react-ui-kit';
 
 import Cookies from 'js-cookie'; // Import the js-cookie library
 
@@ -77,38 +82,50 @@ const handleLogin = async (e) => {
   return (
     <>
 
-      <MDBContainer className="p-3 my-5 d-flex flex-column w-50 shadow-5-strong rounded-5 animate__animated animate__fadeIn">
-        <MDBTabs pills justify className="mb-3 d-flex flex-row justify-content-between"></MDBTabs>
-        <MDBTabsContent>
-          <MDBTabsPane show={true}>
-            <div className="text-center mb-4">
-              <h2 className="mb-4">Login Form</h2>
-            </div>
-            <form onSubmit={handleLogin}>
-              <MDBInput
-                wrapperClass="mb-4"
-                label="Email address"
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <MDBInput
-                wrapperClass="mb-4"
-                label="Password"
-                id="password"
+     
+
+<MDBContainer fluid>
+
+<MDBRow className='d-flex justify-content-center align-items-center h-100'>
+  <MDBCol col='12'>
+
+    <MDBCard className='bg-dark text-white my-5 mx-auto' style={{borderRadius: '1rem', maxWidth: '400px'}}>
+      <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100' >
+
+        <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
+        <p className="text-white-50 mb-5">Please enter your login and password!</p>
+        <form onSubmit={handleLogin}>
+
+        <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white'   size="lg" className="txtf"
+        id="email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="Email"/>
+        <MDBInput wrapperClass='mb-4 mx-5 w-100' labelClass='text-white'   id="password" className="txtf"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button className="btn btn-primary btn-lg w-100 mb-4" type="submit">Sign in</button>
-            </form>
-            <p className="text-center">
-              Not a member? <a href="/signup" className="text-decoration-none">Register</a>
-            </p>
-          </MDBTabsPane>
-        </MDBTabsContent>
-      </MDBContainer>
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)} size="lg"/>
+
+      
+
+        <button className="btn btn-primary btn-lg w-100 mb-4" color='white' type="submit">Sign in</button>
+
+
+        <div>
+          <p className="mb-0">Don't have an account? <a href="/signup" class="text-white-50 fw-bold">Sign Up</a></p>
+
+        </div>
+        </form>
+
+      </MDBCardBody>
+    </MDBCard>
+
+  </MDBCol>
+</MDBRow>
+
+</MDBContainer>
       <Footer />
       <ToastContainer />
     </>

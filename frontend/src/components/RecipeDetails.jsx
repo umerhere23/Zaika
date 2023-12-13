@@ -4,10 +4,12 @@ import Rating from 'react-rating-stars-component';
 import Footer from './footer';
 import { saveFeedback } from '../Service/api';
 import { fetchAllFeedbacks } from '../Service/api';
-import { faShareAlt, faCommentAlt, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faShareAlt, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
-import '../components/CSS/feedback.css'
+import StarRating from '../components/icons/stars.jsx';
+import '../components/CSS/feedback.css';
+
 const RecipeDetails = () => {
   const { id } = useParams();
   const location = useLocation();
@@ -22,13 +24,6 @@ const RecipeDetails = () => {
     recipeId: id,
   });
 
-  const handleShareClick = () => {
-    const currentURL = window.location.href;
-    navigator.clipboard.writeText(currentURL);
-    setShowSuccessMessagefd(true);
-  };
-
-
   const [feedbackdetails, setFeedbackDetails] = useState([]);
   const [showSuccessMessagefd, setShowSuccessMessagefd] = useState(false);
 
@@ -37,17 +32,20 @@ const RecipeDetails = () => {
     feedbackText: false,
     email: false,
   });
-  const fetchData = async () => {
-    try {
-      const result = await fetchAllFeedbacks(); // Change this line to fetch all feedbacks
-      setFeedbackDetails(result);
-    } catch (error) {
-      console.error('Error:', error);
-    }
-  };
+
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await fetchAllFeedbacks(); // Change this line to fetch all feedbacks
+        setFeedbackDetails(result);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
     fetchData();
   }, [id]);
+
   const handleRatingChange = (newRating) => {
     setFeedbackData({ ...feedbackData, rating: newRating });
     setIsFeedbackValid({ ...isFeedbackValid, rating: newRating > 0 });
@@ -67,8 +65,18 @@ const RecipeDetails = () => {
 
   const handleFeedbackSubmit = async () => {
     const isValid = Object.values(isFeedbackValid).every((value) => value);
-
+  
     if (isValid) {
+      const userSubmittedFeedback = feedbackdetails.some(
+        (feedback) => feedback.email === feedbackData.email && feedback.recipeId === id
+      );
+  
+      if (userSubmittedFeedback) {
+        setShowErrorMessage(true);
+        setShowSuccessMessage(false);
+        return;
+      }
+  
       try {
         await saveFeedback(feedbackData);
         setIsSubmitted(true);
@@ -80,6 +88,13 @@ const RecipeDetails = () => {
     } else {
       setShowErrorMessage(true);
     }
+  };
+  
+
+  const handleShareClick = () => {
+    const currentURL = window.location.href;
+    navigator.clipboard.writeText(currentURL);
+    setShowSuccessMessagefd(true);
   };
 
   return (
@@ -122,72 +137,73 @@ const RecipeDetails = () => {
           </div></p>}           </div>
 
           <div className="col-md-4">
-            <img src="https://via.placeholder.com/150" alt="Recipe Image" className="img-fluid rounded" />
-            <div className="mt-4">
-              {isSubmitted ? (
-                <div className="alert alert-info" role="alert">
-                  Feedback has already been submitted.
-                </div>
-              ) : (
-                <>
-                  <h4>Feedback {id}</h4>
-                  <Rating
-                    count={5}
-                    value={feedbackData.rating}
-                    onChange={handleRatingChange}
-                    size={24}
-                    activeColor="#ffd700"
-                  />
-                  <textarea
-                    className={`form-control mt-2 ${isFeedbackValid.feedbackText ? '' : 'is-invalid'}`}
-                    rows="4"
-                    placeholder="Share your feedback..."
-                    value={feedbackData.feedbackText}
-                    onChange={handleFeedbackChange}
-                  ></textarea>
-                  <input
-                    type="email"
-                    className={`form-control mt-2 ${isFeedbackValid.email ? '' : 'is-invalid'}`}
-                    placeholder="Your Email"
-                    value={feedbackData.email}
-                    onChange={handleEmailChange}
-                  />
-                  <div className="invalid-feedback">
-                    {isFeedbackValid.email ? '' : 'Please provide a valid email address.'}
+          <img src="https://via.placeholder.com/150" alt="Recipe Image" className="img-fluid rounded" />
+          <div className="mt-4">
+            {isSubmitted ? (
+              <div className="alert alert-info" role="alert">
+                Feedback has already been submitted.
+              </div>
+            ) : (
+              <>
+                {showErrorMessage && (
+                  <div className="alert alert-danger mt-2" role="alert">
+                    You have already submitted feedback. You are not allowed to submit feedback again.
                   </div>
-                  <button
-                    className="btn btn-primary mt-2"
-                    onClick={handleFeedbackSubmit}
-                    disabled={!Object.values(isFeedbackValid).every((value) => value)}
-                  >
-                    Submit Feedback
-                  </button>
+                )}
 
-                  {showSuccessMessage && (
-                    <div className="alert alert-success mt-2" role="alert">
-                      Feedback submitted successfully!
-                    </div>
-                  )}
+                <h4>Feedback {id}</h4>
+                <Rating
+                  count={5}
+                  value={feedbackData.rating}
+                  onChange={handleRatingChange}
+                  size={24}
+                  activeColor="#ffd700"
+                />
+                <textarea
+                  className={`form-control mt-2 ${isFeedbackValid.feedbackText ? '' : 'is-invalid'}`}
+                  rows="4"
+                  placeholder="Share your feedback..."
+                  value={feedbackData.feedbackText}
+                  onChange={handleFeedbackChange}
+                ></textarea>
+                <input
+                  type="email"
+                  className={`form-control mt-2 ${isFeedbackValid.email ? '' : 'is-invalid'}`}
+                  placeholder="Your Email"
+                  value={feedbackData.email}
+                  onChange={handleEmailChange}
+                />
+                <div className="invalid-feedback">
+                  {isFeedbackValid.email ? '' : 'Please provide a valid email address.'}
+                </div>
+                <button
+                  className="btn btn-primary mt-2"
+                  onClick={handleFeedbackSubmit}
+                  disabled={!Object.values(isFeedbackValid).every((value) => value)}
+                >
+                  Submit Feedback
+                </button>
 
-                  {showErrorMessage && (
-                    <div className="alert alert-danger mt-2" role="alert">
-                      Error submitting feedback. Please try again.
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
+                {showSuccessMessage && (
+                  <div className="alert alert-success mt-2" role="alert">
+                    Feedback submitted successfully!
+                  </div>
+                )}
+              </>
+            )}
           </div>
+        </div>
 
-<h3 className="fd">Users FeedBacks</h3>
           <div className="row mt-4">
           <div className="col-md-12 boxdb">
+          <h3 className="fd">Users FeedBacks</h3>
+
             {feedbackdetails.map((feedback, index) => (
               feedback.recipeId === id ? (
                 <div key={index} className="media mb-3">
                   <div className="media-body">
-                    <h5 className="mt-0">Feedback {index + 1}</h5>
-                    <p><b>Rating:</b> {feedback.rating}</p>
+                    <h5 className="mt-0">Feedback </h5>
+                    <p><b>Rating:</b> <StarRating rating={feedback.rating} /></p>
                     <p><b>Feedback:</b> {feedback.feedbackText}</p>
                     <p><i className="fa fa-envelope" aria-hidden="true"></i> : {feedback.email}</p>
                   </div>

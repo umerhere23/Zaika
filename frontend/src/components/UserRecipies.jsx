@@ -15,7 +15,7 @@ const UserRecipes = () => {
     if (userName) {
       fetchUserRecipesData(userName);
     }
-  }, [userName]); // Include userName in the dependency array
+  }, [userName]); 
 
   const fetchUserRecipesData = async (userName) => {
     try {
