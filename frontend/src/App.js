@@ -10,7 +10,7 @@ import Dashboard from './components/Dashboard.jsx';
 import Recipes from './components/Recipe';
 import UserRecipes from './components/UserRecipies.jsx';
 import React, { useEffect, useState } from 'react';
-
+import AdminDasboard from './components/AdminDasboard.jsx';
 import RecipeDetails from './components/RecipeDetails.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
 
@@ -50,7 +50,7 @@ const App=()=>{
   <Route path="/UserRecipes" element={<UserRecipes />} />
   <Route path="/AdminLogin" element={<AdminLogin />} />
 
-
+<Route path='/AdminDasboard' element={<AdminDasboard/>}/>
 
 
 </Routes>

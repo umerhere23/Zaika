@@ -18,7 +18,7 @@ import {
 }
 from 'mdb-react-ui-kit';
 
-import Cookies from 'js-cookie'; // Import the js-cookie library
+import Cookies from 'js-cookie'; 
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -92,7 +92,7 @@ const handleLogin = async (e) => {
     <MDBCard className='bg-dark text-white my-5 mx-auto' style={{borderRadius: '1rem', maxWidth: '400px'}}>
       <MDBCardBody className='p-5 d-flex flex-column align-items-center mx-auto w-100' >
 
-        <h2 className="fw-bold mb-2 text-uppercase">Login</h2>
+        <h2 className="fw-bold mb-2 text-uppercase">User Login</h2>
         <p className="text-white-50 mb-5">Please enter your login and password!</p>
         <form onSubmit={handleLogin}>
 

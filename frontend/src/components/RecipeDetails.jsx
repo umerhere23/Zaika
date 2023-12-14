@@ -36,7 +36,7 @@ const RecipeDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchAllFeedbacks(); // Change this line to fetch all feedbacks
+        const result = await fetchAllFeedbacks(); 
         setFeedbackDetails(result);
       } catch (error) {
         console.error('Error:', error);

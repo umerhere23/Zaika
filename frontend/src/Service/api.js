@@ -160,3 +160,65 @@ export const removefeedback = async (_id) => {
     throw error;
   }
 };
+export const AdminloginApi = async (loginData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/Adminlogin`, loginData);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      throw error.response.data;
+    } else {
+      throw new Error('An error occurred during the login request');
+    }
+  }
+};
+
+export const addAdmin = async (applicantData) => {
+  try {
+      const response = await axios.post(`${baseUrl}/AdminSignup`, applicantData);
+      return response.data; 
+  } catch (error) {
+      throw error; 
+  }
+}
+
+export const fetchAllUsers = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/fetchUsers`);
+    
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching all Users: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error in fetchAllUsers:', error);
+    throw error;
+  }
+};
+
+export const deleteUser = async (_id) => {
+  try {
+    const response = await axios.delete(`${baseUrl}/removeaccount/${_id}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const blockUser = async ({ _id, action }) => {
+  try {
+    const isBlocked = action === true; 
+    await axios.put(`${baseUrl}/blockUser/${_id}`, { isBlocked });
+    return isBlocked;
+  } catch (error) {
+    throw error;
+  }
+};
+export const unblockUser = async (_id) => {
+  try {
+    await axios.put(`${baseUrl}/blockUser/${_id}`, { isBlocked: false });
+  } catch (error) {
+    throw error;
+  }
+};

@@ -7,6 +7,8 @@ import recipeRoutes from './routes/recpie.js';
 import Loginroute from './routes/Loginrout.js';
 import UserData from './routes/UserDetails.js';
 import Feedback from './routes/FeedBack.js';
+import Adminlogin from './routes/adminRoute.js';
+import fetchUserData from './routes/FetchAllUsers.js';
 
 const app = express(); 
 
@@ -39,3 +41,7 @@ app.use('/saveFeedback',Feedback)
 app.use('/fetchfeedbacks',Feedback)
 app.use('/removeRecipe',recipeRoutes)
 app.use('/removefeedback',Feedback)
+app.use('/Adminlogin',Adminlogin)
+app.use('/fetchUsers',fetchUserData)
+app.use('/removeaccount', UserData);
+app.use('/blockUser', fetchUserData);

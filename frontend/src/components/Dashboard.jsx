@@ -72,9 +72,9 @@ const Dashboard = () => {
             const updatedfeedback = feedbackdetails.filter(feedbackData => feedbackData._id !== _id);
             setFeedbackDetails(updatedfeedback);
 
-            console.log("Recipe removed successfully");
+            console.log("feedback removed successfully");
         } catch (error) {
-            console.error('Error removing recipe:', error);
+            console.error('Error removing feedback:', error);
         }      };
     useEffect(() => {
         const handleBeforeUnload = (event) => {
