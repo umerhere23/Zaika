@@ -8,10 +8,13 @@ import { faTrash, faBan, faCheckCircle } from '@fortawesome/free-solid-svg-icons
 import { fetchAllUsers, blockUser, deleteUser, unblockUser, removeRecipe, fetchRecipes } from '../Service/api';
 import Footer from './footer';
 import '../components/CSS/AdminDasboard.css';
-
+import { fetchAllFeedbacks,removefeedback } from '../Service/api';
+import StarRating from '../components/icons/stars.jsx'; 
+import { Table } from 'react-bootstrap';
 const AdminDasboard = () => {
   const location = useLocation();
   const userEmail = location.state?.userEmail;
+const [showSidebar, setShowSidebar] = useState(false);
 
   const [UserDetails, setUserDetails] = useState([]);
   const [allRecipes, setAllRecipes] = useState([]);
@@ -30,7 +33,31 @@ const AdminDasboard = () => {
       console.error('Error:', error);
     }
   };
+  const [feedbackdetails, setFeedbackDetails] = useState([]);
 
+  const fetchData1 = async () => {
+    try {
+      const result = await fetchAllFeedbacks(); 
+      setFeedbackDetails(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  useEffect(() => {
+    fetchData1();
+  }, []);
+
+  const handleRemoveFeedback = async(_id) => {
+    try {
+        await removefeedback(_id);
+
+        const updatedfeedback = feedbackdetails.filter(feedbackData => feedbackData._id !== _id);
+        setFeedbackDetails(updatedfeedback);
+
+        console.log("feedback removed successfully");
+    } catch (error) {
+        console.error('Error removing feedback:', error);
+    }      };
   const handleDeleteAccount = async (_id) => {
     try {
       await deleteUser(_id);
@@ -78,6 +105,7 @@ const AdminDasboard = () => {
 
   return (
     <>
+     <div className={`wrapper ${showSidebar ? 'sidebar-open' : ''}`}>
       <br />
       <br />
      
@@ -110,7 +138,7 @@ const AdminDasboard = () => {
           <div className="tables">
             <h5 className="fontst">All Users</h5>
             
-            <table className="table tb table-responsive">
+            <table className="table tb ">
               <thead>
                 <tr>
                   <th scope="col">#</th>
@@ -198,11 +226,56 @@ const AdminDasboard = () => {
                   ))}
                 </tbody>
               </table>
+<br />              <h5 className="fontst">All Users</h5>
+
+              <div>
+              <div className="row justify-content-center" id='fb'>
+
+  <div className="container py-5">
+    <Table striped bordered hover responsive className="table">
+      <thead className="thead-dark">
+        <tr>
+          <th colSpan={5} style={{ textAlign: "center" }} className='txt2'>
+            <h4>User Feedbacks</h4>
+          </th>
+        </tr>
+        <tr>
+          <th>#</th>
+          <th>Rating</th>
+          <th>Feedback</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {feedbackdetails.map((feedback, index) => (
+          <tr key={index}>
+            <td>{index + 1}</td>
+            <td><StarRating rating={feedback.rating} /></td>
+            <td>{feedback.feedbackText}</td>
+            <td>{feedback.email} </td>
+            <td>
+       
+ <FontAwesomeIcon
+                          icon={faTrash}
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => handleRemoveFeedback(feedback._id)}
+                        />             
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </Table>
+  </div>
+</div>
+
+    </div>
             </div>
           </div>
           <Footer />
           <ToastContainer />
         </div>
+      </div>
       </div>
     </>
   );
