@@ -18,11 +18,12 @@ export default function Meal({ meal }) {
 
   return (
     <article>
-      <h1>{meal.title}</h1>
+      <h5><b>{meal.title}</b></h5>
       <img src={imageUrl} alt="recipe" />
       <ul className="instructions">
         <li>Preparation time: {meal.readyInMinutes} minutes</li>
         <li>Number of servings: {meal.servings}</li>
+
       </ul>
 
       {/* <a href={meal.sourceUrl}>Go to Recipe</a> */}
