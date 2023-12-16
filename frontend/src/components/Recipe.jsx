@@ -100,13 +100,15 @@ const Recipe = () => {
           </button>
         </div>
       </div>
-    <div>
-    <h1 className='fonts'>Avilable Recpies</h1>
-    <div class="alert alert-warning " role="alert">
+
+      <section style={{ backgroundColor: '#eee' }}>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+      <div class="alert alert-warning " role="alert">
     <p className='msg'>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
 </div>
-<div className="row">
-<div className="input-group mb-3 " style={{width:"30%",marginLeft:"30%"}}>
+      <h1 className='fontsa'>Available Recpies</h1>
+      <div className="input-group mb-3 " style={{width:"30%",marginLeft:"30%"}}>
         <label htmlFor="recipeSearch" className="visually-hidden">
           Search by Recipe Name:
         </label>
@@ -131,30 +133,51 @@ const Recipe = () => {
           <i className="fas fa-search"></i>
         </button>
       </div>
+      <div className="container py-5">
+        <div className="row">
+        
 
+          {filteredRecipes.map((details) => (
+            <div className="col-md-4 mb-4" key={details._id} onClick={() => handleRecipeClick(details)}>
+              <div className="card h-100 box">
+                <img
+                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStB2b-YH3ev3TzntBN-p2g7B1sUYbNaW2GEw&usqp=CAU"
+                className="card-img-top"
+                alt="Laptop"
+              />
+                  <div className="card-body">
+                <div className="d-flex justify-content-between">
+                  <p className="small">
+                    <a href="#!" className="text-muted">
+                    {details.name}
+                    </a>
+                  </p>
+                  <p className="small text-danger">
+                  <i className="fa fa-user" aria-hidden="true"></i>: {details.userName}
+                  </p>
+                </div>
 
-          <ToastContainer />
-<br></br>          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-<div className="row">
-  {filteredRecipes.map((details) => (
-    <div className="col-md-4 mb-4 " key={details._id} onClick={() => handleRecipeClick(details)}>
-      <div className="card h-100 box">
-        <img src={details.image} alt={`Recipe: ${details.name}`} className="card-img-top" />
-        <div className="card-body">
-          <h5 className="card-title">{details.name}</h5>
-          <p className="card-text"><i class="fa fa-user" aria-hidden="true"></i>
-: {details.userName}</p>
-
-      
-
+                <div className="d-flex justify-content-between mb-2">
+                  <p className="text-muted mb-0">
+                    Time To Cook: <span className="fw-bold">{details.timeToCook}</span>
+                  </p>
+                  <div className="ms-auto text-warning">
+                    <i className="fa fa-star"></i>
+                    <i className="fa fa-star"></i>
+                    <i className="fa fa-star"></i>
+                    <i className="fa fa-star"></i>
+                    <i className="fa fa-star"></i>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-    </div>
-  ))}
-</div>
+    </section>
+    <ToastContainer />
 
-        </div>
-      </div>
       <Footer />
     </>
   );

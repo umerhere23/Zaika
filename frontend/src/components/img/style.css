@@ -7,7 +7,6 @@
     margin-bottom: 10px;
     color: rgb(88, 83, 73);
     margin: 10px;
-    /* background: #efd112; */
     background-color: #EED971;
     border: wheat;
     width: 30%;
@@ -32,11 +31,11 @@
       font-size:1vw;}
 
 
-nav:hover .nav-item:hover{
+/* nav:hover .nav-item:hover{
     filter:blur(0px);
 }
 nav:hover .nav-item{
-    filter:blur(5px);}
+    filter:blur(5px);} */
 
 #navbarNav{
     margin-left: 50%;
@@ -44,8 +43,9 @@ nav:hover .nav-item{
 
 }
 .logo{
-    width: 10%;
+    width: 100px;
     margin-left: 5%;
+    height:  80px;
 }
 
 #heading{
@@ -119,6 +119,8 @@ transition: transform 3s; /* Set the duration to 3 seconds */
 }
 footer{
     font-family: Inter, Arial, Helvetica, sans-serif;
+    background: rgb(0, 12, 20);
+
 }
   @media screen and (max-width: 600px) {
     .carousel-caption{  

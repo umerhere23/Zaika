@@ -1,4 +1,5 @@
 nav{
+    background: #001827;
 
     height: 60px;
 height: 100px;}
@@ -6,8 +7,15 @@ height: 100px;}
     color: aliceblue;
 
 }
+.navbar-toggler{
+    color: aliceblue;
+    background: rgb(254, 255, 255);
 
+}
+.navbar-collapse{
+    background: #001827;
 
+}
 nav ul li a{
     color: aliceblue;
 

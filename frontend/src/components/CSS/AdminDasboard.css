@@ -92,13 +92,22 @@
   margin: 0;
 }
 
-/* Set the height of the sidebar to 100% of the container */
 .CDBSidebar {
   height: 100%;
 }
-
+CDBSidebar{
+  background: #000;
+}
 /* Set the height of the sidebar content to 100% of the container */
 .CDBSidebarContent {
   height: 100%;
   overflow: auto; /* Add this line to enable scrolling if the content is too long */
+}
+.tt{
+  margin-top: -45%;
+  margin-left: 12%;
+}
+.txt2{
+  background-color: #f1f1f1;
+
 }

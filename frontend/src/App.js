@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import AdminDasboard from './components/AdminDasboard.jsx';
 import RecipeDetails from './components/RecipeDetails.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
-
+import MealPlanner from './components/Mealplanner/Mealplanner.jsx';
 import LoadingSpinner from '../src/components/loading.jsx';
 
 const App=()=>{
@@ -51,6 +51,7 @@ const App=()=>{
   <Route path="/AdminLogin" element={<AdminLogin />} />
 
 <Route path='/AdminDasboard' element={<AdminDasboard/>}/>
+<Route path='/Mealplanner' element={<MealPlanner/>}/>
 
 
 </Routes>

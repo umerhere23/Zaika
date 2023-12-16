@@ -5,11 +5,19 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
         const user = await Signup.findOne({ email });
-        if (user && await bcrypt.compare(password, user.password)) {
-            // Successful login
-            res.status(200).json({ message: 'Login successful' });
+
+        if (user) {
+            console.log('User found:', user);
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+         if (isPasswordValid) {
+                res.status(200).json({ message: 'Login successful', user: { ...user.toObject() } });
+            } else {
+                console.log('Invalid email or password');
+                res.status(401).json({ message: 'Invalid email or password' });
+            }
         } else {
-            // Invalid login
+            console.log('User not found');
             res.status(401).json({ message: 'Invalid email or password' });
         }
     } catch (error) {

@@ -1,10 +1,10 @@
 import React from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 import './img/style.css';
 
 const Footer = () => {
     return (
-        <footer className="bg-dark text-white p-5">
+        <footer className=" text-white p-5" >
             <div className="container">
                 <div className="row">
                     <div className="col-md-4">

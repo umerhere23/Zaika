@@ -390,7 +390,7 @@ const Dashboard = () => {
     </div>
 
     
-            <footer className="bg-dark text-white p-5">
+            <footer className=" text-white p-5">
                 <div className="container">
                     <div className="row">
                         <div className="col-md-4">

@@ -222,3 +222,21 @@ export const unblockUser = async (_id) => {
     throw error;
   }
 };
+
+
+export const addMealPlan = async (mealPlanData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/meal-planner`, mealPlanData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getMealSuggestions = async (userPreferences) => {
+  try {
+    const response = await axios.post(`${baseUrl}/meal-suggestions`, userPreferences);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

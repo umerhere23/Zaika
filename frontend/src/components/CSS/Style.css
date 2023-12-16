@@ -1,7 +1,8 @@
-.fonts{
+.fontsa{
     color: rgb(133, 133, 133);
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    margin-left: 40%;
+    text-align: center;
+    margin-left: -8%;
 }
 /* Add this CSS to your Recipe.css file or in your component's styles */
 

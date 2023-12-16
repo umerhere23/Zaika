@@ -54,29 +54,41 @@ const Login = () => {
     });
   };
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  if (!email || !password) {
-    showError("Please provide both email and password.");
-    return;
-  }
-
-  try {
-    const response = await loginApi({ email, password });
-    if (response.message === "Login successful") {
-      Cookies.set("userToken", response.token, { expires: 1 });
-      Cookies.set("userSession", JSON.stringify(response.user), { expires: 1 });
-      showSuccessAndNavigate("Login Successful");
-
-      // Disable forward navigation
-      window.history.forward = () => false;
-    } else {
-      showError(response.message || "Authentication failed.");
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    if (!email || !password) {
+      showError("Please provide both email and password.");
+      return;
     }
-  } catch (err) {
-    showError("An error occurred during authentication.");
-  }
-};
+  
+    try {
+      const response = await loginApi({ email, password });
+      console.log(response.message);
+
+      if (response.message === "Login successful") {
+        Cookies.set("userToken", response.token, { expires: 1 });
+        Cookies.set("userSession", JSON.stringify(response.user), { expires: 1 });
+  
+        const userData = response.user;
+  
+  
+        if (userData.isBlocked===true) {
+          showError("Account is blocked. Please contact support.");
+        }
+        
+        else {
+          showSuccessAndNavigate("Login Successful");
+          window.history.forward = () => false;
+        }
+      }  else {
+        showError(response.message || "Authentication failed.");
+      }
+    } catch (err) {
+      showError("An error occurred during authentication.");
+    }
+  };
+  
+  
 
 
   return (

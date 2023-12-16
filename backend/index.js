@@ -45,3 +45,4 @@ app.use('/Adminlogin',Adminlogin)
 app.use('/fetchUsers',fetchUserData)
 app.use('/removeaccount', UserData);
 app.use('/blockUser', fetchUserData);
+app.use('/blockUser', fetchUserData);

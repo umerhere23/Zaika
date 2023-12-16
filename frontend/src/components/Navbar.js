@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import './img/nav.css';
-import logo from './img/logo.png';
+import logo from './img/zaika.png';
 import './img/style.css';
 
 const Navbar=()=>{
@@ -16,8 +16,8 @@ const Navbar=()=>{
         </nav> */}
        
 
-<nav class="navbar navbar-expand-lg navbar bg-dark " >
-  <div class="container-fluid bg-dark">
+<nav class="navbar navbar-expand-lg navbar  " >
+  <div class="container-fluid ">
   <img src={logo} alt="Logo" className='logo' />
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -32,7 +32,7 @@ const Navbar=()=>{
 
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
+          <a class="nav-link" href="/Mealplanner">MealPlanner</a>
         </li>
         <li class="nav-item">
           <a class="nav-link " href="/login" tabindex="-1" aria-disabled="true">Login</a>
