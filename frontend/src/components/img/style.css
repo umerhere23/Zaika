@@ -119,7 +119,7 @@ transition: transform 3s; /* Set the duration to 3 seconds */
 }
 footer{
     font-family: Inter, Arial, Helvetica, sans-serif;
-    background: rgb(0, 12, 20);
+    background: rgb(0, 19, 31);
 
 }
   @media screen and (max-width: 600px) {
