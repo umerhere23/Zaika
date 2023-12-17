@@ -8,7 +8,7 @@ export const AddRecipe = async (req, res) => {
     instructions,
     image,
     timeToCook,
-    userName,
+    UserName,
     email,
   } = req.body;
   const imageString = image.toString('base64');
@@ -19,7 +19,7 @@ export const AddRecipe = async (req, res) => {
     instructions: instructions,
     image: imageString,
     timeToCook: timeToCook,
-    userName: userName,
+    userName: UserName,
     email: email,
   });
 

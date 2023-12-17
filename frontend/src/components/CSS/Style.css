@@ -50,6 +50,8 @@
     background-color: rgb(0, 153, 255);
     border: none;
     margin-left: 45%;
+  
+    height: 40px;
   }
 .txt2{
   font-family: Georgia, 'Times New Roman', Times, serif;

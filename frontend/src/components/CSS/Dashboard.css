@@ -23,3 +23,49 @@ border-radius: 15px 15px;
     margin-top: -5%;
 }
 
+
+.tt{
+    margin-left: 49%;
+    width: 60%;
+}
+.feedbackUsers{
+    margin-top: -65%;
+    margin-left: 19%;
+    width: 70%;
+}
+#recp{
+    margin-top: -70%;
+    margin-left: 19%;
+    width: 80%;
+}
+.Formrecp{
+    margin-left: 40%;
+    margin-top: -65%;
+    width: 60%;
+
+}
+.prof{
+    margin-top: -69%;
+    width: 60%;
+}
+.tte{
+    margin-top: -69%;
+    width: 60%;
+}
+.Sucessmsg{
+    margin-top: -60%;
+    width: 60%;
+    margin-left: 20%;
+}
+
+.btt a{
+    color: rgb(0, 0, 0);
+    border: none;
+    text-decoration: none;
+
+}
+.btt :hover{
+    color: rgb(255, 255, 255);
+text-decoration: none;
+
+}

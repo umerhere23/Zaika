@@ -1,209 +1,451 @@
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { fetchUserDetails, updateUserDetails, fetchUserRecipes, removeRecipe } from '../Service/api';
-import { useLocation, Link, Navigate ,useNavigate} from 'react-router-dom';
-import { fetchAllFeedbacks,removefeedback } from '../Service/api';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { CRow, CCol, CWidgetStatsB } from '@coreui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faBan, faCheckCircle, faBars } from '@fortawesome/free-solid-svg-icons';
+import LoadingSpinner from '../components/loading.jsx';
+import "./CSS/Dashboard.css";
+import { onAddRecipe } from '../Service/api';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Footer from './footer';
 import StarRating from '../components/icons/stars.jsx'; 
 import { Table } from 'react-bootstrap';
 import "./CSS/Dashboard.css";
-import LoadingSpinner from '../components/loading.jsx';
+import { fetchUserDetails, updateUserDetails, fetchUserRecipes, removeRecipe } from '../Service/api';
+import { useLocation, Link, Navigate ,useNavigate} from 'react-router-dom';
+import { fetchAllFeedbacks,removefeedback } from '../Service/api';
+import imgsucess from "../components/img/tikpic.png"
+import {
+  CDBSidebar,
+  CDBSidebarContent,
+  CDBSidebarHeader,
+  CDBSidebarMenu,
+  CDBSidebarMenuItem,
+  CDBSidebarFooter,
+} from 'cdbreact';
+import { CDBInput, CDBCard, CDBCardBody, CDBIcon, CDBBtn, CDBLink, CDBContainer } from 'cdbreact';
 
-const Dashboard = () => {
+const Dasboard = () => {
+    const location = useLocation();
+
     const [userData, setUserData] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [userRecipes, setUserRecipes] = useState([]);
-    const location = useLocation();
     const userEmail = location.state?.userEmail;
+    const Uname =location.state?.username
+
     const userName = userData?.Username || '';
     const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
   const [feedbackdetails, setFeedbackDetails] = useState([]);
+    const [showSidebar, setShowSidebar] = useState(false);
+    const [selectedTable, setSelectedTable] = useState('users');
+  
+  
 
-  const fetchData1 = async () => {
-    try {
-      const result = await fetchAllFeedbacks(); 
-      setFeedbackDetails(result);
-    } catch (error) {
-      console.error('Error:', error);
-    }
+    const [recipedata, setRecipe] = useState({
+        name: '',
+        ingredients: '',
+        instructions: '',
+        image: null,
+        timeToCook: '',
+        UserName:Uname ,
+        email: userEmail || '',
+      });
+  console.log(Uname)
+
+  
+    const [errors, setErrors] = useState({});
+
+    
+    const [isSubmitted, setIsSubmitted] = useState(false); 
+  const{name,ingredients,instructions,image,timeToCook,UserName,email}=recipedata;
+  const handleChange = (e) => {
+    setRecipe({ ...recipedata, [e.target.name]: e.target.value });
   };
-  useEffect(() => {
-    fetchData1();
-  }, []);
-    useEffect(() => {
-        if (userName) {
-            fetchUserData(userName);
-            fetchUserRecipesData(userName);
+  
+    const fetchData1 = async () => {
+        try {
+          const result = await fetchAllFeedbacks(); 
+          setFeedbackDetails(result);
+        } catch (error) {
+          console.error('Error:', error);
         }
-    }, [userName]);
-    useEffect(() => {
+      };
+      useEffect(() => {
+        fetchData1();
+      }, []);
+        useEffect(() => {
+            if (userName) {
+                fetchUserData(userName);
+                fetchUserRecipesData(userName);
+            }
+        }, [userName]);
+        useEffect(() => {
+            if (!isLoggedIn()) {
+                return <Navigate to="/login" />;
+            }
+        }, []);
+    
+        useEffect(() => {
+            const fetchData = async () => {
+    
+                await new Promise(resolve => setTimeout(resolve, 500));
+    
+                setIsLoading(false);
+            };
+    
+            fetchData();
+        }, []);
+        const addDetails = async (e) => {
+            e.preventDefault();
+          
+            if (validateForm()) {
+              const basePath = '../img';
+              const fileName = `${recipedata.name.replace(/\s+/g, '_')}.jpg`; 
+              const imagePath = `${basePath}/${fileName}`;
+          
+              const imageBlob = recipedata.image;
+              const reader = new FileReader();
+          
+              reader.readAsDataURL(imageBlob);
+          
+              reader.onloadend = () => {
+                const base64String = reader.result;
+                localStorage.setItem(imagePath, base64String);
+              };
+              console.log(`Image "${fileName}" saved to Local Storage`);
+          
+              try {
+                await onAddRecipe(recipedata);
+          
+                toast.success('Recipe submitted successfully!',  { autoClose: 500 });
+
+                setRecipe({
+                    name: '',
+                    ingredients: '',
+                    instructions: '',
+                    image: null,
+                    timeToCook: '',
+                    UserName: Uname,
+                    email: userEmail || '',
+                  });
+                  setErrors({});
+                  setIsSubmitted(true);
+
+              } catch (error) {
+                console.error('Error submitting recipe:', error);
+                toast.error('Error submitting recipe. Please try again.');
+              }
+          
+            }
+          };
+          
+
+        const handleImageChange = (e) => {
+            const imageFile = e.target.files[0];
+          
+            if (imageFile) {
+              const reader = new FileReader();
+          
+              reader.onload = (event) => {
+                const base64String = event.target.result;
+                setRecipe({ ...recipedata, image: imageFile, imageString: base64String });
+              };
+          
+              reader.readAsDataURL(imageFile);
+            }
+          };
+        
+          const validateForm = () => {
+              let errors = {};
+      
+              if (!name.trim()) {
+                  errors.name = "Name is required";
+              } else if (name.length < 6){
+                  errors.name = "Invalid name format";
+              }
+      
+              if (!ingredients.trim()) {
+                  errors.ingredients = "ingredients is required";
+              } else if (ingredients.length < 6) {
+                  errors.ingredients = "ingredients must be at least 6 characters long";
+              }
+      
+              if (!instructions.trim()) {
+                  errors.instructions = "instructions is required";
+              }
+      
+              if (!timeToCook.trim()) {
+                  errors.timeToCook = "timeToCook is required";
+              }
+      
+              if (!UserName.trim()) {
+                  errors.UserName = "userName is required";
+              }
+      
+              if (!email.trim()) {
+                  errors.email = "Email is required";
+              } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+                  errors.email = "Invalid email format";
+              }
+      
+              setErrors(errors);
+      
+              return Object.keys(errors).length === 0;
+          }
+        const fetchUserRecipesData = async (userName) => {
+            try {
+                const recipes = await fetchUserRecipes(userName);
+                setUserRecipes(recipes);
+            } catch (error) {
+                console.error('Error fetching user recipes:', error);
+                toast.error('Failed to fetch user recipes');
+            }
+        };
+    
+        const handleRemoveFeedback = async (_id) => {
+            try {
+              await removefeedback(_id);
+        
+              const updatedfeedback = feedbackdetails.filter(feedbackData => feedbackData._id !== _id);
+              setFeedbackDetails(updatedfeedback);
+        
+              toast.success('Feedback removed successfully', { autoClose: 500 });
+            } catch (error) {
+              console.error('Error removing feedback:', error);
+              toast.error('Error removing feedback', { autoClose: 500 });
+            }
+          };
+        useEffect(() => {
+            const handleBeforeUnload = (event) => {
+                if (!isLoggedIn()) {
+                    event.returnValue = true;
+                    return true;
+                }
+            };
+    
+            window.addEventListener('beforeunload', handleBeforeUnload);
+    
+            return () => {
+                window.removeEventListener('beforeunload', handleBeforeUnload);
+            };
+        }, []);
+    
+        const isLoggedIn = () => {
+            const token = localStorage.getItem("userToken");
+            return !!token;
+        };
+        const handleRemoveRecipe = async (recipeId) => {
+            try {
+                await removeRecipe(recipeId);
+    
+                const updatedRecipes = userRecipes.filter(recipe => recipe._id !== recipeId);
+                setUserRecipes(updatedRecipes);
+    
+                toast.success("Recipe removed successfully", { autoClose: 500 });
+            } catch (error) {
+                console.error('Error removing recipe:', error, { autoClose: 500 });
+            }
+        };
+    
+        useEffect(() => {
+            if (userEmail) {
+                fetchUserData(userEmail);
+            }
+        }, [userEmail]);
+    
+        const fetchUserData = async (email) => {
+            try {
+                const result = await fetchUserDetails(email);
+                setUserData(result);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        };
+    
+    
+    
         if (!isLoggedIn()) {
             return <Navigate to="/login" />;
         }
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            setIsLoading(false);
+    
+        const handleEditClick = () => {
+            setEditMode(!editMode);
         };
-
-        fetchData();
-    }, []);
-
-    const fetchUserRecipesData = async (userName) => {
-        try {
-            const recipes = await fetchUserRecipes(userName);
-            setUserRecipes(recipes);
-        } catch (error) {
-            console.error('Error fetching user recipes:', error);
-            toast.error('Failed to fetch user recipes');
-        }
-    };
-
-    const handleRemoveFeedback = async(_id) => {
-        try {
-            await removefeedback(_id);
-
-            const updatedfeedback = feedbackdetails.filter(feedbackData => feedbackData._id !== _id);
-            setFeedbackDetails(updatedfeedback);
-
-            console.log("feedback removed successfully");
-        } catch (error) {
-            console.error('Error removing feedback:', error);
-        }      };
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            if (!isLoggedIn()) {
-                event.returnValue = true;
-                return true;
+    
+        const handleFormSubmit = async (e) => {
+            e.preventDefault();
+            try {
+                await updateUserDetails(userData._id, userData);
+                toast.success("Profile updated successfully", { autoClose: 500 });
+            } catch (error) {
+                console.error('Error updating user details:', error);
+                toast.error("Failed to update user data");
             }
         };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, []);
-
-    const isLoggedIn = () => {
-        const token = localStorage.getItem("userToken");
-        return !!token;
-    };
-    const handleRemoveRecipe = async (recipeId) => {
-        try {
-            await removeRecipe(recipeId);
-
-            const updatedRecipes = userRecipes.filter(recipe => recipe._id !== recipeId);
-            setUserRecipes(updatedRecipes);
-
-            toast.success("Recipe removed successfully");
-        } catch (error) {
-            console.error('Error removing recipe:', error);
+    
+        if (isLoading) {
+            return <LoadingSpinner />;
         }
-    };
+    
+     
+          
+    
 
-    useEffect(() => {
-        if (userEmail) {
-            fetchUserData(userEmail);
-        }
-    }, [userEmail]);
+        const UserRecpieUpload = () => {
+            return (
+             <>
+             {isSubmitted ? ( 
+                <div className="text-center Sucessmsg">
+                    <img src={imgsucess} alt=""  style={{width:"5%"}}/>
+                    <h2>Thank you for your submission!</h2>
+                    <p>Your recipe has been added.</p>
+                    <button  className="btn btn-primary btt"> <a href='/dashboard'>Save Changes</a></button>
 
-    const fetchUserData = async (email) => {
-        try {
-            const result = await fetchUserDetails(email);
-            setUserData(result);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    };
+                </div>
+        ) : (
+              <CDBContainer className='Formrecp'>
+                <CDBCard style={{ width: '30rem' }}>
+                  <CDBCardBody className="mx-4">
+                    <div className="text-center mt-4 mb-2">
+                      <h2>Add Recipe</h2>
+                    </div>
+                    <div className="form-flex-row mb-n4">
+                      <div className="col">
+                        <CDBInput
+                          material
+                          placeholder={errors.name ? errors.name : 'Name of recipe'}
+                          type="text"                         
+                          name="name"
+                          value={name}
+                          onChange={(e) => handleChange(e)}
+                          required              style={{ borderColor: errors.name ? 'red' : '' }}
+
+                        />
+                        {errors.name && (
+                          <div className="invalid-feedback">{errors.name}</div>
+                        )}
+                      </div>
+                    </div>
+          
+                    <CDBInput
+                      material
+                      placeholder={errors.ingredients ? errors.ingredients : 'Step to make ingredients'}
+                      type="text"
+                      name="ingredients"
+                      value={ingredients}
+                      onChange={(e) => handleChange(e)}
+                      required              style={{ borderColor: errors.name ? 'red' : '' }}
+
+                    />
+                    {errors.ingredients && (
+                      <div className="invalid-feedback">{errors.ingredients}</div>
+                    )}
+          
+                    <CDBInput
+                      material
+                      placeholder={errors.instructions ? errors.instructions : 'Instructions'}
+                      type="text"
+                      name="instructions"
+                      value={instructions}
+                      onChange={(e) => handleChange(e)}
+                      style={{ borderColor: errors.name ? 'red' : '' }}
+
+                      required
+                    />
+                    {errors.instructions && (
+                      <div className="invalid-feedback">{errors.instructions}</div>
+                    )}
+          
+                    <CDBInput
+                      material
+                      placeholder={errors.timeToCook ? errors.timeToCook : 'Time to cook (mins)'}
+                      type="number"
+                      name="timeToCook"
+                      value={timeToCook}
+                      onChange={(e) => handleChange(e)}
+                      required              style={{ borderColor: errors.name ? 'red' : '' }}
+
+                    />
+                    {errors.timeToCook && (
+                      <div className="invalid-feedback">{errors.timeToCook}</div>
+                    )}
+          
+                    <CDBInput
+                      material
+                      placeholder="Picture"
+                      type="file"
+                      name="image"
+                      accept=".jpg, .jpeg, .png"
+                      onChange={handleImageChange}
+                    />
+                    {errors.image && (
+                      <div className="invalid-feedback">{errors.image}</div>
+                    )}
+                    {image && (
+                      <div>
+                        <img
+                          src={URL.createObjectURL(image)}
+                          alt="Recipe"
+                          style={{ width: '100px', height: '100px' }}
+                        />
+                      </div>
+                    )}
+          
+                    <CDBInput
+                      material
+                      hint="User name"
+                      type="text"
+                      name="UserName"
+                      value={recipedata.UserName}
+                      onChange={(e) => handleChange(e)}
+                      required
+                      disabled
+                    />
+                    {errors.UserName && (
+                      <div className="invalid-feedback">{errors.UserName}</div>
+                    )}
+          
+                    <CDBInput
+                      material
+                      hint="Email"
+                      type="email"
+                      name="email"
+                      value={email}
+                      onChange={(e) => handleChange(e)}
+                      required
+                      disabled
+                    />
+                    {errors.email && (
+                      <div className="invalid-feedback">{errors.email}</div>
+                    )}
+          
+                    <br />
+                    <div className="form-group">
+                    <button className="btn btn-primary1" onClick={(e) => addDetails(e)}>Apply</button>
+
+                    </div>
+                  </CDBCardBody>
+                </CDBCard>
+              </CDBContainer>)}
+             </>
+            );
+          };
 
 
-
-    if (!isLoggedIn()) {
-        return <Navigate to="/login" />;
-    }
-
-    const handleEditClick = () => {
-        setEditMode(!editMode);
-    };
-
-    const handleFormSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await updateUserDetails(userData._id, userData);
-            toast.success("Profile updated successfully");
-        } catch (error) {
-            console.error('Error updating user details:', error);
-            toast.error("Failed to update user data");
-        }
-    };
-
-    if (isLoading) {
-        return <LoadingSpinner />;
-    }
-
-    const handleRecipeClick = (userData) => {
-        navigate(`/AddRecpie/${userData._id}`, {
-          state: {
-            Username: userData.Username,
-            useremail: userData.email,
-          }
-        });
-      };
-      
-    console.log(userData)
-    return (
-        <>
-
-<div className="container py-5">
-        <div className="alert alert-success" role="alert">
-          <h4 className="alert-heading">Welcome to Your User Profile!</h4>
-          <p>
-            We're excited to have you here. This is your personal space where you can manage and update your profile
-            information. Feel free to explore and make any changes you need.
-          </p>
-          <hr />
-          <p className="mb-0">
-            If you have any questions or need assistance, don't hesitate to reach out. Enjoy your time in your user
-            profile!
-          </p>
-        </div>
-                <ul class="nav">
-                    
-                    <li class="nav-item">
-                    {/* <Link to={{ pathname: "/AddRecpie", state: { userId: userData?._id } }} className="navbar-brand">
-  AddRecipe
-</Link> */}
-
-<div className="col-md-4 mb-4" key={userData._id} onClick={() => handleRecipeClick(userData)}>
-  AddRecipe
-</div>
-
-
-
-                   </li> &nbsp;&nbsp;&nbsp;
-
-                    <li class="nav-item">
-                        <a class="navbar-brand " href="#recp" >User Recipes</a>
-                    </li> &nbsp;&nbsp;&nbsp;
-                    <li class="nav-item">
-                        <a class="navbar-brand " href="#fb">UserFeedbacks</a>
-                    </li> &nbsp;&nbsp;&nbsp;
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-                {userData ? (
-                    <div className='new'>
+const renderUsersTable = () => {
+  return (
+    <>
+    <br />
+    {userData ? (
+                    <div className='new users1'>
                         {editMode ? (
-                            <form onSubmit={handleFormSubmit} className="max-w-md mx-auto">
-                                <table className="table">
+                            <form onSubmit={handleFormSubmit} className="max-w-md mx-auto tte">
+                                <table className="table  ">
                                     <tbody>
                                         <tr className='square border border-warning'>
                                             <th colSpan={"2"} style={{ textAlign: "center" }}>Edit User Profile</th>
@@ -243,12 +485,13 @@ const Dashboard = () => {
                                     </tbody>
                                 </table>
                                 <div className="text-center mt-4">
-                                    <button type="submit" className="btn btn-primary">Save Changes</button>
-                                </div>
+                <button type="submit" className="btn btn-primary mr-2">Save Changes</button> &nbsp;
+                <button type="button" onClick={handleEditClick} className="btn btn-danger">Cancel</button>
+              </div>
                             </form>
                         ) : (
                             <div>
-                                <div className="container">
+                                <div className="container prof">
                                     <div className="row justify-content-center">
                                         <div className="col-md-8">
                                             <table className="table">
@@ -293,19 +536,26 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )}
-                    </div>
-                ) : (
-                    <p>Loading user data...</p>
-                )}
-                <div className="flex justify-center mt-4 btnedit">
-                    <button onClick={handleEditClick} className="bg-blue-500 hover:bg-blue-700 text-blue font-bold py-2 px-4 rounded">
-                        {editMode ? 'Cancel' : 'Edit Profile'}
-                    </button>
+                                <div className="flex justify-center mt-4 btnedit">
+                <button onClick={handleEditClick} className="bg-blue-500 hover:bg-blue-700 text-blue font-bold py-2 px-4 rounded">
+                  Edit Profile
+                </button>
                 </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <p>Loading user data...</p>
+      )}
+    </>
+  );
+};
 
-                <div className="row justify-content-center" id='recp'>
+const renderRecipesTable = () => {
+  return (
+    <>
+    
+    <div className="row justify-content-center " id='recp'>
                     <div className="container py-5">
                         {userRecipes.length > 0 ? (
                             <Table striped bordered hover>
@@ -327,13 +577,14 @@ const Dashboard = () => {
                                             <td>{recipe.ingredients}</td>
                                             <td>{recipe.instructions}</td>
                                             <td>
-                                                <span
-                                                    className='icons'
-                                                    style={{ cursor: 'pointer', color: 'red' }}
-                                                    onClick={() => handleRemoveRecipe(recipe._id)}
-                                                >
-                                                    <b> &#x1F5D1;</b>
-                                                </span>
+                                                
+
+<FontAwesomeIcon
+                          icon={faTrash}
+                  type="button"
+                  className="btn "
+                  onClick={() => handleRemoveRecipe(recipe._id)}
+                />
                                             </td>
                                         </tr>
                                     ))}
@@ -344,8 +595,15 @@ const Dashboard = () => {
                         )}
                     </div>
                 </div>
-            </div>
-         <div>
+
+    </>
+  );
+};
+
+const renderFeedbackTable = () => {
+  return (
+    <>
+        <div className='feedbackUsers'> 
       <div className="row justify-content-center" id='fb'>
       <div className="container py-5">
       <Table striped bordered hover responsive className="table">
@@ -372,15 +630,17 @@ const Dashboard = () => {
               <td>{feedback.feedbackText}</td>
               <td>{feedback.email} </td>
               <td>
-                <button
+              <FontAwesomeIcon
+                          icon={faTrash}
                   type="button"
                   className="btn "
                   onClick={() => handleRemoveFeedback(feedback._id)}
-                >
-                  <b> &#x1F5D1;</b>
-                </button>
+                />
+          
               </td>
             </tr>
+
+            
           ) : null
         ))}
       </tbody>
@@ -390,55 +650,45 @@ const Dashboard = () => {
     </div>
 
     
-            <footer className=" text-white p-5">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-4">
-                            <h5>About Us</h5>
-                            <p>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
-                        </div>
-                        <div className="col-md-4">
-                            <h5>Quick Links</h5>
-                            <ul className="list-unstyled">
-                                <li><a href="#">Home</a></li>
-                                <li><a href="#">Services</a></li>
-
-                                <li><a href="#">Portfolio</a></li>
-                                <li><a href="#">Contact</a></li>
-                                <li><a href="/signup">Signup</a></li>
-                                <li><a href="/AddRecpie">AddRecipe</a></li>
-                                <li><a href="/login">Login</a></li>
-                                <li><a href="/dashboard">Dashboard</a></li>
-
-
-
-
-                            </ul>
-                        </div>
-                        <div className="col-md-4">
-                            <h5>Contact Us</h5>
-                            <address>
-                                <p>Cui atd</p>
-                                <p>Abbottabad, Pkaistan</p>
-                                <p>Email: omerjh5004@gamil.com</p>
-                            </address>
-                        </div>
-                    </div>
-                    <hr className="my-4" />
-                    <div className="row">
-                        <div className="col-md-6">
-                            <p>&copy; {new Date().getFullYear()} Zaika(The Recipie)</p>
-                        </div>
-                        <div className="col-md-6">
-                            <ul className="list-inline float-md-end">
-                                <li className="list-inline-item"><a href="#">Privacy Policy</a></li>
-                                <li className="list-inline-item"><a href="#">Terms of Service</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </footer>        </>
-    );
+    </>
+  );
 };
 
-export default Dashboard;
+return (
+  <>
+ 
+
+ <CDBSidebar className='CDBSidebar'style={{background:"  #001827" , height: "150%", maxHeight: "1190vh", overflowY: "auto" }}>
+        <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>User Dasbaord</CDBSidebarHeader>
+        <CDBSidebarContent>
+          <CDBSidebarMenu>
+            <CDBSidebarMenuItem onClick={() => setSelectedTable('users')} icon="user">Users</CDBSidebarMenuItem>
+            <CDBSidebarMenuItem onClick={() => setSelectedTable('recipes')} icon="sticky-note">Recipes</CDBSidebarMenuItem>
+            <CDBSidebarMenuItem onClick={() => setSelectedTable('feedback')} icon="star" iconType="solid">
+              Feedback
+            </CDBSidebarMenuItem>
+            <CDBSidebarMenuItem onClick={() => setSelectedTable('upload')} icon="plus" iconType="solid">
+              Upload Recpie
+            </CDBSidebarMenuItem>
+          </CDBSidebarMenu>
+        </CDBSidebarContent>
+<hr />
+<CDBSidebarFooter style={{ textAlign: 'center' }}>
+    <div className="sidebar-btn-wrapper" style={{ padding: '20px 5px' }}>
+      <p>&copy; {new Date().getFullYear()} Zaika (The Recipe)</p>
+    </div>
+  </CDBSidebarFooter>
+        <ToastContainer />
+
+      </CDBSidebar>
+
+      {selectedTable === 'users' && renderUsersTable()}
+      {selectedTable === 'recipes' && renderRecipesTable()}
+      {selectedTable === 'feedback' && renderFeedbackTable()}
+      {selectedTable === 'upload' && UserRecpieUpload()}
+
+    
+    </>
+);
+};
+export default Dasboard;
