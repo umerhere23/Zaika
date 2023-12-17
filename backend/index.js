@@ -9,7 +9,7 @@ import UserData from './routes/UserDetails.js';
 import Feedback from './routes/FeedBack.js';
 import Adminlogin from './routes/adminRoute.js';
 import fetchUserData from './routes/FetchAllUsers.js';
-
+import mealRoutes from "./routes/MealPlaanerRoute/MealPlannerRoute.js"
 const app = express(); 
 
 const connectionURL = "mongodb://127.0.0.1:27017/Zaika"; 
@@ -46,3 +46,4 @@ app.use('/fetchUsers',fetchUserData)
 app.use('/removeaccount', UserData);
 app.use('/blockUser', fetchUserData);
 app.use('/blockUser', fetchUserData);
+app.use('/meals', mealRoutes);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import a2 from './img/a2.webp';
 import b3 from './img/b3.jpg';
 import img4 from './img/img4.jpg';
@@ -9,6 +9,8 @@ import './img/style.css';
 import Footer from './footer';
 
 const Home = () => {
+
+  
   return (
     <>
       <div className="carousel-container">

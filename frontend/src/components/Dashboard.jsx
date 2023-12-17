@@ -4,7 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { CRow, CCol, CWidgetStatsB } from '@coreui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faBan, faCheckCircle, faBars } from '@fortawesome/free-solid-svg-icons';
-import LoadingSpinner from '../components/loading.jsx';
 import "./CSS/Dashboard.css";
 import { onAddRecipe } from '../Service/api';
 import Button from 'react-bootstrap/Button';
@@ -37,7 +36,6 @@ const Dasboard = () => {
     const Uname =location.state?.username
 
     const userName = userData?.Username || '';
-    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
   const [feedbackdetails, setFeedbackDetails] = useState([]);
@@ -90,16 +88,7 @@ const Dasboard = () => {
             }
         }, []);
     
-        useEffect(() => {
-            const fetchData = async () => {
-    
-                await new Promise(resolve => setTimeout(resolve, 500));
-    
-                setIsLoading(false);
-            };
-    
-            fetchData();
-        }, []);
+   
         const addDetails = async (e) => {
             e.preventDefault();
           
@@ -288,9 +277,7 @@ const Dasboard = () => {
             }
         };
     
-        if (isLoading) {
-            return <LoadingSpinner />;
-        }
+     
     
      
           

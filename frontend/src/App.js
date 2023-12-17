@@ -14,25 +14,10 @@ import AdminDasboard from './components/AdminDasboard.jsx';
 import RecipeDetails from './components/RecipeDetails.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
 import MealPlanner from './components/Mealplanner/Mealplanner.jsx';
-import LoadingSpinner from '../src/components/loading.jsx';
+import DietMealplanner from './components/Mealplanner/DietMealplanner.jsx';
 
 const App=()=>{
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      setIsLoading(false);
-    };
-
-    fetchData();
-  }, []);
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
   return(
     <>
 <Navbar />   
@@ -52,6 +37,7 @@ const App=()=>{
 
 <Route path='/AdminDasboard' element={<AdminDasboard/>}/>
 <Route path='/Mealplanner' element={<MealPlanner/>}/>
+<Route path='/MealPlanners' element={<DietMealplanner/>}/>
 
 
 </Routes>

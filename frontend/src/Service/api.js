@@ -240,3 +240,16 @@ export const getMealSuggestions = async (userPreferences) => {
     throw error;
   }
 };
+
+
+export const sendMealsToBackend = async (meals) => {
+  try {
+    const response = await axios.post(`${baseUrl}/meals`, { meals });
+
+    console.log('Meals saved:', response.data);
+    alert('Meals saved successfully');
+  } catch (error) {
+    console.error('Error saving meals:', error);
+    alert('Error saving meals');
+  }
+};
