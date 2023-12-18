@@ -94,7 +94,7 @@ const EComHome = () => {
         </div><br/><br/>
       <h1 id='heading'>Ingredients Store</h1>
       <br/>
-      <MDBContainer fluid>
+      {/* <MDBContainer fluid>
       <MDBCard>
 
       <div class="boxes flex forming">
@@ -204,7 +204,7 @@ const EComHome = () => {
       </div>
       </MDBCard>
 
-      </MDBContainer>
+      </MDBContainer> */}
 
       <br/>
       <br/>
