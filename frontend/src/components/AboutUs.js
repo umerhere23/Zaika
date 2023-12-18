@@ -7,52 +7,32 @@ import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './img/style.css';
 import Footer from './footer';
+import banner1 from './img/banner1.png';
 
 const Aboutus = () => {
   return (
     <>
-      <div className="carousel-container">
-        <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel">
-          <div className="carousel-inner">
-            <div className="carousel-item active" data-bs-interval="10000">
-              <img src={a2} className="d-block w-100" alt="..." />
-              <div className="carousel-caption">
-                <h3>Zaika</h3>
-                <p>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
-                <button type="button" className="btn btn-primary">Contac Us</button>
-                <button type="button" className="btn btn-primary">About Us</button>
+      <div class="wrapper">
+            <div class="banner flex inner">
+                <div class="right">
+                    <h1>Discover</h1>
+                    <h2>The New</h2>
+                    <h3>Recpies Here!</h3>
+                    <h4>Aloso Providing Ingredients <br/>  Grab Your Discount  &nbsp;<span class="code">NewUser@</span></h4>
+                    <p>At Zaika Recipes, we understand the joy of sharing your culinary creations with others. Our platform fosters a
+              vibrant community of food enthusiasts who can not only access recipes but also share their own. Join the community,
+              share your unique recipes, and connect with fellow food lovers.
 
-              </div>
+                    </p>
+                    <button class="btn1 btn"> <a  class="txtd"href="/login">Become User</a> </button>
+                    <button class="btn1 btn"><a class="txta" href="/aboutUS">Read More</a></button>
+                </div>
+                <div class="left">
+                    <img src={banner1} alt="" srcset=""/>
+                </div>
             </div>
-            <div className="carousel-item" data-bs-interval="2000">
-              <img src={b3} className="d-block w-100" alt="..." />
-              <div className="carousel-caption">
-                <h3>Zaika</h3>
-                <p>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
-                <button type="button" className="btn btn-primary">Contac Us</button>
-                <button type="button" className="btn btn-primary">About Us</button>
-              </div>
-            </div>
-            <div className="carousel-item">
-              <img src={img4} className="d-block w-100" alt="..." />
-              <div className="carousel-caption">
-                <h3>Zaika</h3>
-                <p>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
-                <button type="button" className="btn btn-primary">Contac Us</button>
-                <button type="button" className="btn btn-primary">About Us</button>
-              </div>
-            </div>
-          </div>
-          <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Previous</span>
-          </button>
-          <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Next</span>
-          </button>
-        </div>
-      </div>
+            <hr/>
+        </div><br/><br/>
       <div class="alert alert-warning" role="alert">
   <h4 class="alert-heading">Welcome to About Us of Zaika</h4>
   <p>Zaika is more than just a food platform. We are passionate about bringing people together through the love of food. Our journey began with a simple idea: to create a space where food enthusiasts from around the world can share their culinary creations, connect with one another, and embark on a gastronomic adventure.</p>

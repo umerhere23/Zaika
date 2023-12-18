@@ -1,5 +1,5 @@
-.carousel-item img {
-    height: auto;
+/* .carousel-item img {
+    height: 600px;
     opacity: 0.8;
   } 
   .carousel-caption button {
@@ -28,7 +28,7 @@
       padding: 10px;
       border-radius: 4px;
       box-shadow: 2px 2px 20px 23px #FFBE7B;
-      font-size:1vw;}
+      font-size:1vw;} */
 
 
 /* nav:hover .nav-item:hover{
@@ -133,4 +133,182 @@ footer{
         background-color: linear-gradient( #553c9a 45%, #ee4b2b);
 
     }
+    .imgslide{
+        height: 400px;
+    }
+    .flex {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 0 1%;
+    }.inner {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 1%;
+    }
     
+    .wrapper {
+        width: 100%;
+        /* background-color: rgb(218, 232, 220); */
+        height: 100vh;
+        padding-bottom: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    
+    }
+
+    .banner {
+        width: 100%;
+        height: auto;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .banner .left {
+        width: 43%;
+    }
+    
+    .left img {
+        width: 90%;
+        border-radius: 10px;
+    
+    }
+    .aboutstd{
+    background: rgb(173, 220, 231);
+    width: 70%;
+    margin-left: 15%;
+    border-radius: 14px;
+    padding: 5px;
+    
+    }
+    .aboutst{
+        background: rgb(64, 183, 210);
+     text-align: center;
+     border-radius: 14px;
+    
+    }
+    .banner .right {
+        width: 53%;
+        text-align: center;
+    }
+    
+    .banner .right h1 {
+        font-size: 4.5rem;
+        color: rgb(2, 98, 142);
+        font-style: italic;
+    }
+    
+    .banner .right h2 {
+        font-size: 5.5rem;
+        color: rgb(67, 218, 78);
+    
+    }
+    
+    .right h3 {
+        font-size: 2.5rem;
+        color: rgb(2, 98, 142);
+        margin: 20px 0;
+    }
+    
+    .code {
+        color: rgb(2, 98, 142);
+    }
+    
+    .banner .right p {
+        font-size: 1.1rem;
+        line-height: 1.5rem;
+        color: #333;
+        margin-top: 30px;
+    }
+    
+    .btn1 {
+        padding: 12px 30px;
+        margin-top: 20px;
+        border-radius: 4px;
+        background-color: rgb(2, 98, 142);
+        color: aliceblue;
+        box-shadow: 0 6px 24px rgb(99, 71, 249/40%);
+        border: none;
+       
+    }
+    .txtd{
+      color: #e4e4e4;
+        text-decoration: none;
+    }
+    .txta{
+      color: #e4e4e4;
+          text-decoration: none;
+      }
+    .btn1 {
+        padding: 12px 30px;
+        margin-top: 20px;
+        background-color: rgb(2, 98, 142);
+        color: rgb(2, 98, 142);
+        box-sizing: 0 6px 24px #e4e4e4;
+        margin-left: 15px;
+    }
+    .btn1 :hover{
+background-color:green;
+padding: 12px 30px;
+margin-top: 20px;
+border-radius: 4px;
+color: aliceblue;
+box-shadow: 0 6px 24px rgb(99, 71, 249/40%);
+border: none;
+    }
+
+    @media only screen and(max-width:600px) {
+        .box {
+            width: 90%;
+            margin: 25px auto;
+    
+        }
+    
+        .banner .right h1 {
+            font-size: 3.5rem;
+        }
+    
+        .banner-code {
+            font-size: 11rem;
+        }
+    
+        .banner .btn {
+            margin-left: 0;
+        }}
+
+        @media only screen and (max-width:1060px) {
+            .wrapper {
+                height: auto;
+                padding-bottom: 10px;
+        
+            }
+        
+            .banner .left {
+                width: 70%;
+                margin: 0 auto;
+            }
+        
+            .left img {
+                width: 100%;
+            }
+        
+            .banner .right {
+                width: 100%;
+                margin: 50px 10px;
+            }
+        
+            .banner .right h1 {
+                padding-top: 50px;
+        
+            }
+        
+            .box {
+                width: 45%;
+                margin: 20px 0px;
+            }
+        
+            .boxes {
+                padding: 25px;
+            }
+        }        
