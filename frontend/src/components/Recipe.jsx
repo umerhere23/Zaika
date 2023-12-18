@@ -114,13 +114,13 @@ const Recipe = () => {
           <i className="fas fa-search"></i>
         </button>
       </div>
-      <div className="container py-5">
-        <div className="row">
+      <div className="container py-5" >
+        <div className="row" >
         
 
           {filteredRecipes.map((details) => (
             <div className="col-md-4 mb-4" key={details._id} onClick={() => handleRecipeClick(details)}>
-              <div className="card h-100 box">
+              <div className="card h-100 box" style={{background:"#BDC7C5"}}>
                 <img
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStB2b-YH3ev3TzntBN-p2g7B1sUYbNaW2GEw&usqp=CAU"
                 className="card-img-top"

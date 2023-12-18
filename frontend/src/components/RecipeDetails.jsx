@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import Rating from 'react-rating-stars-component';
 import Footer from './footer';
-import { saveFeedback } from '../Service/api';
-import { fetchAllFeedbacks } from '../Service/api';
+import { saveFeedback, fetchAllFeedbacks } from '../Service/api';
 import { faShareAlt, faClipboard } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
@@ -36,7 +35,7 @@ const RecipeDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await fetchAllFeedbacks(); 
+        const result = await fetchAllFeedbacks();
         setFeedbackDetails(result);
       } catch (error) {
         console.error('Error:', error);
@@ -65,18 +64,18 @@ const RecipeDetails = () => {
 
   const handleFeedbackSubmit = async () => {
     const isValid = Object.values(isFeedbackValid).every((value) => value);
-  
+
     if (isValid) {
       const userSubmittedFeedback = feedbackdetails.some(
         (feedback) => feedback.email === feedbackData.email && feedback.recipeId === id
       );
-  
+
       if (userSubmittedFeedback) {
         setShowErrorMessage(true);
         setShowSuccessMessage(false);
         return;
       }
-  
+
       try {
         await saveFeedback(feedbackData);
         setIsSubmitted(true);
@@ -89,13 +88,30 @@ const RecipeDetails = () => {
       setShowErrorMessage(true);
     }
   };
-  
 
   const handleShareClick = () => {
     const currentURL = window.location.href;
     navigator.clipboard.writeText(currentURL);
     setShowSuccessMessagefd(true);
   };
+
+  const averageAndStarCount = () => {
+    const userFeedbacks = feedbackdetails.filter(
+      (feedback) => feedback.recipeId === id 
+    );
+
+    const ratingsCount = [0, 0, 0, 0, 0];
+    const totalRating = userFeedbacks.reduce((sum, feedback) => {
+      ratingsCount[feedback.rating - 1]++;
+      return sum + feedback.rating;
+    }, 0);
+    const numFeedbacks = userFeedbacks.length;
+    const average = numFeedbacks > 0 ? totalRating / numFeedbacks : 0;
+    return { average, ratingsCount };
+  };
+
+  const { average, ratingsCount } = averageAndStarCount();
+
 
   return (
     <>
@@ -106,18 +122,25 @@ const RecipeDetails = () => {
           <div className="col-md-8">
             <h2>{recipeName}</h2>
             <p><i class="fa fa-user" aria-hidden="true"></i>: {userName}</p>
-            <p>Ingredients: {ingredients}</p>
-            <div>
+            <h5>Ingredient:</h5>
+            <ol className="instruction-lists">
+  {ingredients &&
+    ingredients.split(',').map((ingredient, index) => (
+      <li key={index}>{ingredient.trim()}</li>
+    ))}
+</ol>
+   <div>
               <h5>Instructions:</h5>
-              <ol>
-                {instructions &&
-                  instructions.split(',').map((step, index) => (
-                    <li key={index}>{step.trim()}</li>
-                  ))}
-              </ol>
+              <ol className="instruction-list">&nbsp;&nbsp;&nbsp;&nbsp;
+  {instructions &&
+    instructions.split(',').map((step, index) => (
+      <li key={index}>{step.trim()}</li>
+    ))}
+</ol>  
+
             </div>
             <p><FontAwesomeIcon icon={faClock} /> &nbsp;
-: {timeToCook}	(Hours)
+: {timeToCook}	(Mins)
 </p>
             <p><i class="fa fa-envelope" aria-hidden="true"></i>
 : {email}</p>
@@ -150,8 +173,7 @@ const RecipeDetails = () => {
                     You have already submitted feedback. You are not allowed to submit feedback again.
                   </div>
                 )}
-
-                <h4>Feedback {id}</h4>
+<h3>User Feedback Form</h3>
                 <Rating
                   count={5}
                   value={feedbackData.rating}
@@ -194,32 +216,81 @@ const RecipeDetails = () => {
           </div>
         </div>
 
-          <div className="row mt-4">
-          <div className="col-md-12 boxdb">
-          <h3 className="fd">Users FeedBacks</h3>
-
-            {feedbackdetails.map((feedback, index) => (
-              feedback.recipeId === id ? (
-                <div key={index} className="media mb-3">
-                  <div className="media-body">
-                    <h5 className="mt-0">Feedback </h5>
-                    <p><b>Rating:</b> <StarRating rating={feedback.rating} /></p>
-                    <p><b>Feedback:</b> {feedback.feedbackText}</p>
-                    <p><i className="fa fa-envelope" aria-hidden="true"></i> : {feedback.email}</p>
-                  </div>
-                  <hr />
-
-                </div>
-                
-              ) : null
-            ))}
-          </div>
-     
-        </div>
-
         
+
+      
+
+<section>
+  <div class="row d-flex justify-content-center">
+    <div class="col-md-10 col-xl-8 text-center">
+      <h3 class="mb-4">Users FeedBacks</h3>
+    
+    </div>
+  </div>
+
+  <div class="row text-center">
+    {feedbackdetails.map((feedback, index) => (
+      feedback.recipeId === id ? (
+        <div key={index} className="col-md-4 mb-0">
+          <div className="d-flex justify-content-center mb-4">
+            <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(9).webp"
+              className="rounded-circle shadow-1-strong" style={{ width: "20%" }} alt="User Avatar" />
+          </div>
+          <h5 className="mb-3">{feedback.email}</h5>
+          <h6 className="text-primary mb-3">User</h6>
+          <p className="px-xl-3">
+            <i className="fas fa-quote-left pe-2"></i>{feedback.feedbackText}
+          </p>
+          <ul className="list-unstyled d-flex justify-content-center mb-0">
+            {[...Array(feedback.rating).keys()].map((star, index) => (
+              <li key={index}>
+                <i className="fas fa-star fa-sm text-warning"></i>
+              </li>
+            ))}
+            {[...Array(5 - feedback.rating).keys()].map((star, index) => (
+              <li key={index}>
+                <i className="far fa-star fa-sm text-warning"></i>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null
+    ))}
+
+<div class="card ttt">            
+<div className="d-flex justify-content-center mb-4">
+        
+            </div>
+            <h5 className="mb-3">Average Rating</h5>
+            <h6 className="text-primary mb-3">Recipe</h6>
+            <ul className="list-unstyled d-flex justify-content-center mb-0">
+              {[...Array(Math.round(average)).keys()].map((star, index) => (
+                <li key={index}>
+                  <i className="fas fa-star fa-sm text-warning"></i>
+                </li>
+              ))}
+              {[...Array(5 - Math.round(average)).keys()].map((star, index) => (
+                <li key={index}>
+                  <i className="far fa-star fa-sm text-warning"></i>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-2">Average Rating: {average.toFixed(1)}</p>
+
+            <ul className="list-unstyled d-flex justify-content-center mb-0">
+              {ratingsCount.map((count, index) => (
+                <li key={index}>
+                  <span className="badge bg-secondary mx-1">{`${index + 1} stars: ${count}`}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+  </div>
+</section>
+
         </div>
       </div>
+      
       <Footer />
     </>
   );

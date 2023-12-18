@@ -17,3 +17,68 @@
     font-style: italic;
     
    }
+   .instruction-list {
+    counter-reset: step-counter;
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .instruction-list li {
+    position: relative;
+    counter-increment: step-counter;
+    padding-left: 30px; 
+    margin-bottom: 10px; 
+  }
+
+  .instruction-list li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    color: white; 
+    width: 3%;
+    text-align:center;
+    padding: 0.5%;
+    background-color: #e76182;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    line-height:14px;
+  }
+
+  .instruction-lists {
+    counter-reset: step-counter;
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .instruction-lists li {
+    position: relative;
+    counter-increment: step-counter;
+    padding-left: 30px; 
+    margin-bottom: 10px; 
+  }
+
+  .instruction-lists li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+    color: white; 
+    width: 3%;
+    text-align:center;
+    padding: 0.5%;
+    background-color: #269fca;
+    border-radius: 50%;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border-bottom-left-radius: 50%;
+    line-height:14px;
+  }
+  .ttt{
+    width: 30%;
+    background: #A5E9E5;
+  }
