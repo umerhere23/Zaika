@@ -6,13 +6,17 @@ const mealSchema = new mongoose.Schema({
     required: true,
   },
   start: {
-    type: Date,
+    type: Date, 
     required: true,
   },
   end: {
-    type: Date,
+    type: Date, 
     required: true,
   },
+  UserName:{
+    type: String,
+    required: true,
+  }
 });
 
 const Meal = mongoose.model('Meal', mealSchema);

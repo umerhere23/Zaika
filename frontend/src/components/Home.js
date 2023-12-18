@@ -17,7 +17,7 @@ const Home = () => {
         <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-inner">
             <div className="carousel-item active" data-bs-interval="10000">
-              <img src={a2} className="d-block w-100" alt="..." />
+              <img src="https://goldbelly.imgix.net/uploads/card/image/934/We-ship-Food-Homepage-Feature-Banner-Template-1.gif?ixlib=rails-3.0.2" className="d-block w-100" alt="..." />
               <div className="carousel-caption">
                 <h3>Zaika</h3>
                 <p>Zaika Recipes is a proposed website that aims to provide a platform for food lovers to access and share recipes. The website will include an extensive collection of recipes from various cuisines and cultures. The main objective of the website is to provide a user-friendly interface that allows users to search, explore, share their favourite recipes and delivery of food.</p>
@@ -26,7 +26,7 @@ const Home = () => {
 
               </div>
             </div>
-            <div className="carousel-item" data-bs-interval="2000">
+            {/* <div className="carousel-item" data-bs-interval="2000">
               <img src={b3} className="d-block w-100" alt="..." />
               <div className="carousel-caption">
                 <h3>Zaika</h3>
@@ -43,7 +43,7 @@ const Home = () => {
                 <button type="button" className="btn btn-primary">Contac Us</button>
                 <button type="button" className="btn btn-primary">About Us</button>
               </div>
-            </div>
+            </div> */}
           </div>
           <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
             <span className="carousel-control-prev-icon" aria-hidden="true"></span>

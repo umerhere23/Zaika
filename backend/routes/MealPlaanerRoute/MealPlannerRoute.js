@@ -1,8 +1,9 @@
 import express from 'express';
 const router = express.Router();
-import { saveMealPlan,getMealPlans } from '../../controller/MealPlanner.js';
+import { saveMealPlan,getMealPlans,removeMeal } from '../../controller/MealPlanner.js';
 
 router.post('/',saveMealPlan);
-router.get('/',getMealPlans);
+router.get('/:userName',getMealPlans);
+router.delete('/:mealToDeleteId',removeMeal);
 
 export default router;

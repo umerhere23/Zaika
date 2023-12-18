@@ -224,32 +224,30 @@ export const unblockUser = async (_id) => {
 };
 
 
-export const addMealPlan = async (mealPlanData) => {
-  try {
-    const response = await axios.post(`${baseUrl}/meal-planner`, mealPlanData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-export const getMealSuggestions = async (userPreferences) => {
-  try {
-    const response = await axios.post(`${baseUrl}/meal-suggestions`, userPreferences);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 
 export const sendMealsToBackend = async (meals) => {
   try {
-    const response = await axios.post(`${baseUrl}/meals`, { meals });
-
+    const response = await axios.post(`${baseUrl}/meals`, meals);
+    console.log('Meals:', meals);
     console.log('Meals saved:', response.data);
-    alert('Meals saved successfully');
   } catch (error) {
     console.error('Error saving meals:', error);
-    alert('Error saving meals');
+  }
+};
+export const fetchMealsFromBackend = async (userName) => {
+  try {
+    const response = await axios.get(`${baseUrl}/meals/${userName}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching meals:', error);
+    throw error;
+  }
+};
+export const deleteMealFromBackend = async (mealToDeleteId) => {
+  try {
+    const response = await axios.delete(`${baseUrl}/meals/${mealToDeleteId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
   }
 };

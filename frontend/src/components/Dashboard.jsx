@@ -10,8 +10,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Footer from './footer';
 import StarRating from '../components/icons/stars.jsx'; 
-import { Table } from 'react-bootstrap';
+import { Table,Modal } from 'react-bootstrap';
 import "./CSS/Dashboard.css";
+import moment from 'moment';
+import { sendMealsToBackend,fetchMealsFromBackend,deleteMealFromBackend } from '../Service/api';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+
 import { fetchUserDetails, updateUserDetails, fetchUserRecipes, removeRecipe } from '../Service/api';
 import { useLocation, Link, Navigate ,useNavigate} from 'react-router-dom';
 import { fetchAllFeedbacks,removefeedback } from '../Service/api';
@@ -25,35 +29,134 @@ import {
   CDBSidebarFooter,
 } from 'cdbreact';
 import { CDBInput, CDBCard, CDBCardBody, CDBIcon, CDBBtn, CDBLink, CDBContainer } from 'cdbreact';
+const localizer = momentLocalizer(moment);
 
 const Dasboard = () => {
-    const location = useLocation();
+  const location = useLocation();
 
-    const [userData, setUserData] = useState(null);
-    const [editMode, setEditMode] = useState(false);
-    const [userRecipes, setUserRecipes] = useState([]);
-    const userEmail = location.state?.userEmail;
-    const Uname =location.state?.username
+  const [meals, setMeals] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [fetchedMeals, setFetchedMeals] = useState([]);
 
-    const userName = userData?.Username || '';
-    const navigate = useNavigate();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [mealType, setMealType] = useState('Breakfast');
+  const [mealDescription, setMealDescription] = useState('');
+  const [EditMode, setEditModes] = useState(false);
+  const [mealToEdit, setMealToEdit] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [editMode, setEditMode] = useState(false);
+  const [userRecipes, setUserRecipes] = useState([]);
+  const userEmail = location.state?.userEmail;
+  const Uname =location.state?.username
 
-  const [feedbackdetails, setFeedbackDetails] = useState([]);
-    const [showSidebar, setShowSidebar] = useState(false);
-    const [selectedTable, setSelectedTable] = useState('users');
+  const userName = userData?.Username || '';
+
+const [feedbackdetails, setFeedbackDetails] = useState([]);
+  const [selectedTable, setSelectedTable] = useState('users');
+
+
+
+  const [recipedata, setRecipe] = useState({
+      name: '',
+      ingredients: '',
+      instructions: '',
+      image: null,
+      timeToCook: '',
+      UserName:Uname ,
+      email: userEmail || '',
+    });
+console.log(Uname)
+  const handleSelectSlot = ({ start }) => {
+    setSelectedDate(start);
+    setShowModal(true);
+    setEditModes(false);
+    setMealToEdit(null);
+  };
+
+  const saveMeal = () => {
+    const newMeal = {
+      title: `${mealType} - ${mealDescription}`,
+      start: selectedDate,
+      end: selectedDate,
+      Username:Uname
+    };
+
+    setMeals((prevMeals) => {
+      if (EditMode && mealToEdit) {
+        return prevMeals.map((meal) => (meal === mealToEdit ? newMeal : meal));
+      } else {
+        return [...prevMeals, newMeal];
+      }
+    });
+   
+    setShowModal(false);
+  };
+  const fetchAndSetMeals = async () => {
+    try {
+      const fetchedMeals = await fetchMealsFromBackend(userName);
+      setMeals(fetchedMeals);
+      setFetchedMeals(fetchedMeals);
+    } catch (error) {
+      console.error('Error fetching meals:', error);
+      // toast.error('Failed to fetch meals. Please try again later.');
+    }
+  };
+
+  useEffect(() => {
+    fetchAndSetMeals();
+  }, [userName]);
+  useEffect(() => {
+   
+    console.log("Meals updated:", meals);
+  }, [meals]);
+
+
   
+  const handleSaveMealPlan = async (e) => {
+    e.preventDefault();
+
+    console.log("Meals to be sent:", meals);
+
+    try {
+      await sendMealsToBackend(meals);
+      toast.success('Meal plan saved successfully!',  { autoClose: 500 });
+     
+      console.log("Meal plan saved successfully");
+    } catch (error) {
+      toast.error(' Error saving meals!',  { autoClose: 500 });
+    }
+  };
+
+  const handleDeleteMeal = async (mealToDeleteId) => {
+    try {
+      console.log('Deleting Meal ID:', mealToDeleteId);
+
+      await deleteMealFromBackend(mealToDeleteId);
+
+      const updatedMeals = meals.filter((meal) => meal._id !== mealToDeleteId);
+      setMeals(updatedMeals);
+
+      toast.success('Meal deleted successfully',  { autoClose: 500 });
+    } catch (error) {
+      console.error('Error deleting meal:', error);
+      toast.error('Failed to delete meal. Please try again later.',  { autoClose: 500 });
+    }
+  };
   
 
-    const [recipedata, setRecipe] = useState({
-        name: '',
-        ingredients: '',
-        instructions: '',
-        image: null,
-        timeToCook: '',
-        UserName:Uname ,
-        email: userEmail || '',
-      });
-  console.log(Uname)
+  const handleEditMeal = (mealToEdit) => {
+    setMealType(''); 
+    setMealDescription(mealToEdit.title); 
+    setEditModes(true);
+    setMealToEdit(mealToEdit);
+    setSelectedDate(mealToEdit.start);
+    setShowModal(true);
+  };
+
+  const customCellClass = 'custom-calendar-cell';
+
+
+   
 
   
     const [errors, setErrors] = useState({});
@@ -640,7 +743,113 @@ const renderFeedbackTable = () => {
     </>
   );
 };
+const UserMeal = () => {
+  return(
+<>
+<div className="sett">
 
+
+<div className="container mt-4">
+      <style>
+        {`.${customCellClass} {
+         
+        }`}
+      </style>
+
+      <Calendar
+        localizer={localizer}
+        events={meals}
+        startAccessor="start"
+        endAccessor="end"
+        style={{ height: 500 }}
+        selectable
+        onSelectSlot={handleSelectSlot}
+        eventPropGetter={(event, start, end, isSelected) => {
+          const style = {
+            backgroundColor: '#3174ad',
+          };
+          return {
+            style,
+          };
+        }}
+        components={{
+          event: ({ event }) => (
+            <div>
+              <div>{event.title}</div>
+              <Button
+                variant="danger"
+                onClick={() => handleDeleteMeal(event._id)} 
+              >
+                Delete
+              </Button>
+              <Button
+                variant="info"
+                onClick={() => handleEditMeal(event)}
+              >
+                Edit
+              </Button>
+            </div>
+          ),
+          timeSlotWrapper: ({ children }) => (
+            <div className={customCellClass}>{children}</div>
+          ),
+        }}
+      />
+
+      <Modal show={showModal} onHide={() => setShowModal(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>{EditMode ? 'Edit Meal' : 'Add Meal'}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group controlId="formMealType">
+              <Form.Label>Meal Type</Form.Label>
+              <Form.Control
+                as="select"
+                value={mealType}
+                onChange={(e) => setMealType(e.target.value)}
+              >
+                <option>Breakfast</option>
+                <option>Lunch</option>
+                <option>Dinner</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group controlId="formMealDescription">
+              <Form.Label>Meal Description</Form.Label>
+              <Form.Control
+                type="text"
+                value={mealDescription}
+                onChange={(e) => setMealDescription(e.target.value)}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowModal(false)}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={saveMeal}>
+            {EditMode ? 'Save Changes' : 'Save Meal'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Button variant="success" onClick={handleSaveMealPlan} className="mt-3">
+        Save Meal Plan
+      </Button>
+
+      {fetchedMeals.length > 0 && (
+  <h1 className='ddd'>Fetched Meal IDs: {fetchedMeals.map(meal => meal._id).join(', ')}</h1>
+)}
+    </div>
+
+    </div>
+    <ToastContainer />
+
+</>
+  )
+
+  
+}
 return (
   <>
  
@@ -657,6 +866,8 @@ return (
             <CDBSidebarMenuItem onClick={() => setSelectedTable('upload')} icon="plus" iconType="solid">
               Upload Recpie
             </CDBSidebarMenuItem>
+            <CDBSidebarMenuItem onClick={() => setSelectedTable('Meal')} icon="calendar" iconType="solid">
+Meal Planner            </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
 <hr />
@@ -673,6 +884,8 @@ return (
       {selectedTable === 'recipes' && renderRecipesTable()}
       {selectedTable === 'feedback' && renderFeedbackTable()}
       {selectedTable === 'upload' && UserRecpieUpload()}
+      {selectedTable === 'Meal' && UserMeal()}
+
 
     
     </>
