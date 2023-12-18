@@ -15,7 +15,15 @@ import "./CSS/Dashboard.css";
 import moment from 'moment';
 import { sendMealsToBackend,fetchMealsFromBackend,deleteMealFromBackend } from '../Service/api';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import {addIngredientPack} from '../Service/api.js';
 
+import {
+    MDBCard,
+    MDBContainer
+
+ 
+  } from "mdb-react-ui-kit";
+  
 import { fetchUserDetails, updateUserDetails, fetchUserRecipes, removeRecipe } from '../Service/api';
 import { useLocation, Link, Navigate ,useNavigate} from 'react-router-dom';
 import { fetchAllFeedbacks,removefeedback } from '../Service/api';
@@ -54,6 +62,15 @@ const Dasboard = () => {
 const [feedbackdetails, setFeedbackDetails] = useState([]);
   const [selectedTable, setSelectedTable] = useState('users');
 
+  const [formData, setFormData] = useState({
+    recipeId: '',
+    ingredients: [
+      { name: '', quantity: '', price: '' },
+      { name: '', quantity: '', price: '' }
+    ],
+    seller: '',
+    image: '',
+  });
 
 
   const [recipedata, setRecipe] = useState({
@@ -382,7 +399,43 @@ console.log(Uname)
     
      
     
-     
+      
+        const handleInputChange = (e, index) => {
+          const { name, value } = e.target;
+          const newIngredients = [...formData.ingredients];
+          newIngredients[index][name] = value;
+      
+          setFormData({
+            ...formData,
+            ingredients: newIngredients,
+          });
+        };
+      
+        const handleAddIngredient = () => {
+          setFormData({
+            ...formData,
+            ingredients: [...formData.ingredients, { name: '', quantity: '', price: '' }],
+          });
+        };
+      
+        const handleRemoveIngredient = (index) => {
+          const newIngredients = [...formData.ingredients];
+          newIngredients.splice(index, 1);
+      
+          setFormData({
+            ...formData,
+            ingredients: newIngredients,
+          });
+        };
+  
+          const handleSubmit = async () => {
+              try {
+                const result = await addIngredientPack(formData);
+                console.log(result);
+              } catch (error) {
+                console.error('Error:', error.message);
+              }
+            };
           
     
 
@@ -526,7 +579,123 @@ console.log(Uname)
             );
           };
 
+const SellIngredients=()=>{
+  return(
+    <>
+       <MDBContainer fluid className='forming'>
+      <MDBCard>
 
+      <div class="boxes flex ">
+      <div className="container mt-5">
+      <h2>Add Ingredient Pack</h2>
+      <form>
+        <div className="mb-3">
+          <label htmlFor="recipeId" className="form-label">Recipe ID:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="recipeId"
+            name="recipeId"
+            value={formData.recipeId}
+            onChange={(e) => setFormData({ ...formData, recipeId: e.target.value })}
+            required
+          />
+        </div>
+
+        {formData.ingredients.map((ingredient, index) => (
+          <div key={index} className="mb-3">
+            <label htmlFor={`ingredient${index + 1}Name`} className="form-label">Ingredient {index + 1} Name:</label>
+            <input
+              type="text"
+              className="form-control"
+              id={`ingredient${index + 1}Name`}
+              name="name"
+              value={ingredient.name}
+              onChange={(e) => handleInputChange(e, index)}
+              required
+            />
+
+            <label htmlFor={`ingredient${index + 1}Quantity`} className="form-label">Ingredient {index + 1} Quantity:</label>
+            <input
+              type="number"
+              className="form-control"
+              id={`ingredient${index + 1}Quantity`}
+              name="quantity"
+              value={ingredient.quantity}
+              onChange={(e) => handleInputChange(e, index)}
+              required
+            />
+
+            <label htmlFor={`ingredient${index + 1}Price`} className="form-label">Ingredient {index + 1} Price:</label>
+            <input
+              type="number"
+              className="form-control"
+              id={`ingredient${index + 1}Price`}
+              name="price"
+              value={ingredient.price}
+              onChange={(e) => handleInputChange(e, index)}
+              required
+            />
+
+            {index > 0 && (
+              <button
+                type="button"
+                className="btn btn-danger"
+                onClick={() => handleRemoveIngredient(index)}
+              >
+                Remove Ingredient {index + 1}
+              </button>
+            )}
+          </div>
+        ))}
+
+        <button
+          type="button"
+          className="btn btn-success"
+          onClick={handleAddIngredient}
+        >
+          Add Another Ingredient
+        </button>
+
+        <div className="mb-3">
+          <label htmlFor="seller" className="form-label">Seller:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="seller"
+            name="seller"
+            value={formData.seller}
+            onChange={(e) => setFormData({ ...formData, seller: e.target.value })}
+            required
+          />
+        </div>
+
+        <div className="mb-3">
+          <label htmlFor="image" className="form-label">Image URL:</label>
+          <input
+            type="text"
+            className="form-control"
+            id="image"
+            name="image"
+            value={formData.image}
+            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+            required
+          />
+        </div>
+
+        <button type="button" className="btn btn-primary" onClick={handleSubmit}>
+          Submit
+        </button>
+      </form>
+    </div>
+
+      </div>
+      </MDBCard>
+
+      </MDBContainer>
+    </>
+  )
+}
 const renderUsersTable = () => {
   return (
     <>
@@ -868,6 +1037,10 @@ return (
             </CDBSidebarMenuItem>
             <CDBSidebarMenuItem onClick={() => setSelectedTable('Meal')} icon="calendar" iconType="solid">
 Meal Planner            </CDBSidebarMenuItem>
+
+<CDBSidebarMenuItem onClick={() => setSelectedTable('Sell')} icon="plus"  iconType="solid">
+  Sell Ingredients
+</CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
 <hr />
@@ -885,6 +1058,7 @@ Meal Planner            </CDBSidebarMenuItem>
       {selectedTable === 'feedback' && renderFeedbackTable()}
       {selectedTable === 'upload' && UserRecpieUpload()}
       {selectedTable === 'Meal' && UserMeal()}
+      {selectedTable === 'Sell' && SellIngredients()}
 
 
     

@@ -15,7 +15,7 @@ import RecipeDetails from './components/RecipeDetails.jsx';
 import AdminLogin from './components/AdminLogin.jsx';
 import MealPlanner from './components/Mealplanner/Mealplanner.jsx';
 import DietMealplanner from './components/Mealplanner/DietMealplanner.jsx';
-
+import EComHome from './components/Ecommerce/EComHome.jsx';
 const App=()=>{
 
   return(
@@ -38,7 +38,7 @@ const App=()=>{
 <Route path='/AdminDasboard' element={<AdminDasboard/>}/>
 <Route path='/Mealplanner' element={<MealPlanner/>}/>
 <Route path='/MealPlanners' element={<DietMealplanner/>}/>
-
+<Route path='/Ecomerce' element={<EComHome/>}/>
 
 </Routes>
 

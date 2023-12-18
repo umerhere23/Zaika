@@ -27,7 +27,7 @@ const Home = () => {
               share your unique recipes, and connect with fellow food lovers.
 
                     </p>
-                    <button class="btn1 btn"> <a  class="txtd"href="/login">Become User</a> </button>
+                    <button class="btn1 btn"> <a  class="txtd"href="/Ecomerce">Our Store</a> </button>
                     <button class="btn1 btn"><a class="txta" href="/aboutUS">Read More</a></button>
                 </div>
                 <div class="left">

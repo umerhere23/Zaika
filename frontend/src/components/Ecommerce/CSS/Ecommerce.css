@@ -1,0 +1,56 @@
+
+/* .forming {
+    width: 70%;
+
+  } */
+  
+   /* .form-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .form-control {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ced4da; 
+    border-radius: 8px; 
+    box-sizing: border-box;
+    margin-bottom: 10px; 
+    transition: border-color 0.3s ease; 
+  }
+   
+  .form-control:focus {
+    border-color: #80bdff; 
+  } 
+  
+  .add-ingredient-btn,
+  .remove-ingredient-btn {
+    margin-top: 10px;
+  }
+  
+  .submit-btn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+  } */
+   
+  .submit-btn:hover {
+    background-color: #218838;
+  }
+  

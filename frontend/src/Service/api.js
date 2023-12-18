@@ -251,3 +251,15 @@ export const deleteMealFromBackend = async (mealToDeleteId) => {
     throw error;
   }
 };
+
+
+
+export const addIngredientPack = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/AddIngredients`, formData);
+    console.log('Meals:', formData);
+    console.log('formData saved:', response.data);
+  } catch (error) {
+    console.error('Error saving formData:', error);
+  }
+};
