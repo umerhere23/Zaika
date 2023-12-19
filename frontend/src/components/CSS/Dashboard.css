@@ -29,7 +29,7 @@ border-radius: 15px 15px;
     width: 60%;
 }
 .feedbackUsers{
-    margin-top: -65%;
+    margin-top: -72%;
     margin-left: 19%;
     width: 70%;
 }
@@ -45,7 +45,7 @@ border-radius: 15px 15px;
 
 }
 .prof{
-    margin-top: -69%;
+    margin-top: -73%;
     width: 60%;
 }
 .tte{
@@ -71,7 +71,7 @@ text-decoration: none;
 }
 
 .sett{
-    margin-top: -70%;
+    margin-top: -73%;
     width: 80%;
     margin-left:20% ;
 }
@@ -82,3 +82,12 @@ text-decoration: none;
   .ddd{
     font: 1em sans-serif;
   }
+#ingred{
+    width: 80%;
+margin-left: 18%; 
+}
+.ingred{
+    margin-top: -88%;
+    font-size: small;
+
+}

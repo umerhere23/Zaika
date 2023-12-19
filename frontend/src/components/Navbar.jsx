@@ -6,14 +6,7 @@ import './img/style.css';
 const Navbar=()=>{
     return(
         <>
-        {/* <nav>
-          <div>
-        <Link to='./home' class='navhead selected' >Home</Link>
-        <Link to='./recipe'class='navhead' >Recipe</Link>
-        <Link to='./home' class='navhead'>Home</Link>
-        <Link to='./recipe'class='navhead' >Recipe</Link>
-        <Link to='./recipe' class='navhead'>Recipe</Link></div>
-        </nav> */}
+       
        
 
 <nav class="navbar navbar-expand-lg navbar  " >

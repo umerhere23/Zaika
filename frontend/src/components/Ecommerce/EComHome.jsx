@@ -3,7 +3,7 @@ import a2 from '../img/a2.webp';
 import b3 from '../img/b3.jpg';
 import img4 from '../img/img4.jpg';
 import banner1 from '../img/banner1.png';
-import {addIngredientPack} from '../../Service/api.js';
+import {AddIngredients,createUpperAPI} from '../../Service/api.js';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -12,62 +12,76 @@ import Footer from '../footer';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import '../Ecommerce/CSS/Ecommerce.css';
+import axios from 'axios';
 
 import {
-    MDBCard,
-    MDBContainer
+  MDBContainer,
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardBody,
+  MDBCardImage,
+  MDBIcon,
+  MDBRipple,
+  MDBBtn,
+} from "mdb-react-ui-kit";
+import "../Ecommerce/CSS/ecommerce-category-product.css";
 
- 
-  } from "mdb-react-ui-kit";
-  
 const EComHome = () => {
+  const [filteredIngredients, setFilteredIngredients] = useState([]);
 
-    const [formData, setFormData] = useState({
-        recipeId: '',
-        ingredients: [
-          { name: '', quantity: '', price: '' },
-          { name: '', quantity: '', price: '' }
-        ],
-        seller: '',
-        image: '',
-      });
-    
-      const handleInputChange = (e, index) => {
-        const { name, value } = e.target;
-        const newIngredients = [...formData.ingredients];
-        newIngredients[index][name] = value;
-    
-        setFormData({
-          ...formData,
-          ingredients: newIngredients,
-        });
-      };
-    
-      const handleAddIngredient = () => {
-        setFormData({
-          ...formData,
-          ingredients: [...formData.ingredients, { name: '', quantity: '', price: '' }],
-        });
-      };
-    
-      const handleRemoveIngredient = (index) => {
-        const newIngredients = [...formData.ingredients];
-        newIngredients.splice(index, 1);
-    
-        setFormData({
-          ...formData,
-          ingredients: newIngredients,
-        });
-      };
 
-        const handleSubmit = async () => {
-            try {
-              const result = await addIngredientPack(formData);
-              console.log(result);
-            } catch (error) {
-              console.error('Error:', error.message);
-            }
-          };
+  const [ingdetails, setingDetails] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const filtered = ingdetails.filter((ingredient) => ingredient.seller.length>0 );
+    setFilteredIngredients(filtered);
+  }, [ingdetails]);
+  const fetchData = async () => {
+    try {
+      const result = await AddIngredients();
+      setingDetails(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  const onDelete = (id) => {
+    console.log(`Deleting ingredient with ID: ${id}`);
+  };
+
+  const onViewDetails = (id) => {
+    console.log(`Viewing details of ingredient with ID: ${id}`);
+  };
+
+  
+  const [image, setImage] = useState(null);
+  const [recipeId, setRecipeId] = useState('');
+
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
+  const handleRecipeIdChange = (e) => {
+    setRecipeId(e.target.value);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('image', image);
+      formData.append('recipeId', recipeId);
+
+      await createUpperAPI(formData);
+
+      setImage(null);
+      setRecipeId('');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
   return (
     <>
   
@@ -76,7 +90,7 @@ const EComHome = () => {
                 <div class="right">
                     <h1>Discover</h1>
                     <h2>The New</h2>
-                    <h3>Recpies Here!</h3>
+                    <h3>Recpies Ingredients!</h3>
                     <h4>Aloso Providing Ingredients <br/>  Grab Your Discount  &nbsp;<span class="code">NewUser@</span></h4>
                     <p>At Zaika Recipes, we understand the joy of sharing your culinary creations with others. Our platform fosters a
               vibrant community of food enthusiasts who can not only access recipes but also share their own. Join the community,
@@ -94,121 +108,46 @@ const EComHome = () => {
         </div><br/><br/>
       <h1 id='heading'>Ingredients Store</h1>
       <br/>
-      {/* <MDBContainer fluid>
-      <MDBCard>
 
-      <div class="boxes flex forming">
       <div className="container mt-5">
-      <h2>Add Ingredient Pack</h2>
-      <form>
-        <div className="mb-3">
-          <label htmlFor="recipeId" className="form-label">Recipe ID:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="recipeId"
-            name="recipeId"
-            value={formData.recipeId}
-            onChange={(e) => setFormData({ ...formData, recipeId: e.target.value })}
-            required
-          />
-        </div>
+      <div className="row">
+        {filteredIngredients.map((ingredient, index) => (
+          <div key={index} className="col-md-4 mb-3">
+            <MDBCard>
+              <div className="card-body">
+                <img src={ingredient.image} alt="" srcSet="" />
+                <hr />
 
-        {formData.ingredients.map((ingredient, index) => (
-          <div key={index} className="mb-3">
-            <label htmlFor={`ingredient${index + 1}Name`} className="form-label">Ingredient {index + 1} Name:</label>
-            <input
-              type="text"
-              className="form-control"
-              id={`ingredient${index + 1}Name`}
-              name="name"
-              value={ingredient.name}
-              onChange={(e) => handleInputChange(e, index)}
-              required
-            />
-
-            <label htmlFor={`ingredient${index + 1}Quantity`} className="form-label">Ingredient {index + 1} Quantity:</label>
-            <input
-              type="number"
-              className="form-control"
-              id={`ingredient${index + 1}Quantity`}
-              name="quantity"
-              value={ingredient.quantity}
-              onChange={(e) => handleInputChange(e, index)}
-              required
-            />
-
-            <label htmlFor={`ingredient${index + 1}Price`} className="form-label">Ingredient {index + 1} Price:</label>
-            <input
-              type="number"
-              className="form-control"
-              id={`ingredient${index + 1}Price`}
-              name="price"
-              value={ingredient.price}
-              onChange={(e) => handleInputChange(e, index)}
-              required
-            />
-
-            {index > 0 && (
-              <button
-                type="button"
-                className="btn btn-danger"
-                onClick={() => handleRemoveIngredient(index)}
-              >
-                Remove Ingredient {index + 1}
-              </button>
-            )}
+                <h5 className="card-title">Pack Name : {ingredient.packName}</h5>
+                <h6  className="card-title"color='black'><b>Recpie Name:</b> {ingredient.recipeName}</h6>
+                <hr />
+                <p className="card-text">
+                  <b>Quantity:</b> {ingredient.totalProducts},&nbsp;&nbsp;&nbsp;&nbsp; <b>Price:</b> {ingredient.totalPrice}
+                 
+                  <br /> <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp; <b>Discount</b> {ingredient.discount}%
+                </p>
+                {ingredient.ingredients.map((nestedIngredient, nestedIndex) => (
+          <div key={nestedIndex}>
+            <p>
+              <b>Ingredient :</b> {nestedIngredient.name}
+            </p>
           </div>
         ))}
-
-        <button
-          type="button"
-          className="btn btn-success"
-          onClick={handleAddIngredient}
-        >
-          Add Another Ingredient
-        </button>
-
-        <div className="mb-3">
-          <label htmlFor="seller" className="form-label">Seller:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="seller"
-            name="seller"
-            value={formData.seller}
-            onChange={(e) => setFormData({ ...formData, seller: e.target.value })}
-            required
-          />
-        </div>
-
-        <div className="mb-3">
-          <label htmlFor="image" className="form-label">Image URL:</label>
-          <input
-            type="text"
-            className="form-control"
-            id="image"
-            name="image"
-            value={formData.image}
-            onChange={(e) => setFormData({ ...formData, image: e.target.value })}
-            required
-          />
-        </div>
-
-        <button type="button" className="btn btn-primary" onClick={handleSubmit}>
-          Submit
-        </button>
-      </form>
-    </div>
-
+ <div className="d-flex justify-content-between">
+                  <button onClick={() => onViewDetails(ingredient._id)} color="primary"  type="button" class="btn btn-primary">Details</button>
+                </div>
+              </div>
+            </MDBCard>
+            
+          </div>
+        
+        ))}
+       
       </div>
-      </MDBCard>
-
-      </MDBContainer> */}
-
+    </div>
       <br/>
       <br/>
-
+    
       <Footer />
       
 

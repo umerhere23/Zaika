@@ -16,11 +16,31 @@ const ingredientSchema = new mongoose.Schema({
 });
 
 const ingredientPackSchema = new mongoose.Schema({
-  recipeid: {
+  recipeName: {
     type: String,
     required: true,
   },
-  ingredients: [ingredientSchema], 
+  recipeId: {
+    type: String,
+    required: true,
+  },
+  totalProducts: {
+    type: Number,
+    required: true,
+  },
+  details: {
+    type: String,
+    required: true,
+  },
+  packName: {
+    type: String,
+    required: true,
+  },
+  discount: {
+    type: Number,
+    required: true,
+  },
+  ingredients: [ingredientSchema],
   totalPrice: {
     type: Number,
     required: true,

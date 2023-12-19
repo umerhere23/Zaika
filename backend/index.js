@@ -11,6 +11,8 @@ import Adminlogin from './routes/adminRoute.js';
 import fetchUserData from './routes/FetchAllUsers.js';
 import mealRoutes from "./routes/MealPlaanerRoute/MealPlannerRoute.js"
 import addIngredient from './routes/IngredientsRoute.js';
+import  uploadImage  from './routes/MealPlaanerRoute/Images/imageroute.js';
+
 const app = express(); 
 
 const connectionURL = "mongodb://127.0.0.1:27017/Zaika"; 
@@ -49,3 +51,4 @@ app.use('/blockUser', fetchUserData);
 app.use('/blockUser', fetchUserData);
 app.use('/meals', mealRoutes);
 app.use('/AddIngredients', addIngredient);
+app.use('/image', uploadImage);

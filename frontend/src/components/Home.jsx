@@ -18,9 +18,9 @@ const Home = () => {
    <div class="wrapper">
             <div class="banner flex inner">
                 <div class="right">
-                    <h1>Discover</h1>
-                    <h2>The New</h2>
-                    <h3>Recpies Here!</h3>
+                    <h1>Welcome</h1>
+                    <h2>To The </h2>
+                    <h3>The ZAIKA !</h3>
                     <h4>Aloso Providing Ingredients <br/>  Grab Your Discount  &nbsp;<span class="code">NewUser@</span></h4>
                     <p>At Zaika Recipes, we understand the joy of sharing your culinary creations with others. Our platform fosters a
               vibrant community of food enthusiasts who can not only access recipes but also share their own. Join the community,
@@ -82,8 +82,9 @@ const Home = () => {
       <br/>
       <br/>
 
+     
       <Footer />
-      
+
 
     </>
   );

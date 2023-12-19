@@ -263,3 +263,31 @@ export const addIngredientPack = async (formData) => {
     console.error('Error saving formData:', error);
   }
 };
+
+export const AddIngredients = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/AddIngredients`);
+    
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching Ingredients: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error in Ingredients:', error);
+    throw error;
+  }
+};
+
+
+export const createUpperAPI = async (formData) => {
+  try {
+    const response = await axios.post(`${baseUrl}/image`, formData);
+    console.log('Data sent:', formData);
+    console.log('Response received:', response.data);
+    return response.data; 
+  } catch (error) {
+    console.error('Error sending data:', error);
+    throw new Error('Error sending data to Upper API');
+  }
+};

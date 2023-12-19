@@ -16,14 +16,18 @@ import AdminLogin from './components/AdminLogin.jsx';
 import MealPlanner from './components/Mealplanner/Mealplanner.jsx';
 import DietMealplanner from './components/Mealplanner/DietMealplanner.jsx';
 import EComHome from './components/Ecommerce/EComHome.jsx';
+import Layout from './components/Mealplanner/Layout.jsx';
 const App=()=>{
 
   return(
     <>
-<Navbar />   
+
 
 <Routes>
-  <Route path="/home" element={<Home />}  />
+  <Route path='/' element={<Layout />} >
+    <Route index element={<Home />}/>
+    <Route path="/home" element={<Home />}  />
+
   <Route path="/recipe" element={<Recipe />}  />
   <Route path="/signup" element={<Signup />}  />
   <Route path="/login" element={<Login />}  />
@@ -39,7 +43,7 @@ const App=()=>{
 <Route path='/Mealplanner' element={<MealPlanner/>}/>
 <Route path='/MealPlanners' element={<DietMealplanner/>}/>
 <Route path='/Ecomerce' element={<EComHome/>}/>
-
+</Route>
 </Routes>
 
 

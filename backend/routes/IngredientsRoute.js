@@ -1,7 +1,8 @@
 import express from 'express';
-import { addIngredientPack } from '../controller/IngredientsController.js';
+import { addIngredientPack,AllIngredients } from '../controller/IngredientsController.js';
 
 const router = express.Router();
 router.post('/', addIngredientPack); 
+router.get('/', AllIngredients); 
 
 export default router;
