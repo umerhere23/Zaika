@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
-import { fetchUserRecipes } from '../Service/api';
-import { useLocation, Navigate } from 'react-router-dom';
-import { Table } from 'react-bootstrap';
-import Footer from './footer';
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+import { fetchUserRecipes } from "../Service/api";
+import { useLocation, Navigate } from "react-router-dom";
+import { Table } from "react-bootstrap";
+import Footer from "./footer";
 
 const UserRecipes = () => {
   const [userRecipes, setUserRecipes] = useState([]);
@@ -15,20 +15,20 @@ const UserRecipes = () => {
     if (userName) {
       fetchUserRecipesData(userName);
     }
-  }, [userName]); 
+  }, [userName]);
 
   const fetchUserRecipesData = async (userName) => {
     try {
       const recipes = await fetchUserRecipes(userName);
       setUserRecipes(recipes);
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Failed to fetch user recipes');
+      console.error("Error:", error);
+      toast.error("Failed to fetch user recipes");
     }
   };
 
   const isLoggedIn = () => {
-    const token = localStorage.getItem('userToken');
+    const token = localStorage.getItem("userToken");
     return !!token;
   };
 
@@ -66,12 +66,9 @@ const UserRecipes = () => {
             )}
           </div>
         </div>
-        <div className="flex justify-center mt-4 btnedit">
-       
-        </div>
+        <div className="flex justify-center mt-4 btnedit"></div>
       </div>
       <Footer />
-
     </>
   );
 };

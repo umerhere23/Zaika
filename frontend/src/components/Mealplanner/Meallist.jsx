@@ -1,9 +1,9 @@
-import React from "react"
-import Meal from "./Meal"
-import "./CSS/meal.css"
+import React from "react";
+import Meal from "./Meal";
+import "./CSS/meal.css";
 
 export default function MealList({ mealData }) {
-  const nutrients = mealData.nutrients
+  const nutrients = mealData.nutrients;
 
   return (
     <main>
@@ -18,10 +18,10 @@ export default function MealList({ mealData }) {
       </section>
 
       <section className="meals">
-        {mealData.meals.map(meal => {
-          return <Meal key={meal.id} meal={meal} />
+        {mealData.meals.map((meal) => {
+          return <Meal key={meal.id} meal={meal} />;
         })}
       </section>
     </main>
-  )
+  );
 }

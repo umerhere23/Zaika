@@ -1,4 +1,3 @@
-// ./routes/UserDetails.js
 import express from 'express';
 
 import { fetchUserData, blockUser} from '../controller/UserController.js';

@@ -1,9 +1,13 @@
-import React, { useState,useEffect } from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Modal, Button, Form } from 'react-bootstrap';
-import { sendMealsToBackend,fetchMealsFromBackend,deleteMealFromBackend } from '../../Service/api';
+import React, { useState, useEffect } from "react";
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
+import { Modal, Button, Form } from "react-bootstrap";
+import {
+  sendMealsToBackend,
+  fetchMealsFromBackend,
+  deleteMealFromBackend,
+} from "../../Service/api";
 
 const localizer = momentLocalizer(moment);
 
@@ -13,8 +17,8 @@ const MealPlanner = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [mealType, setMealType] = useState('Breakfast');
-  const [mealDescription, setMealDescription] = useState('');
+  const [mealType, setMealType] = useState("Breakfast");
+  const [mealDescription, setMealDescription] = useState("");
   const [EditMode, setEditModes] = useState(false);
   const [mealToEdit, setMealToEdit] = useState(null);
   const userName = "User2";
@@ -31,8 +35,7 @@ const MealPlanner = () => {
       title: `${mealType} - ${mealDescription}`,
       start: selectedDate,
       end: selectedDate,
-      Username:"User2"
-
+      Username: "User2",
     };
     setMeals((prevMeals) => {
       if (EditMode && mealToEdit) {
@@ -50,12 +53,12 @@ const MealPlanner = () => {
         const fetchedMeals = await fetchMealsFromBackend();
         setMeals(fetchedMeals);
       } catch (error) {
-        console.error('Error fetching meals:', error);
+        console.error("Error fetching meals:", error);
       }
     };
 
     fetchMeals();
-  }, []); 
+  }, []);
   const handleSaveMealPlan = async (e) => {
     e.preventDefault();
 
@@ -63,7 +66,7 @@ const MealPlanner = () => {
 
     try {
       await sendMealsToBackend(meals);
-      
+
       console.log("Meal plan saved successfully");
     } catch (error) {
       console.error("Error saving meal plan:", error);
@@ -72,46 +75,43 @@ const MealPlanner = () => {
   useEffect(() => {
     const fetchMeals = async () => {
       try {
-
         const fetchedMeals = await fetchMealsFromBackend(userName);
         setMeals(fetchedMeals);
         console.log(setMeals);
         setMeals(fetchedMeals);
         setFetchedMeals(fetchedMeals);
       } catch (error) {
-        console.error('Error fetching meals:', error);
+        console.error("Error fetching meals:", error);
       }
     };
-  
+
     fetchMeals();
   }, [userName]);
   const handleDeleteMeal = async (mealToDeleteId) => {
     try {
-      console.log('Deleting Meal ID:', mealToDeleteId);
+      console.log("Deleting Meal ID:", mealToDeleteId);
 
       await deleteMealFromBackend(mealToDeleteId);
 
       const updatedMeals = meals.filter((meal) => meal._id !== mealToDeleteId);
       setMeals(updatedMeals);
 
-      console.log('Meal deleted successfully');
+      console.log("Meal deleted successfully");
     } catch (error) {
-      console.error('Error deleting meal:', error);
+      console.error("Error deleting meal:", error);
     }
   };
-  
-  
 
   const handleEditMeal = (mealToEdit) => {
-    setMealType(''); 
-    setMealDescription(mealToEdit.title); 
+    setMealType("");
+    setMealDescription(mealToEdit.title);
     setEditModes(true);
     setMealToEdit(mealToEdit);
     setSelectedDate(mealToEdit.start);
     setShowModal(true);
   };
 
-  const customCellClass = 'custom-calendar-cell';
+  const customCellClass = "custom-calendar-cell";
 
   return (
     <div className="container mt-4">
@@ -121,7 +121,9 @@ const MealPlanner = () => {
           // height: 250px;
         }`}
       </style>
-      <h1>Fetched Meal IDs: {fetchedMeals.map(meal => meal._id).join(', ')}</h1>
+      <h1>
+        Fetched Meal IDs: {fetchedMeals.map((meal) => meal._id).join(", ")}
+      </h1>
 
       <Calendar
         localizer={localizer}
@@ -133,7 +135,7 @@ const MealPlanner = () => {
         onSelectSlot={handleSelectSlot}
         eventPropGetter={(event, start, end, isSelected) => {
           const style = {
-            backgroundColor: '#3174ad',
+            backgroundColor: "#3174ad",
           };
           return {
             style,
@@ -145,14 +147,11 @@ const MealPlanner = () => {
               <div>{event.title}</div>
               <Button
                 variant="danger"
-                onClick={() => handleDeleteMeal(event._id)} 
+                onClick={() => handleDeleteMeal(event._id)}
               >
                 Delete
               </Button>
-              <Button
-                variant="info"
-                onClick={() => handleEditMeal(event)}
-              >
+              <Button variant="info" onClick={() => handleEditMeal(event)}>
                 Edit
               </Button>
             </div>
@@ -165,7 +164,7 @@ const MealPlanner = () => {
 
       <Modal show={showModal} onHide={() => setShowModal(false)}>
         <Modal.Header closeButton>
-          <Modal.Title>{EditMode ? 'Edit Meal' : 'Add Meal'}</Modal.Title>
+          <Modal.Title>{EditMode ? "Edit Meal" : "Add Meal"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
@@ -196,7 +195,7 @@ const MealPlanner = () => {
             Close
           </Button>
           <Button variant="primary" onClick={saveMeal}>
-            {EditMode ? 'Save Changes' : 'Save Meal'}
+            {EditMode ? "Save Changes" : "Save Meal"}
           </Button>
         </Modal.Footer>
       </Modal>

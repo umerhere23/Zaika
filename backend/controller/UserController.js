@@ -1,4 +1,3 @@
-// controller/UserController.js
 import SignupModel from '../Models/Login.js';
 
 export const getUserDetails = async (req, res) => {
@@ -85,7 +84,6 @@ export const fetchUserData = async (req, res) => {
     
 
 
-// In your backend route
 export const blockUser = async (req, res) => {
     const { _id } = req.params;
     const { isBlocked } = req.body;

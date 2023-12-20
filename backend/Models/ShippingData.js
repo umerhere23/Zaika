@@ -60,6 +60,21 @@ const shippingInfoSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  Completed: {
+    type: Boolean,
+    default: false, 
+  },
+  lastUpdated: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+shippingInfoSchema.pre('save', function (next) {
+  if (this.isModified('Completed')) {
+    this.lastUpdated = new Date();
+  }
+  next();
 });
 
 const ShippingData = mongoose.model('ShippingData', shippingInfoSchema);

@@ -1,4 +1,3 @@
-// FeedbackController.js
 import Feedback from '../Models/FeedBacks.js';
 
 export const saveFeedback = async (req, res) => {

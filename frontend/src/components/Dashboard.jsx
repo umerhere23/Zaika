@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { MdCheckCircle, MdDelete } from 'react-icons/md';
+import { MdCheckCircle, MdDelete } from "react-icons/md";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CRow, CCol, CWidgetStatsB } from "@coreui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+
 import {
   faTrash,
   faBan,
@@ -12,7 +13,6 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import "./CSS/Dashboard.css";
-import { onAddRecipe } from "../Service/api";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Footer from "./footer";
@@ -26,7 +26,6 @@ import {
   deleteMealFromBackend,
 } from "../Service/api";
 import { Calendar, momentLocalizer } from "react-big-calendar";
-import { addIngredientPack } from "../Service/api.js";
 
 import { MDBCard, MDBContainer, MDBCardBody, MDBInput } from "mdb-react-ui-kit";
 
@@ -37,7 +36,17 @@ import {
   removeRecipe,
 } from "../Service/api";
 import { useLocation, Link, Navigate, useNavigate } from "react-router-dom";
-import { fetchAllFeedbacks, removefeedback,AddIngredients ,fetchorder} from "../Service/api";
+import {
+  fetchAllFeedbacks,
+  removefeedback,
+  AddIngredients,
+  onAddRecipe,
+  fetchorder,
+  deleteIngredient,
+  addIngredientPack,
+  markOrderAsComplete,
+  DeleteOrder,
+} from "../Service/api";
 import imgsucess from "../components/img/tikpic.png";
 import {
   CDBSidebar,
@@ -62,7 +71,6 @@ const localizer = momentLocalizer(moment);
 const Dasboard = () => {
   const location = useLocation();
   const [filteredIngredients, setFilteredIngredients] = useState([]);
-
 
   const [ingdetails, setingDetails] = useState([]);
   const [meals, setMeals] = useState([]);
@@ -299,7 +307,9 @@ const Dasboard = () => {
     fetchData();
   }, []);
   useEffect(() => {
-    const filtered = ingdetails.filter((ingredient) => ingredient.seller ===Uname);
+    const filtered = ingdetails.filter(
+      (ingredient) => ingredient.seller === Uname
+    );
     setFilteredIngredients(filtered);
   }, [ingdetails]);
   const fetchData = async () => {
@@ -307,7 +317,7 @@ const Dasboard = () => {
       const result = await AddIngredients();
       setingDetails(result);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
   const validateForm = () => {
@@ -434,7 +444,7 @@ const Dasboard = () => {
       const result = await fetchorder(Uname);
       setOrders(result);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
   };
   if (!isLoggedIn()) {
@@ -487,13 +497,53 @@ const Dasboard = () => {
     });
   };
 
-  const handleDeleteOrder = (_id) => {
-    // Filter out the order with the given id
-    const updatedOrders = orders.filter((order) => order._id !== _id);
-    console.log(_id)
-    // setOrders(updatedOrders);
+  const handleDeleteOrder = async (_id) => {
+    try {
+      const orderIndex = orders.findIndex((order) => order._id === _id);
+
+      if (orderIndex === -1) {
+        throw new Error(`Order with ID ${_id} not found`);
+      }
+
+      await DeleteOrder(_id);
+
+      const updatedOrders = orders.filter((order) => order._id !== _id);
+      setOrders(updatedOrders);
+
+      toast.success("Order removed successfully", { autoClose: 500 });
+    } catch (error) {
+      console.error("Error removing order:", error);
+      toast.error("Failed to remove order", { autoClose: 500 });
+    }
   };
 
+  const handleCompleteOrder = async (_id) => {
+    try {
+      const orderIndex = orders.findIndex((order) => order._id === _id);
+
+      if (orderIndex === -1) {
+        throw new Error(`Order with ID ${_id} not found`);
+      }
+
+      const newStatus = !orders[orderIndex].Completed;
+
+      await markOrderAsComplete({ _id, action: newStatus });
+
+      const updatedOrders = [...orders];
+      updatedOrders[orderIndex].Completed = newStatus;
+      setOrders(updatedOrders);
+
+      toast.success(
+        `Order ${
+          newStatus ? "completed" : "marked as incomplete"
+        } successfully`,
+        { autoClose: 500 }
+      );
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast.error("Failed to update order status", { autoClose: 500 });
+    }
+  };
 
   const handleSubmit = async () => {
     if (
@@ -503,14 +553,19 @@ const Dasboard = () => {
       formData.details === "" ||
       formData.packName === "" ||
       formData.discount === "" ||
-      formData.ingredients.some((ingredient) => ingredient.name === "" || ingredient.quantity === "" || ingredient.price === "") ||
+      formData.ingredients.some(
+        (ingredient) =>
+          ingredient.name === "" ||
+          ingredient.quantity === "" ||
+          ingredient.price === ""
+      ) ||
       formData.seller === "" ||
       formData.image === ""
     ) {
       toast.error("Please fill in all required fields.");
-      return; 
+      return;
     }
-  
+
     try {
       const result = await addIngredientPack(formData);
       console.log(result);
@@ -540,7 +595,7 @@ const Dasboard = () => {
     return (
       <>
         {isSubmitted ? (
-          <div className="text-center Sucessmsg" >
+          <div className="text-center Sucessmsg">
             <img src={imgsucess} alt="" style={{ width: "5%" }} />
             <h2>Thank you for your submission!</h2>
             <p>Your recipe has been added.</p>
@@ -550,7 +605,7 @@ const Dasboard = () => {
             </button>
           </div>
         ) : (
-          <CDBContainer className="Formrecp" style={{marginTop:"-70%"}}>
+          <CDBContainer className="Formrecp" style={{ marginTop: "-70%" }}>
             <CDBCard style={{ width: "30rem" }}>
               <CDBCardBody className="mx-4">
                 <div className="text-center mt-4 mb-2">
@@ -695,7 +750,7 @@ const Dasboard = () => {
   const SellIngredients = () => {
     return (
       <>
-        <div className="container mt-5  " style={{ marginLeft: "10%" }} >
+        <div className="container mt-5  " style={{ marginLeft: "10%" }}>
           <div
             className="row justify-content-center "
             style={{ marginTop: "-88%" }}
@@ -833,7 +888,7 @@ const Dasboard = () => {
                               className="btn btn-danger mt-4 p-3"
                               onClick={() => handleRemoveIngredient(index)}
                             >
-                              Remove  {index + 1}
+                              Remove {index + 1}
                             </button>
                           </div>
                         )}
@@ -1146,10 +1201,10 @@ const Dasboard = () => {
   const renderRecipesTable = () => {
     return (
       <>
-        <div className="row justify-content-center " id="recp" >
+        <div className="row justify-content-center " id="recp">
           <div className="container py-5">
             {userRecipes.length > 0 ? (
-              <Table striped bordered hover >
+              <Table striped bordered hover>
                 <thead>
                   <tr>
                     <th
@@ -1198,56 +1253,73 @@ const Dasboard = () => {
     );
   };
   const Showorders = () => {
-    return(
-      <>
-              <div className="row justify-content " id="recp"   style={{marginLeft:"10%",width:"90%",fontSize:"1.9vh"}}>
+    return (
+      <div
+        className="row justify-content"
+        id="recp"
+        style={{ marginLeft: "10%", width: "90%", fontSize: "1.9vh" }}
+      >
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Address</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Product</th>
+              <th>Product ID</th>
+              <th>Price</th>
+              <th>Complete Date</th>
 
-              <Table striped bordered hover >
-        <thead>
-          <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Address</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Product</th>
-            <th>Product ID</th>
-            <th>Price</th>
-            <th>Complete</th>
-            <th>Delete</th>
-
-          </tr>
-        </thead>
-        <tbody>
-          {orders.map((order) => (
-            <tr key={order.id}>
-              <td>{order.firstName}</td>
-              <td>{order.lastName}</td>
-              <td>{order.address}</td>
-              <td>{order.email}</td>
-              <td>{order.phone}</td>
-              <td>{order.Product}</td>
-              <td>{order.ProducdID}</td>
-              <td>{order.TotalPrice}</td>
-
-              <td>
-              {/* <MdCheckCircle style={{ color: 'green', cursor: 'pointer' }} onClick={() => handleCompleteOrder(order.id)} /> */}
-               
-              </td>
-              <td>
-              <MdDelete style={{ cursor: 'pointer' }} onClick={() => handleDeleteOrder(order._id)} />
-
-              </td>
+              <th>Complete</th>
+              <th>Delete</th>
             </tr>
-          ))}
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.firstName}</td>
+                <td>{order.lastName}</td>
+                <td style={{ width: "95%" }}>{order.address}</td>
+                <td>{order.email}</td>
+                <td>{order.phone}</td>
+                <td>{order.Product}</td>
+                <td>{order.ProducdID}</td>
+                <td>{order.TotalPrice}</td>
+                <td>{new Date(order.lastUpdated).toLocaleString()}</td>
 
-        </tbody>
-      </Table>
-     </div>
-
-      </>
+                <td>
+                  <td>
+                    {order.Completed === false ? (
+                      <FontAwesomeIcon
+                        icon={faBan}
+                        className="text-danger"
+                        onClick={() => handleCompleteOrder(order._id)}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        className="text-success"
+                        onClick={() => handleCompleteOrder(order._id)}
+                      />
+                    )}
+                  </td>
+                </td>
+                <td>
+                  <MdDelete
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleDeleteOrder(order._id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     );
-  }
+  };
+
   const renderFeedbackTable = () => {
     return (
       <>
@@ -1410,51 +1482,77 @@ const Dasboard = () => {
       </>
     );
   };
+  const handleDeleteIngredient = async (ingredientId) => {
+    try {
+      console.log(ingredientId);
+      await deleteIngredient(ingredientId);
+
+      const updatedIngredients = filteredIngredients.filter(
+        (ingredient) => ingredient._id !== ingredientId
+      );
+      setFilteredIngredients(updatedIngredients);
+
+      console.log("Ingredient deleted successfully");
+    } catch (error) {
+      console.error("Error deleting ingredient:", error);
+      console.log("Failed to delete ingredient");
+    }
+  };
 
   const ShowIngredients = () => {
-    return( 
-    <>
-       <div className="container " id="ingred">
-      <div className="row  ingred">
-        {filteredIngredients.map((ingredient, index) => (
-          <div key={index} className="col-md-4 mb-3 " >
-            <MDBCard >
-              <div className="card-body " >
-                <img src={ingredient.image} alt="" srcSet="" />
-                <hr />
-
-                <h5 className="card-title">Pack Name : {ingredient.packName}</h5>
-                <h6  className="card-title"color='black'><b>Recpie Name:</b> {ingredient.recipeName}</h6>
-                <hr />
-                <p className="card-text">
-                  <b>Quantity:</b> {ingredient.totalProducts},&nbsp;&nbsp;&nbsp;&nbsp; <b>Price:</b> {ingredient.totalPrice}
-                 
-                  <br /> <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp; <b>Discount</b> {ingredient.discount}%
-                </p>
-                <b>Details :</b> {ingredient.details} <br />
-                <b>Product Id :</b> {ingredient._id}
-
-                {ingredient.ingredients.map((nestedIngredient, nestedIndex) => (
-          <div key={nestedIndex}>
-            <p>
-              <b>Ingredient :</b> {nestedIngredient.name}
-
-            </p>
-          </div>
-        ))}
- <div className="d-flex justify-content-between">
-                  {/* <button onClick={() => onViewDetails(ingredient._id)} color="primary"  type="button" class="btn btn-primary">Details</button> */}
-                </div>
+    return (
+      <>
+        <div className="container " id="ingred">
+          <div className="row  ingred">
+            {filteredIngredients.map((ingredient, index) => (
+              <div key={index} className="col-md-4 mb-3 ">
+                <MDBCard>
+                  <div className="card-body ">
+                    <img src={ingredient.image} alt="" srcSet="" />
+                    <hr />
+                    <h5 className="card-title">
+                      Pack Name: {ingredient.packName}
+                    </h5>
+                    <h6 className="card-title" color="black">
+                      <b>Recipe Name:</b> {ingredient.recipeName}
+                    </h6>
+                    <button
+                      onClick={() => handleDeleteIngredient(ingredient._id)}
+                      className="btn btn-danger  "
+                    >
+                      Delete
+                    </button>
+                    <hr />
+                    <p className="card-text">
+                      <b>Quantity:</b> {ingredient.totalProducts}
+                      ,&nbsp;&nbsp;&nbsp;&nbsp;
+                      <b>Price:</b> {ingredient.totalPrice}
+                      <br />
+                      <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp;
+                      <b>Discount</b> {ingredient.discount}%
+                    </p>
+                    <b>Details:</b> {ingredient.details} <br />
+                    <b>Product Id:</b> {ingredient._id}
+                    {ingredient.ingredients.map(
+                      (nestedIngredient, nestedIndex) => (
+                        <div key={nestedIndex}>
+                          <p>
+                            <b>Ingredient:</b> {nestedIngredient.name}
+                          </p>
+                        </div>
+                      )
+                    )}
+                    <div className="d-flex justify-content-between">
+                      {/* <button onClick={() => onViewDetails(ingredient._id)} color="primary"  type="button" class="btn btn-primary">Details</button> */}
+                    </div>
+                  </div>
+                </MDBCard>
               </div>
-            </MDBCard>
-            
+            ))}
           </div>
-        
-        ))}
-       
-      </div>
-    </div>
-    </> );
+        </div>
+      </>
+    );
   };
 
   return (
@@ -1543,7 +1641,8 @@ const Dasboard = () => {
               onClick={() => setSelectedTable("Orders")}
               icon="box"
             >
-Orders            </CDBSidebarMenuItem>
+              Orders{" "}
+            </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
         <hr />
@@ -1566,7 +1665,6 @@ Orders            </CDBSidebarMenuItem>
       {selectedTable === "Sell" && SellIngredients()}
       {selectedTable === "Show" && ShowIngredients()}
       {selectedTable === "Orders" && Showorders()}
-
     </>
   );
 };

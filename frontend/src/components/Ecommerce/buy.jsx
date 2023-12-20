@@ -15,6 +15,7 @@ import {
   MDBListGroupItem,
 } from 'mdb-react-ui-kit';
 import 'react-toastify/dist/ReactToastify.css';
+import Footer from '../footer';
 
 const BuyProduct = () => {
   const navigate = useNavigate();
@@ -31,7 +32,7 @@ const BuyProduct = () => {
     expiration: '',
     cvv: '',
     seller:Seller,
-    TotalPrice:price*quantity,
+    TotalPrice:price*quantity+400,
     shippingSameAsBilling: '',
     saveInfoForNextTime: '',
     Product:Packame,
@@ -107,7 +108,7 @@ const BuyProduct = () => {
 
     return Object.keys(newErrors).length === 0;
   };
-  return (
+  return (<>
     <div className="container ml-15">
      
   
@@ -354,7 +355,8 @@ const BuyProduct = () => {
       <ToastContainer />
 
     </div>
-    
+          <Footer />
+</>
   );
 };
 

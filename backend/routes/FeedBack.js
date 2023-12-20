@@ -1,4 +1,3 @@
-// feedbackRoutes.js
 import express from 'express';
 import { saveFeedback,fetchAllFeedbacks,removeFeedback } from '../controller/FeedbackController.js';
 

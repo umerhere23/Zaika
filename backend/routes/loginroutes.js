@@ -1,4 +1,3 @@
-// routes/loginroutes.js
 
 import express from 'express';
 import { getApplications, createApplication, loginApplication1 } from '../controller/logoncontroller.js';

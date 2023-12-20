@@ -1,6 +1,6 @@
-const Head=()=>{
-    return(<>
-    
+const Head = () => {
+    return (<>
+
     </>);
 }
 export default Head;

@@ -19,6 +19,7 @@ export const addIngredientPack = async (req, res) => {
       totalPrice,
       seller,
       image,
+      
     });
 
     await newIngredientPack.save();
@@ -43,3 +44,23 @@ export const AllIngredients = async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ message: "Failed to fetch allIngredients." });}}
+
+
+    export const blockUser = async (req, res) => {
+      const { _id } = req.params;
+      const { isBlocked } = req.body;
+    
+      try {
+        const user = await SignupModel.findByIdAndUpdate(_id, { isBlocked }, { new: true });
+    
+        if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+        }
+    
+        res.status(200).json(user);
+      } catch (error) {
+        console.error('Error updating user details:', error);
+        res.status(500).json({ message: 'Failed to update user details' });
+      }
+    };
+    

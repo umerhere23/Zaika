@@ -1,5 +1,5 @@
 import Home from './components/Home';
-import {Route,Routes} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Navbar from "./components/Navbar";
 import Recipe from './components/Recipe';
 import Signup from './components/Signup';
@@ -19,36 +19,36 @@ import EComHome from './components/Ecommerce/EComHome.jsx';
 import Layout from './components/Mealplanner/Layout.jsx';
 import IngredientDetail from './components/Ecommerce/Ingredient.jsx';
 import BuyProduct from './components/Ecommerce/buy.jsx'
-const App=()=>{
+const App = () => {
 
-  return(
+  return (
     <>
 
 
-<Routes>
-  <Route path='/' element={<Layout />} >
-    <Route index element={<Home />}/>
-    <Route path="/home" element={<Home />}  />
+      <Routes>
+        <Route path='/' element={<Layout />} >
+          <Route index element={<Home />} />
+          <Route path="/home" element={<Home />} />
 
-  <Route path="/recipe" element={<Recipe />}  />
-  <Route path="/signup" element={<Signup />}  />
-  <Route path="/login" element={<Login />}  />
-  <Route path="/AddRecpie/:id" element={<AddRecipe />}  />
-  <Route path="/aboutUS" element={<AboutUS />}  />
-  <Route path="/dashboard" element={<Dashboard />}  />
-  <Route path="/recipes/:id" element={<RecipeDetails />} />
-        <Route path="/ingredient/:id" element={<IngredientDetail/>} />
-        <Route path="/buy/:id" element={<BuyProduct/>} />
+          <Route path="/recipe" element={<Recipe />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/AddRecpie/:id" element={<AddRecipe />} />
+          <Route path="/aboutUS" element={<AboutUS />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/recipes/:id" element={<RecipeDetails />} />
+          <Route path="/ingredient/:id" element={<IngredientDetail />} />
+          <Route path="/buy/:id" element={<BuyProduct />} />
 
-  <Route path="/UserRecipes" element={<UserRecipes />} />
-  <Route path="/AdminLogin" element={<AdminLogin />} />
+          <Route path="/UserRecipes" element={<UserRecipes />} />
+          <Route path="/AdminLogin" element={<AdminLogin />} />
 
-<Route path='/AdminDasboard' element={<AdminDasboard/>}/>
-<Route path='/Mealplanner' element={<MealPlanner/>}/>
-<Route path='/MealPlanners' element={<DietMealplanner/>}/>
-<Route path='/Ecomerce' element={<EComHome/>}/>
-</Route>
-</Routes>
+          <Route path='/AdminDasboard' element={<AdminDasboard />} />
+          <Route path='/Mealplanner' element={<MealPlanner />} />
+          <Route path='/MealPlanners' element={<DietMealplanner />} />
+          <Route path='/Ecomerce' element={<EComHome />} />
+        </Route>
+      </Routes>
 
 
     </>

@@ -50,3 +50,37 @@ export const getShippingData = async (req, res) => {
       .json({ error: 'Failed to fetch shipping data. Please try again later.' });
   }
 };
+
+export const MarkComplete = async (req, res) => {
+  const { _id } = req.params;
+  const { Completed } = req.body;
+
+  try {
+    const user = await ShippingData.findByIdAndUpdate(_id, { Completed }, { new: true });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.error('Error updating user details:', error);
+    res.status(500).json({ message: 'Failed to update user details' });
+  }
+};
+export const DeleteOrder = async (req, res) => {
+  const { _id } = req.params;
+
+  try {
+    const deletedOrder = await ShippingData.findByIdAndDelete(_id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    res.json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting Order:', error);
+    res.status(500).json({ message: 'Internal Server Error', error: error.message });
+  }
+};
