@@ -18,6 +18,7 @@ import {
   MDBBtn,
 } from "mdb-react-ui-kit";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import Recipe from '../Recipe.jsx';
 
 const IngredientDetail = () => {
   const { id } = useParams();
@@ -54,7 +55,8 @@ const IngredientDetail = () => {
           image:ingdetails.image,
           price:ingdetails.totalPrice,
           Packame:ingdetails.packName,
-          Recpie:ingdetails.recipeName
+          Recpie:ingdetails.recipeName,
+          Seller:ingdetails.seller
         },
       });
     } else {

@@ -19,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const BuyProduct = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { id, quantity, image, price, packageName, recipe } = state;
+  const { id, quantity, image, price, Packame, Recpie,Seller } = state;
   const [formFields, setFormFields] = useState({
     firstName: '',
     lastName: '',
@@ -30,8 +30,13 @@ const BuyProduct = () => {
     cardNumber: '',
     expiration: '',
     cvv: '',
+    seller:Seller,
+    TotalPrice:price*quantity,
     shippingSameAsBilling: '',
     saveInfoForNextTime: '',
+    Product:Packame,
+    ProducdID:id
+    
   });
   const [errors, setErrors] = useState({});
   const handleInputChange = (e) => {
@@ -119,6 +124,11 @@ const BuyProduct = () => {
       label="First Name"
       name="firstName"
       type="text"
+      placeholder={
+        errors.firstName
+          ? errors.firstName
+          : "Enter First Name"
+      }
       onChange={handleInputChange}
       value={formFields.firstName}
     />
@@ -128,6 +138,11 @@ const BuyProduct = () => {
       type="text"
       onChange={handleInputChange}
       value={formFields.lastName}
+      placeholder={
+        errors.lastName
+          ? errors.lastName
+          : "Enter last Name"
+      }
     />
     <MDBInput
       wrapperClass="mb-4"
@@ -138,6 +153,11 @@ const BuyProduct = () => {
       onChange={handleInputChange}
       value={formFields.address}
       required
+      placeholder={
+        errors.address
+          ? errors.address
+          : "Enter address"
+      }
     />
     <MDBInput
       wrapperClass="mb-4"
@@ -148,6 +168,11 @@ const BuyProduct = () => {
       onChange={handleInputChange}
       value={formFields.email}
       required
+      placeholder={
+        errors.email
+          ? errors.email
+          : "Enter email"
+      }
     />
     <MDBInput
       wrapperClass="mb-4"
@@ -158,6 +183,12 @@ const BuyProduct = () => {
       onChange={handleInputChange}
       value={formFields.phone}
       required
+
+      placeholder={
+        errors.phone
+          ? errors.phone
+          : "Enter phone"
+      }
     />
     <hr className="my-4" />
     <MDBCheckbox
@@ -200,6 +231,12 @@ const BuyProduct = () => {
       onChange={handleInputChange}
       required
       pattern='/^[A-Za-z\s]+$/'
+      placeholder={
+        errors.cardName
+          ? errors.cardName
+          : "Enter Name on Card"
+      }
+      
     />
      <MDBInput
       label="Name on card"
@@ -212,6 +249,11 @@ const BuyProduct = () => {
       required
       pattern='/^\d{16}$/'
       max={16}
+      placeholder={
+        errors.cardNumber
+          ? errors.cardNumber
+          : "Enter cardNumber"
+      }
     />
   <MDBRow>
   <MDBCol md="6">
@@ -225,6 +267,12 @@ const BuyProduct = () => {
       onChange={handleInputChange}
       pattern="\d{4}-\d{2}-\d{2}"
       required
+
+      placeholder={
+        errors.expiration
+          ? errors.expiration
+          : "Enter expiration"
+      }
     />
   </MDBCol>
   <MDBCol md="6">
@@ -240,6 +288,11 @@ const BuyProduct = () => {
   minLength={3}
   maxLength={3}
   required
+  placeholder={
+    errors.cvv
+      ? errors.cvv
+      : "Enter expiration"
+  }
 />
 
   </MDBCol>
@@ -259,7 +312,7 @@ const BuyProduct = () => {
            <MDBListGroup flush>
            <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 summary">
            Recipe Name
-               <span>{recipe}</span>
+               <span>{Recpie}</span>
              </MDBListGroupItem>
              <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 summary">
         Product ID
@@ -267,7 +320,7 @@ const BuyProduct = () => {
              </MDBListGroupItem>
              <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 summary">
                Product Name
-               <span>{packageName}</span>
+               <span>{Packame}</span>
              </MDBListGroupItem>
              <MDBListGroupItem className="d-flex justify-content-between align-items-center border-0 px-0 pb-0 summary">
            Quantity

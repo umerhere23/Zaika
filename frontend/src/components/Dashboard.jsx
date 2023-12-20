@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { MdCheckCircle, MdDelete } from 'react-icons/md';
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { CRow, CCol, CWidgetStatsB } from "@coreui/react";
@@ -35,7 +37,7 @@ import {
   removeRecipe,
 } from "../Service/api";
 import { useLocation, Link, Navigate, useNavigate } from "react-router-dom";
-import { fetchAllFeedbacks, removefeedback,AddIngredients } from "../Service/api";
+import { fetchAllFeedbacks, removefeedback,AddIngredients ,fetchorder} from "../Service/api";
 import imgsucess from "../components/img/tikpic.png";
 import {
   CDBSidebar,
@@ -140,7 +142,6 @@ const Dasboard = () => {
       setFetchedMeals(fetchedMeals);
     } catch (error) {
       console.error("Error fetching meals:", error);
-      // toast.error('Failed to fetch meals. Please try again later.');
     }
   };
 
@@ -420,6 +421,22 @@ const Dasboard = () => {
     }
   };
 
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    if (Uname) {
+      fetchOrder(Uname);
+    }
+  }, [Uname]);
+
+  const fetchOrder = async (Uname) => {
+    try {
+      const result = await fetchorder(Uname);
+      setOrders(result);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
   if (!isLoggedIn()) {
     return <Navigate to="/login" />;
   }
@@ -469,6 +486,14 @@ const Dasboard = () => {
       ingredients: newIngredients,
     });
   };
+
+  const handleDeleteOrder = (_id) => {
+    // Filter out the order with the given id
+    const updatedOrders = orders.filter((order) => order._id !== _id);
+    console.log(_id)
+    // setOrders(updatedOrders);
+  };
+
 
   const handleSubmit = async () => {
     if (
@@ -1172,7 +1197,57 @@ const Dasboard = () => {
       </>
     );
   };
+  const Showorders = () => {
+    return(
+      <>
+              <div className="row justify-content " id="recp"   style={{marginLeft:"10%",width:"90%",fontSize:"1.9vh"}}>
 
+              <Table striped bordered hover >
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Product</th>
+            <th>Product ID</th>
+            <th>Price</th>
+            <th>Complete</th>
+            <th>Delete</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td>{order.firstName}</td>
+              <td>{order.lastName}</td>
+              <td>{order.address}</td>
+              <td>{order.email}</td>
+              <td>{order.phone}</td>
+              <td>{order.Product}</td>
+              <td>{order.ProducdID}</td>
+              <td>{order.TotalPrice}</td>
+
+              <td>
+              {/* <MdCheckCircle style={{ color: 'green', cursor: 'pointer' }} onClick={() => handleCompleteOrder(order.id)} /> */}
+               
+              </td>
+              <td>
+              <MdDelete style={{ cursor: 'pointer' }} onClick={() => handleDeleteOrder(order._id)} />
+
+              </td>
+            </tr>
+          ))}
+
+        </tbody>
+      </Table>
+     </div>
+
+      </>
+    );
+  }
   const renderFeedbackTable = () => {
     return (
       <>
@@ -1356,7 +1431,8 @@ const Dasboard = () => {
                  
                   <br /> <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp; <b>Discount</b> {ingredient.discount}%
                 </p>
-                <b>Details :</b> {ingredient.details}
+                <b>Details :</b> {ingredient.details} <br />
+                <b>Product Id :</b> {ingredient._id}
 
                 {ingredient.ingredients.map((nestedIngredient, nestedIndex) => (
           <div key={nestedIndex}>
@@ -1380,6 +1456,7 @@ const Dasboard = () => {
     </div>
     </> );
   };
+
   return (
     <>
       <CDBSidebar
@@ -1461,6 +1538,12 @@ const Dasboard = () => {
             >
               Show Ingredients
             </CDBSidebarMenuItem>
+
+            <CDBSidebarMenuItem
+              onClick={() => setSelectedTable("Orders")}
+              icon="box"
+            >
+Orders            </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
         <hr />
@@ -1482,6 +1565,8 @@ const Dasboard = () => {
       {selectedTable === "Meal" && UserMeal()}
       {selectedTable === "Sell" && SellIngredients()}
       {selectedTable === "Show" && ShowIngredients()}
+      {selectedTable === "Orders" && Showorders()}
+
     </>
   );
 };

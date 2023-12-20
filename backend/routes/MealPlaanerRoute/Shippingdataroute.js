@@ -1,8 +1,8 @@
 import express from 'express';
-import { saveShippingData } from '../../controller/ShippingDataController.js';
+import { saveShippingData ,getShippingData} from '../../controller/ShippingDataController.js';
 
 const router = express.Router();
 router.post('/', saveShippingData); 
-// router.post("/", AdminSignup);
+router.get('/:Uname',getShippingData);
 
 export default router;

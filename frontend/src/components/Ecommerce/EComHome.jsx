@@ -104,7 +104,7 @@ const EComHome = () => {
                 <p className="card-text">
                   <b>Quantity:</b> {ingredient.totalProducts},&nbsp;&nbsp;&nbsp;&nbsp; <b>Price:</b> {ingredient.totalPrice}
                  
-                  <br /> <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp; <b>Discount</b> {ingredient.discount}%
+                  <br /><i class="fa fa-user" aria-hidden="true"></i> <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp; <b>Discount</b> {ingredient.discount}%
                 </p>
                 {/* {ingredient.ingredients.map((nestedIngredient, nestedIndex) => (
           <div key={nestedIndex}>

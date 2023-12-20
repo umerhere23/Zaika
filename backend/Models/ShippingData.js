@@ -44,6 +44,22 @@ const shippingInfoSchema = new mongoose.Schema({
   saveInfoForNextTime: {
     type: String,
   },
+  seller: {
+    type: String,
+    required: true,
+  },
+  TotalPrice: {
+    type: String,
+    required: true,
+  },
+  Product: {
+    type: String,
+    required: true,
+  },
+  ProducdID: {
+    type: String,
+    required: true,
+  },
 });
 
 const ShippingData = mongoose.model('ShippingData', shippingInfoSchema);

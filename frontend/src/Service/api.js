@@ -301,3 +301,12 @@ export const Saveshippingdata = async (formFields) => {
     throw error;
   }
 };
+export const fetchorder = async (Uname) => {
+  try {
+    const response = await axios.get(`${baseUrl}/saveshippingdata/${Uname}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+  }
+};
