@@ -17,8 +17,7 @@ import {
   MDBRipple,
   MDBBtn,
 } from "mdb-react-ui-kit";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Recipe from '../Recipe.jsx';
+
 
 const IngredientDetail = () => {
   const { id } = useParams();
@@ -66,6 +65,9 @@ const IngredientDetail = () => {
 
 
   return (<>
+   <br />
+   <br />
+   <br /> <br />
    <br />
    <br />
     <div className="row" style={{marginTop:"7%"}}>
