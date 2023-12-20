@@ -9,10 +9,8 @@ import 'bootstrap/dist/js/bootstrap.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../img/style.css';
 import Footer from '../footer';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import '../Ecommerce/CSS/Ecommerce.css';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
 
 import {
   MDBContainer,
@@ -29,6 +27,7 @@ import "../Ecommerce/CSS/ecommerce-category-product.css";
 
 const EComHome = () => {
   const [filteredIngredients, setFilteredIngredients] = useState([]);
+  const navigate = useNavigate();
 
 
   const [ingdetails, setingDetails] = useState([]);
@@ -47,41 +46,22 @@ const EComHome = () => {
       console.error('Error:', error);
     }
   };
-  const onDelete = (id) => {
-    console.log(`Deleting ingredient with ID: ${id}`);
-  };
 
   const onViewDetails = (id) => {
     console.log(`Viewing details of ingredient with ID: ${id}`);
   };
 
   
-  const [image, setImage] = useState(null);
-  const [recipeId, setRecipeId] = useState('');
-
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleClick = (ingdetails) => {
+    navigate(`/ingredient/${ingdetails._id}`, {
+      state: {
+        id: ingdetails._id, 
+      
+      },
+    });
+    
   };
 
-  const handleRecipeIdChange = (e) => {
-    setRecipeId(e.target.value);
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const formData = new FormData();
-      formData.append('image', image);
-      formData.append('recipeId', recipeId);
-
-      await createUpperAPI(formData);
-
-      setImage(null);
-      setRecipeId('');
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
   return (
     <>
   
@@ -126,15 +106,16 @@ const EComHome = () => {
                  
                   <br /> <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp; <b>Discount</b> {ingredient.discount}%
                 </p>
-                {ingredient.ingredients.map((nestedIngredient, nestedIndex) => (
+                {/* {ingredient.ingredients.map((nestedIngredient, nestedIndex) => (
           <div key={nestedIndex}>
             <p>
               <b>Ingredient :</b> {nestedIngredient.name}
             </p>
           </div>
-        ))}
+        ))} */}
  <div className="d-flex justify-content-between">
-                  <button onClick={() => onViewDetails(ingredient._id)} color="primary"  type="button" class="btn btn-primary">Details</button>
+                  <button key={ingredient._id} onClick={() => handleClick(ingredient)} color="primary"  type="button" class="btn btn-primary">Details</button>
+                  {/* <Link to={`/ingredient/${ingredient._id.$oid}`} className="btn btn-primary">Details</Link> */}
                 </div>
               </div>
             </MDBCard>

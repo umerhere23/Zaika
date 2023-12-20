@@ -471,11 +471,26 @@ const Dasboard = () => {
   };
 
   const handleSubmit = async () => {
+    if (
+      formData.recipeId === "" ||
+      formData.recipeName === "" ||
+      formData.totalProducts === "" ||
+      formData.details === "" ||
+      formData.packName === "" ||
+      formData.discount === "" ||
+      formData.ingredients.some((ingredient) => ingredient.name === "" || ingredient.quantity === "" || ingredient.price === "") ||
+      formData.seller === "" ||
+      formData.image === ""
+    ) {
+      toast.error("Please fill in all required fields.");
+      return; 
+    }
+  
     try {
       const result = await addIngredientPack(formData);
       console.log(result);
       toast.success("Ingredient Added successfully", { autoClose: 500 });
-      setIsSubmitted(true); 
+      setIsSubmitted(true);
       setFormData({
         recipeId: "",
         recipeName: "",
@@ -487,7 +502,7 @@ const Dasboard = () => {
           { name: "", quantity: "", price: "" },
           { name: "", quantity: "", price: "" },
         ],
-        seller: "Uname", 
+        seller: "Uname",
         image: "",
       });
     } catch (error) {
@@ -757,7 +772,7 @@ const Dasboard = () => {
                             htmlFor={`ingredientQuantity${index}`}
                             className="form-label"
                           >
-                            {index + 1} Quantity
+                            {index + 1} Quantity(G)
                           </label>
                           <input
                             type="number"
@@ -774,7 +789,7 @@ const Dasboard = () => {
                             htmlFor={`ingredientPrice${index}`}
                             className="form-label"
                           >
-                            {index + 1} Price
+                            {index + 1} Price(PKR)
                           </label>
                           <input
                             type="number"
@@ -790,10 +805,10 @@ const Dasboard = () => {
                           <div className="col">
                             <button
                               type="button"
-                              className="btn btn-danger mt-4"
+                              className="btn btn-danger mt-4 p-3"
                               onClick={() => handleRemoveIngredient(index)}
                             >
-                              Remove Ingredient {index + 1}
+                              Remove  {index + 1}
                             </button>
                           </div>
                         )}

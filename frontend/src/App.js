@@ -17,6 +17,8 @@ import MealPlanner from './components/Mealplanner/Mealplanner.jsx';
 import DietMealplanner from './components/Mealplanner/DietMealplanner.jsx';
 import EComHome from './components/Ecommerce/EComHome.jsx';
 import Layout from './components/Mealplanner/Layout.jsx';
+import IngredientDetail from './components/Ecommerce/Ingredient.jsx';
+import BuyProduct from './components/Ecommerce/buy.jsx'
 const App=()=>{
 
   return(
@@ -35,6 +37,8 @@ const App=()=>{
   <Route path="/aboutUS" element={<AboutUS />}  />
   <Route path="/dashboard" element={<Dashboard />}  />
   <Route path="/recipes/:id" element={<RecipeDetails />} />
+        <Route path="/ingredient/:id" element={<IngredientDetail/>} />
+        <Route path="/buy/:id" element={<BuyProduct/>} />
 
   <Route path="/UserRecipes" element={<UserRecipes />} />
   <Route path="/AdminLogin" element={<AdminLogin />} />

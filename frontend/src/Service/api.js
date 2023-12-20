@@ -291,3 +291,13 @@ export const createUpperAPI = async (formData) => {
     throw new Error('Error sending data to Upper API');
   }
 };
+export const Saveshippingdata = async (formFields) => {
+  try {
+    const response = await axios.post(`${baseUrl}/saveshippingdata`, formFields);
+
+    return response.data;
+  } catch (error) {
+    console.error('Error saving feedbackData:', error);
+    throw error;
+  }
+};
