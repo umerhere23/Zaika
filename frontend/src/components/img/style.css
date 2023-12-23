@@ -312,3 +312,72 @@ border: none;
                 padding: 25px;
             }
         }        
+
+        /* AboutUs.css */
+
+        @keyframes slideInLeft {
+            0% {
+              transform: translateX(-100%);
+            }
+            100% {
+              transform: translateX(0);
+            }
+          }
+          
+          @keyframes slideInRight {
+            0% {
+              transform: translateX(100%);
+            }
+            100% {
+              transform: translateX(0);
+            }
+          }
+          
+          .team-member {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15% ;
+          }
+          
+          .team-member img {
+            transition: transform 4s ease-in-out;
+          }
+          
+          .team-member img:hover {
+            animation: spin 12s linear infinite;
+          }
+  .banner .right h1 {
+    animation: fadeInUp 1s ease-in-out;
+  }
+  
+  .banner .right h2 {
+    animation: fadeInUp 1.5s ease-in-out;
+  }
+  
+  .banner .right h3 {
+    animation: fadeInUp 2s ease-in-out;
+  }
+  
+  .banner .right h4 {
+    animation: fadeInUp 2.5s ease-in-out;
+  }
+  
+  .banner .right p {
+    animation: fadeInUp 3s ease-in-out;
+  }
+  
+  .banner .right .btn1 {
+    animation: fadeInUp 3.5s ease-in-out;
+  }
+  
+  .banner .left img {
+    animation: slideInLeft 2s ease-in-out;
+  }
+  
+  .alert {
+    animation: slideInRight 2s ease-in-out;
+  }
+  
+  .text-center {
+    animation: fadeInUp 3s ease-in-out;
+  }

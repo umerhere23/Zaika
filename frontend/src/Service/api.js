@@ -4,11 +4,12 @@ const baseUrl = "http://localhost:5000";
 export const addApplicant = async (applicantData) => {
   try {
     const response = await axios.post(`${baseUrl}/hostelApplicants`, applicantData);
-    return response.data;
+    return response;
   } catch (error) {
     throw error;
   }
-}
+};
+
 
 export const getApplicant = async () => {
   try {
@@ -337,6 +338,41 @@ export const deleteIngredient = async (ingredientId) => {
     const response = await axios.delete(`${baseUrl}/Delete/${ingredientId}`);
     return response.data;
   } catch (error) {
+    throw error;
+  }
+};
+
+export const fetchAllorder = async () => {
+  try {
+    const response = await axios.get(`${baseUrl}/saveshippingdata`);
+
+    if (response.status >= 200 && response.status < 300) {
+      return response.data;
+    } else {
+      throw new Error(`Error fetching all Users: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error in fetchAllUsers:', error);
+    throw error;
+  }
+};
+
+export const updateIngredientQuantity = async (id, updatedQuantity) => {
+  try {
+    const response = await axios.put(`${baseUrl}/ingredients/${id}`, { updatedQuantity });
+
+    console.log(response.data.message); 
+  } catch (error) {
+    console.error('Error updating ingredient quantity:', error);
+  }
+};
+
+export const fetchrecpie = async (id) => {
+  try {
+    const response = await axios.get(`${baseUrl}/FetchRecpie/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching Recpie:', error);
     throw error;
   }
 };

@@ -51,6 +51,7 @@ const EComHome = () => {
     navigate(`/ingredient/${ingredient._id}`, {
       state: {
         id: ingredient._id,
+        Quan:ingredient.totalProducts
       },
     });
   };
@@ -163,18 +164,24 @@ const EComHome = () => {
             </p>
           </div>
         ))} */}
-                        <div className="d-flex justify-content-between">
-                          <button
-                            key={ingredient._id}
-                            onClick={() => handleClick(ingredient)}
-                            color="primary"
-                            type="button"
-                            class="btn btn-primary"
-                          >
-                            Details
-                          </button>
+        {ingredient.totalProducts === 0 ? (
+                    <button className="btn btn-primary" type="button" disabled>
+                      Out Of Stock
+                    </button>
+                  ) : (
+                    <div className="d-flex justify-content-between">
+                      <button
+                        onClick={() => handleClick(ingredient)}
+                        className="btn btn-primary"
+                        type="button"
+                      >
+                        Details
+                      </button>
+                    </div>
+                  )}
+                        
                           {/* <Link to={`/ingredient/${ingredient._id.$oid}`} className="btn btn-primary">Details</Link> */}
-                        </div>
+                       
                       </div>
                     </MDBCard>
                   </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import Rating from "react-rating-stars-component";
 import Footer from "./footer";
-import { saveFeedback, fetchAllFeedbacks } from "../Service/api";
+import { saveFeedback, fetchAllFeedbacks ,fetchrecpie} from "../Service/api";
 import { faShareAlt, faClipboard } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
@@ -10,10 +10,18 @@ import StarRating from "../components/icons/stars.jsx";
 import "../components/CSS/feedback.css";
 
 const RecipeDetails = () => {
-  const { id } = useParams();
+  const { id} = useParams();
   const location = useLocation();
-  const { recipeName, userName, ingredients, instructions, timeToCook, email } =
-    location.state || {};
+  const {
+    recipeName,
+    userName,
+    ingredients,
+    instructions,
+    timeToCook,
+    email,
+    Recpimage,
+  } = location.state || {};
+  console.log(Recpimage)
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
@@ -23,7 +31,6 @@ const RecipeDetails = () => {
     feedbackText: "",
     recipeId: id,
   });
-
   const [feedbackdetails, setFeedbackDetails] = useState([]);
   const [showSuccessMessagefd, setShowSuccessMessagefd] = useState(false);
 
@@ -32,7 +39,20 @@ const RecipeDetails = () => {
     feedbackText: false,
     email: false,
   });
+  const [recipeDetails, setRecipeDetails] = useState(null); 
+  useEffect(() => {
+    const fetchRecipeDetails = async () => {
+      try {
+        const recipe = await fetchrecpie(id);
+        setRecipeDetails(recipe);
+      } catch (error) {
+        console.error("Error fetching recipe:", error);
+      }
+    };
 
+    fetchRecipeDetails();
+  }, [id]);
+console.log()
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -123,6 +143,7 @@ const RecipeDetails = () => {
   return (
     <>
       <div className="container mt-4  ">
+
         <link
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
@@ -133,7 +154,7 @@ const RecipeDetails = () => {
             <p>
               <i class="fa fa-user" aria-hidden="true"></i>: {userName}
             </p>
-            <h5>Ingredient:</h5>
+            <h5>Ingredient: </h5>
             <ol className="instruction-lists">
               {ingredients &&
                 ingredients
@@ -186,11 +207,7 @@ const RecipeDetails = () => {
           </div>
 
           <div className="col-md-4">
-            <img
-              src="https://via.placeholder.com/150"
-              alt="Recipe Image"
-              className="img-fluid rounded"
-            />
+            <img src={Recpimage} alt="Recipe Image" className="img-fluid rounded" />
             <div className="mt-4">
               {isSubmitted ? (
                 <div className="alert alert-info" role="alert">
@@ -254,6 +271,7 @@ const RecipeDetails = () => {
               )}
             </div>
           </div>
+     
 
           <section>
             <div class="row d-flex justify-content-center">

@@ -46,21 +46,43 @@ export const AllIngredients = async (req, res) => {
     res.status(500).json({ message: "Failed to fetch allIngredients." });}}
 
 
-    export const blockUser = async (req, res) => {
+
+    
+    export const removeIng = async (req, res) => {
       const { _id } = req.params;
-      const { isBlocked } = req.body;
     
       try {
-        const user = await SignupModel.findByIdAndUpdate(_id, { isBlocked }, { new: true });
+        const IngredientFeedback = await IngredientPack.findByIdAndDelete(_id);
     
-        if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+        if (!IngredientFeedback) {
+          return res.status(404).json({ message: 'Ingredient not found' });
         }
     
-        res.status(200).json(user);
+        res.json({ message: 'Ingredient deleted successfully' });
       } catch (error) {
-        console.error('Error updating user details:', error);
-        res.status(500).json({ message: 'Failed to update user details' });
+        console.error('Error deleting Ingredient:', error);
+        res.status(500).json({ message: 'Internal Server Error', error: error.message });
       }
     };
+
+    export const updateIngredientQuantity = async (req, res) => {
+      const { id } = req.params;
+      const { updatedQuantity } = req.body;
     
+      try {
+        const ingredient = await IngredientPack.findById(id);
+    
+        if (!ingredient) {
+          return res.status(404).json({ error: 'Ingredient not found' });
+        }
+    
+        ingredient.totalProducts = updatedQuantity;
+    
+        await ingredient.save();
+    
+        res.status(200).json({ message: 'Ingredient quantity updated successfully' });
+      } catch (error) {
+        console.error('Error updating ingredient quantity:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    };

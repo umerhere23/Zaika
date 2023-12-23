@@ -1,13 +1,14 @@
 import React from "react";
-import a2 from "./img/a2.webp";
-import b3 from "./img/b3.jpg";
-import img4 from "./img/img4.jpg";
+import noni from "./img/noni.jpg";
+import Usman from "./img/Usman.jpg";
+import Umer from "./img/Umer.jpg";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./img/style.css";
 import Footer from "./footer";
 import banner1 from "./img/banner1.png";
+import { Col, Container, Row, Image, Button } from 'react-bootstrap';
 
 const Aboutus = () => {
   return (
@@ -49,8 +50,8 @@ const Aboutus = () => {
       </div>
       <br />
       <br />
-      <div class="alert alert-warning" role="alert">
-        <h4 class="alert-heading">Welcome to About Us of Zaika</h4>
+      <div class="alert alert-success" role="success" style={{width:"70%",marginLeft:"15%"}}>
+        <h4 class="alert-success">Welcome to About Us of Zaika</h4>
         <p>
           Zaika is more than just a food platform. We are passionate about
           bringing people together through the love of food. Our journey began
@@ -68,88 +69,47 @@ const Aboutus = () => {
           Bon appétit!
         </p>
       </div>
-      <div class="accordion" id="aboutUsAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="purposeHeading">
-            <button
-              class="accordion-button"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#purposeCollapse"
-              aria-expanded="true"
-              aria-controls="purposeCollapse"
-            >
-              Purpose of the Website
-            </button>
-          </h2>
-          <div
-            id="purposeCollapse"
-            class="accordion-collapse collapse show"
-            aria-labelledby="purposeHeading"
-          >
-            <div class="accordion-body">
-              <strong>Welcome to Zaika!</strong> Our website's primary purpose
-              is to provide a platform for food enthusiasts to share and explore
-              a wide variety of recipes, connect with like-minded individuals,
-              and celebrate the joy of cooking and dining.
+      <Container>
+      <h2 className="text-center">Our Team</h2>
+      <Row>
+        <Col md={4}>
+          <div className="d-flex flex-column align-items-center team-member">
+            <Image src={Umer} alt="Jane" fluid />
+            <div className="text-center">
+              <h2>Muhammad Umer Mukhtiar</h2>
+              <p className="title">CEO & Founder</p>
+              <p>SP20-BSE-055</p>
+              <p>omerjh5004@gmail.com</p>
+              <Button variant="primary">Contact</Button>
             </div>
           </div>
-        </div>
-
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="developersHeading">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#developersCollapse"
-              aria-expanded="false"
-              aria-controls="developersCollapse"
-            >
-              Our Developers
-            </button>
-          </h2>
-          <div
-            id="developersCollapse"
-            class="accordion-collapse collapse"
-            aria-labelledby="developersHeading"
-          >
-            <div class="accordion-body">
-              <strong>Meet the Team Behind Zaika!</strong> Our dedicated team of
-              developers has worked tirelessly to bring this platform to life.
-              We are passionate about food and technology, and we hope you enjoy
-              using Zaika as much as we enjoyed creating it.
+        </Col>
+        <Col md={4}>
+          <div className="d-flex flex-column align-items-center team-member">
+            <Image src={Usman} alt="Mike" fluid />
+            <div className="text-center">
+              <h2>Usman Toufique</h2>
+              <p className="title">Art Director</p>
+              <p>SP20-BSE-046</p>
+              <p>linuxkal3434@gmail.com</p>
+              <Button variant="primary">Contact</Button>
             </div>
           </div>
-        </div>
-
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="thanksHeading">
-            <button
-              class="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#thanksCollapse"
-              aria-expanded="false"
-              aria-controls="thanksCollapse"
-            >
-              Thank You for Visiting
-            </button>
-          </h2>
-          <div
-            id="thanksCollapse"
-            class="accordion-collapse collapse"
-            aria-labelledby="thanksHeading"
-          >
-            <div class="accordion-body">
-              <strong>We Appreciate Your Visit!</strong> We want to express our
-              gratitude for choosing Zaika. Your support and interest in our
-              platform mean the world to us. We look forward to serving you with
-              more delicious recipes and culinary inspiration.
+        </Col>
+        <Col md={4}>
+          <div className="d-flex flex-column align-items-center team-member">
+            <Image src={noni} alt="John" fluid />
+            <div className="text-center">
+              <h2>Adnan</h2>
+              <p className="title">Designer</p>
+              <p>SP20-BSE-037</p>
+              <p>noni@gmail.com</p>
+              <Button variant="primary">Contact</Button>
             </div>
           </div>
-        </div>
-      </div>
+        </Col>
+      </Row>
+    </Container>
 
       <Footer />
     </>

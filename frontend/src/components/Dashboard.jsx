@@ -112,7 +112,7 @@ const Dasboard = () => {
     name: "",
     ingredients: "",
     instructions: "",
-    image: null,
+    image: "",
     timeToCook: "",
     UserName: Uname,
     email: userEmail || "",
@@ -237,30 +237,13 @@ const Dasboard = () => {
       fetchUserRecipesData(userName);
     }
   }, [userName]);
-  useEffect(() => {
-    if (!isLoggedIn()) {
-      return <Navigate to="/login" />;
-    }
-  }, []);
+ 
 
   const addDetails = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      const basePath = "../img";
-      const fileName = `${recipedata.name.replace(/\s+/g, "_")}.jpg`;
-      const imagePath = `${basePath}/${fileName}`;
-
-      const imageBlob = recipedata.image;
-      const reader = new FileReader();
-
-      reader.readAsDataURL(imageBlob);
-
-      reader.onloadend = () => {
-        const base64String = reader.result;
-        localStorage.setItem(imagePath, base64String);
-      };
-      console.log(`Image "${fileName}" saved to Local Storage`);
+     
 
       try {
         await onAddRecipe(recipedata);
@@ -271,7 +254,7 @@ const Dasboard = () => {
           name: "",
           ingredients: "",
           instructions: "",
-          image: null,
+          image: "",
           timeToCook: "",
           UserName: Uname,
           email: userEmail || "",
@@ -285,24 +268,7 @@ const Dasboard = () => {
     }
   };
 
-  const handleImageChange = (e) => {
-    const imageFile = e.target.files[0];
-
-    if (imageFile) {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const base64String = event.target.result;
-        setRecipe({
-          ...recipedata,
-          image: imageFile,
-          imageString: base64String,
-        });
-      };
-
-      reader.readAsDataURL(imageFile);
-    }
-  };
+ 
   useEffect(() => {
     fetchData();
   }, []);
@@ -447,9 +413,7 @@ const Dasboard = () => {
       console.error("Error:", error);
     }
   };
-  if (!isLoggedIn()) {
-    return <Navigate to="/login" />;
-  }
+
 
   const handleEditClick = () => {
     setEditMode(!editMode);
@@ -609,7 +573,31 @@ const Dasboard = () => {
             <CDBCard style={{ width: "30rem" }}>
               <CDBCardBody className="mx-4">
                 <div className="text-center mt-4 mb-2">
-                  <h2>Add Recipe</h2>
+                  <div
+                    className="alert alert-danger d-flex align-items-center"
+                    role="alert"
+                  >
+                    <div>
+                      <svg
+                        style={{ marginLeft: "0%" }}
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-exclamation-triangle "
+                        viewBox="0 0 16 16"
+                      >
+                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z" />
+                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0z" />
+                      </svg>{" "}
+                      <br />
+                      &nbsp; <b>
+                        Use Comma(,) Seprator After Each Ingredients
+                      </b>{" "}
+                      <br />{" "}
+                      <b>USe Comma (,) Seprator After Each Line of Recpie</b>
+                    </div>
+                  </div>
                 </div>
                 <div className="form-flex-row mb-n4">
                   <div className="col">
@@ -629,36 +617,36 @@ const Dasboard = () => {
                   </div>
                 </div>
 
-                <CDBInput
-                  material
+                <textarea
+                  className="form-control"
                   placeholder={
                     errors.ingredients
                       ? errors.ingredients
-                      : "Step to make ingredients"
+                      : " ingredients (Use Comma After Each Ingredients)"
                   }
-                  type="text"
                   name="ingredients"
                   value={ingredients}
                   onChange={(e) => handleChange(e)}
                   required
                   style={{ borderColor: errors.name ? "red" : "" }}
                 />
+
                 {errors.ingredients && (
                   <div className="invalid-feedback">{errors.ingredients}</div>
                 )}
 
-                <CDBInput
-                  material
+                <textarea
+                  className="form-control"
                   placeholder={
                     errors.instructions ? errors.instructions : "Instructions"
                   }
-                  type="text"
                   name="instructions"
                   value={instructions}
                   onChange={(e) => handleChange(e)}
                   style={{ borderColor: errors.name ? "red" : "" }}
                   required
                 />
+
                 {errors.instructions && (
                   <div className="invalid-feedback">{errors.instructions}</div>
                 )}
@@ -680,27 +668,29 @@ const Dasboard = () => {
                 {errors.timeToCook && (
                   <div className="invalid-feedback">{errors.timeToCook}</div>
                 )}
-
+ 
+                      <a
+                        href="https://www.atatus.com/tools/image-to-url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Image Url Generator
+                      </a>{" "}
+                      <span className="text-danger">
+                        (Please Use this For Url Generation)
+                      </span>
                 <CDBInput
                   material
-                  placeholder="Picture"
-                  type="file"
+                  placeholder="Place Image  Url Here "
+                  type="text"
                   name="image"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={handleImageChange}
+                  value="image"
+                  onChange={(e) => handleChange(e)}
                 />
                 {errors.image && (
                   <div className="invalid-feedback">{errors.image}</div>
                 )}
-                {image && (
-                  <div>
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt="Recipe"
-                      style={{ width: "100px", height: "100px" }}
-                    />
-                  </div>
-                )}
+                
 
                 <CDBInput
                   material
@@ -1201,7 +1191,7 @@ const Dasboard = () => {
   const renderRecipesTable = () => {
     return (
       <>
-        <div className="row justify-content-center " id="recp">
+        <div className="row justify-content-center " style={{marginLeft:"10%",marginTop:"-75%",fontSize: "1.9vh" ,width:"80%"}}>
           <div className="container py-5">
             {userRecipes.length > 0 ? (
               <Table striped bordered hover>
@@ -1218,6 +1208,7 @@ const Dasboard = () => {
                   </tr>
                   <tr>
                     <th>Id</th>
+                    <th>Image</th>
 
                     <th>Name</th>
                     <th>Ingredients</th>
@@ -1229,6 +1220,13 @@ const Dasboard = () => {
                   {userRecipes.map((recipe) => (
                     <tr key={recipe._id}>
                       <td>{recipe._id}</td>
+                      <td>  <div className="d-flex justify-content-center mb-4">
+          <img
+            src={recipe.image}
+            className="rounded-circle "
+            alt="User Avatar"
+          />
+        </div></td>
                       <td>{recipe.name}</td>
                       <td>{recipe.ingredients}</td>
                       <td>{recipe.instructions}</td>
@@ -1256,8 +1254,8 @@ const Dasboard = () => {
     return (
       <div
         className="row justify-content"
-        id="recp"
-        style={{ marginLeft: "10%", width: "90%", fontSize: "1.9vh" }}
+        
+        style={{ marginLeft: "12%", width: "79%", fontSize: "1.9vh",marginTop:"-70%" }}
       >
         <Table striped bordered hover>
           <thead>
@@ -1324,7 +1322,7 @@ const Dasboard = () => {
     return (
       <>
         <div className="feedbackUsers">
-          <div className="row justify-content-center" id="fb">
+          <div className="row justify-content-center" style={{marginLeft:"10%",marginTop:"-55%",fontSize: "1.9vh" ,width:"90%"}}>
             <div className="container py-5">
               <Table striped bordered hover responsive className="table">
                 <thead className="thead-dark">
@@ -1339,6 +1337,7 @@ const Dasboard = () => {
                   </tr>
                   <tr>
                     <th>#</th>
+                    <th>id</th>
                     <th>Rating</th>
                     <th>Feedback</th>
                     <th>Email</th>
@@ -1350,6 +1349,7 @@ const Dasboard = () => {
                     feedback.email === userData.email ? (
                       <tr key={index}>
                         <td>{index + 1}</td>
+                        <td>{feedback.recipeId}</td>
                         <td>
                           <StarRating rating={feedback.rating} />
                         </td>
@@ -1491,11 +1491,10 @@ const Dasboard = () => {
         (ingredient) => ingredient._id !== ingredientId
       );
       setFilteredIngredients(updatedIngredients);
-
-      console.log("Ingredient deleted successfully");
+      toast.success("Ingredient deleted successfully", { autoClose: 500 });
     } catch (error) {
-      console.error("Error deleting ingredient:", error);
-      console.log("Failed to delete ingredient");
+      toast.error("Error deleting ingredient:", { autoClose: 500 });
+      toast.log("Failed to delete ingredient", { autoClose: 500 });
     }
   };
 

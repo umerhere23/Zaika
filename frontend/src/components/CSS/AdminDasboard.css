@@ -3,7 +3,7 @@
     font-family: 'Times New Roman', Times, serif;
 }
 .table {
-    width: 80%;
+    width: 100%;
     border-collapse: collapse;
     margin-bottom: 1rem;
     background-color: #fff;
@@ -130,4 +130,8 @@ CDBSidebar{
   margin-top: -50%;
 margin-left: 30%;
 width: 1000px;
+}
+#ingredientss{
+  margin-left: 58%;
+  margin-top: -56%;
 }

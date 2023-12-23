@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { Saveshippingdata } from '../../Service/api.js';
+import { Saveshippingdata,updateIngredientQuantity } from '../../Service/api.js';
 import {
   MDBContainer,
   MDBRow,
@@ -20,7 +20,7 @@ import Footer from '../footer';
 const BuyProduct = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
-  const { id, quantity, image, price, Packame, Recpie,Seller } = state;
+  const { id, quantity, image, price, Packame, Recpie,Seller,Quantity } = state;
   const [formFields, setFormFields] = useState({
     firstName: '',
     lastName: '',
@@ -49,22 +49,25 @@ const BuyProduct = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log(Quantity)
+   
     e.preventDefault();
     const isValid = validateForm();
-
     if (isValid) {
       try {
-        if (isValid) {
-           await Saveshippingdata(formFields);
+        await Saveshippingdata(formFields);
+        const quantityInt = parseInt(Quantity, 10);
+        const updatedQuantity = quantityInt - quantity;
+        await updateIngredientQuantity(id, updatedQuantity); 
+  
+        console.log(id, updatedQuantity);
 
-            toast.success('Payment successful!', {
-              autoClose: 500,
-              onClose: () => {
-                navigate('/Ecomerce');
-              },
-            });
-          }
-          
+        toast.success('Payment successful!', {
+          autoClose: 500,
+          onClose: () => {
+            navigate('/Ecomerce');
+          },
+        });
       } catch (error) {
         toast.error('An error occurred while processing your payment.');
         console.error('API error:', error);
@@ -292,7 +295,7 @@ const BuyProduct = () => {
   placeholder={
     errors.cvv
       ? errors.cvv
-      : "Enter expiration"
+      : "Enter CVV"
   }
 />
 

@@ -19,7 +19,7 @@ import {
 } from "mdb-react-ui-kit";
 
 const IngredientDetail = () => {
-  const { id } = useParams();
+  const { id,Quan } = useParams();
   const [quantity, setQuantity] = useState(1);
 
   const [filteredIngredients, setFilteredIngredients] = useState([]);
@@ -44,6 +44,7 @@ const IngredientDetail = () => {
   };
 
   const handleClick = (ingdetails) => {
+    console.log(ingdetails.totalProducts)
     if (quantity <= ingdetails.totalProducts) {
       navigate(`/buy/${ingdetails._id}`, {
         state: {
@@ -54,6 +55,7 @@ const IngredientDetail = () => {
           Packame: ingdetails.packName,
           Recpie: ingdetails.recipeName,
           Seller: ingdetails.seller,
+          Quantity:ingdetails.totalProducts
         },
       });
     } else {

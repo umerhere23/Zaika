@@ -13,6 +13,7 @@ import { fetchRecipes } from "../Service/api";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import "../components/CSS/Style.css";
+
 const Recipe = () => {
   const [recipedetails, setRecipeDetails] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,7 +22,7 @@ const Recipe = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+console.log(recipedetails)
   const fetchData = async () => {
     try {
       const result = await fetchRecipes();
@@ -52,6 +53,7 @@ const Recipe = () => {
         instructions: details.instructions,
         timeToCook: details.timeToCook,
         email: details.email,
+        Recpimage: details.image,
       },
     });
   };
@@ -148,11 +150,11 @@ const Recipe = () => {
                 onClick={() => handleRecipeClick(details)}
               >
                 <div
-                  className="card h-100 box"
-                  style={{ background: "#BDC7C5" }}
+                  className="card h-100 "
+                
                 >
                   <img
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcStB2b-YH3ev3TzntBN-p2g7B1sUYbNaW2GEw&usqp=CAU"
+                    src={details.image}
                     className="card-img-top"
                     alt="Laptop"
                   />

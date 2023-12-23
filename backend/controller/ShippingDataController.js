@@ -84,3 +84,11 @@ export const DeleteOrder = async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error', error: error.message });
   }
 };
+export const fetchShippingData = async (req, res) => {
+  try {
+    const allUsers = await ShippingData.find();
+
+    res.status(200).json(allUsers);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ message: "Failed to fetch Orders." });}}

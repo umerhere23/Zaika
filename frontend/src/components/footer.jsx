@@ -24,14 +24,12 @@ const Footer = () => {
               <li>
                 <a href="/home">Home</a>
               </li>
-              <li>
+              {/* <li>
                 <a href="#">Services</a>
-              </li>
+              </li> */}
+              
               <li>
-                <a href="#">Portfolio</a>
-              </li>
-              <li>
-                <a href="/MealPlanners">Contact</a>
+                <a href="/Mealplanner">Mealplanner</a>
               </li>
               <li>
                 <a href="/signup">Signup</a>
@@ -41,6 +39,9 @@ const Footer = () => {
               </li>
               <li>
                 <a href="/AdminLogin">AdminLogin</a>
+              </li>
+              <li>
+                <a href="aboutUS">AboutUs</a>
               </li>
             </ul>
           </div>

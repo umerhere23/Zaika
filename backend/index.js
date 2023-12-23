@@ -51,5 +51,7 @@ app.use('/blockUser', fetchUserData);
 app.use('/blockUser', fetchUserData);
 app.use('/meals', mealRoutes);
 app.use('/AddIngredients', addIngredient);
+app.use('/Delete', addIngredient);
 app.use('/saveshippingdata', Saveshippingdata);
 app.use('/complete', Saveshippingdata);
+app.use('/ingredients', addIngredient);

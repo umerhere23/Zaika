@@ -11,13 +11,12 @@ export const AddRecipe = async (req, res) => {
     UserName,
     email,
   } = req.body;
-  const imageString = image.toString('base64');
 
   const newRecipe = new RecipeModel({
     name: name,
     ingredients: ingredients,
     instructions: instructions,
-    image: imageString,
+    image: image,
     timeToCook: timeToCook,
     userName: UserName,
     email: email,

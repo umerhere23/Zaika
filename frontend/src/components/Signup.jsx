@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { addApplicant } from "../Service/api";
 import "./CSS/Signup.css";
 import Footer from "./footer";
+import { ToastContainer, toast } from "react-toastify";
 
 const AddApplicant = () => {
   const [applicantData, setApplicantData] = useState({
@@ -66,12 +67,22 @@ const AddApplicant = () => {
 
   const addDetails = async (e) => {
     e.preventDefault();
-
+  
     if (validateForm()) {
-      await addApplicant(applicantData);
-      setIsSubmitted(true);
+      try {
+        const response = await addApplicant(applicantData);
+        setIsSubmitted(true);
+        toast.success("Applicant added successfully", response.data,{ autoClose: 500 });
+      } catch (error) {
+        if (error.response.status === 400) {
+       toast.error("Email or username is already in use. Please use a different email or username.",{ autoClose: 500 });
+        } else {
+          alert("Failed to add applicant", error,{ autoClose: 500 });
+        }
+      }
     }
   };
+  
   return (
     <>
       <hr />
@@ -237,6 +248,8 @@ const AddApplicant = () => {
         <br></br>
       </div>
       <br></br>
+      <ToastContainer />
+
       <Footer />
     </>
   );

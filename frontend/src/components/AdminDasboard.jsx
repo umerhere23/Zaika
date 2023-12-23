@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useLocation } from "react-router-dom";
-import { CRow, CCol, CWidgetStatsB } from "@coreui/react";
+import { MdCheckCircle, MdDelete } from "react-icons/md";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTrash,
@@ -17,10 +18,11 @@ import {
   unblockUser,
   removeRecipe,
   fetchRecipes,
+  fetchAllorder
 } from "../Service/api";
 import Footer from "./footer";
 import "../components/CSS/AdminDasboard.css";
-import { fetchAllFeedbacks, removefeedback } from "../Service/api";
+import { fetchAllFeedbacks, removefeedback,deleteIngredient,AddIngredients,markOrderAsComplete,DeleteOrder } from "../Service/api";
 import StarRating from "../components/icons/stars.jsx";
 import { Table } from "react-bootstrap";
 import {
@@ -31,20 +33,31 @@ import {
   CDBSidebarMenuItem,
   CDBSidebarFooter,
 } from "cdbreact";
+import { MDBCard, MDBContainer, MDBCardBody, MDBInput } from "mdb-react-ui-kit";
 
 const AdminDasboard = () => {
   const location = useLocation();
   const userEmail = location.state?.userEmail;
   const [showSidebar, setShowSidebar] = useState(false);
   const [selectedTable, setSelectedTable] = useState("users");
+  const [filteredIngredients, setFilteredIngredients] = useState([]);
+  const [ingdetails, setingDetails] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   const [UserDetails, setUserDetails] = useState([]);
   const [allRecipes, setAllRecipes] = useState([]);
+  const [allIngredients, setAllIngredients] = useState([]);
 
   useEffect(() => {
     fetchDatas();
+    fetchIngredients(); 
   }, []);
-
+  useEffect(() => {
+    const filtered = ingdetails.filter(
+      (ingredient) => ingredient.seller.length>=0
+    );
+    setFilteredIngredients(filtered);
+  }, [ingdetails]);
   const fetchDatas = async () => {
     try {
       const usersResult = await fetchAllUsers();
@@ -65,10 +78,76 @@ const AdminDasboard = () => {
       console.error("Error:", error);
     }
   };
+  const fetchIngredients = async () => {
+    try {
+      const ingredientsResult = await AddIngredients();
+      setAllIngredients(ingredientsResult);
+    } catch (error) {
+      console.error("Error fetching ingredients:", error);
+      toast.error("Failed to fetch ingredients", { autoClose: 500 });
+    }
+  };
+
+  const handleDeleteIngredient = async (ingredientId) => {
+    try {
+      console.log(ingredientId);
+      await deleteIngredient(ingredientId);
+
+      const updatedIngredients = filteredIngredients.filter(
+        (ingredient) => ingredient._id !== ingredientId
+      );
+      setFilteredIngredients(updatedIngredients);
+      toast.success("Ingredient deleted successfully", { autoClose: 500 });
+
+    } catch (error) {
+      toast.error("Error deleting ingredient:", { autoClose: 500 });
+      toast.log("Failed to delete ingredient", { autoClose: 500 });
+    }
+  };
+  useEffect(() => {
+  {
+      fetchOrder();
+    }
+  }, []);
+
+  const fetchOrder = async () => {
+    try {
+      const result = await fetchAllorder();
+      setOrders(result);
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
   useEffect(() => {
     fetchData1();
   }, []);
+  const handleCompleteOrder = async (_id) => {
+    try {
+      const orderIndex = orders.findIndex((order) => order._id === _id);
 
+      if (orderIndex === -1) {
+        throw new Error(`Order with ID ${_id} not found`);
+      }
+
+      const newStatus = !orders[orderIndex].Completed;
+
+      await markOrderAsComplete({ _id, action: newStatus });
+
+      const updatedOrders = [...orders];
+      updatedOrders[orderIndex].Completed = newStatus;
+      setOrders(updatedOrders);
+
+      toast.success(
+        `Order ${
+          newStatus ? "completed" : "marked as incomplete"
+        } successfully`,
+        { autoClose: 500 }
+      );
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      toast.error("Failed to update order status", { autoClose: 500 });
+    }
+  };
   const handleRemoveFeedback = async (_id) => {
     try {
       await removefeedback(_id);
@@ -78,9 +157,9 @@ const AdminDasboard = () => {
       );
       setFeedbackDetails(updatedfeedback);
 
-      console.log("feedback removed successfully");
+      toast.success("feedback removed successfully",{autoClose:500});
     } catch (error) {
-      console.error("Error removing feedback:", error);
+      toast.error("Error removing feedback:", error);
     }
   };
   const handleDeleteAccount = async (_id) => {
@@ -124,28 +203,104 @@ const AdminDasboard = () => {
 
       toast.success("Recipe removed successfully", { autoClose: 500 });
     } catch (error) {
-      console.error("Error removing recipe:", error);
+      toast.error("Error removing recipe:", error);
     }
   };
-  const renderSelectedTable = () => {
-    switch (selectedTable) {
-      case "users":
-        return renderUsersTable();
-      case "recipes":
-        return renderRecipesTable();
-      case "feedback":
-        return renderFeedbackTable();
-      default:
-        return null;
+  const handleDeleteOrder = async (_id) => {
+    try {
+      const orderIndex = orders.findIndex((order) => order._id === _id);
+
+      if (orderIndex === -1) {
+        throw new Error(`Order with ID ${_id} not found`);
+      }
+
+      await DeleteOrder(_id);
+
+      const updatedOrders = orders.filter((order) => order._id !== _id);
+      setOrders(updatedOrders);
+
+      toast.success("Order removed successfully", { autoClose: 500 });
+    } catch (error) {
+      console.error("Error removing order:", error);
+      toast.error("Failed to remove order", { autoClose: 500 });
     }
   };
+const renderorders =()=>{
+  return(
+    <>
+     <div
+        className="row justify-content "
+       
+        style={{ width: "140%", fontSize: "1.9vh" ,marginTop:"-53%",marginLeft:"16%"}}
+      >
+        <Table striped bordered hover >
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th >Address</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Product</th>
+              <th>Product ID</th>
+              <th>Price</th>
+              <th>Complete Date</th>
+
+              <th>Complete</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <tr key={order.id}>
+                <td>{order.firstName}</td>
+                <td>{order.lastName}</td>
+                <td >{order.address}</td>
+                <td>{order.email}</td>
+                <td>{order.phone}</td>
+                <td>{order.Product}</td>
+                <td>{order.ProducdID}</td>
+                <td>{order.TotalPrice}</td>
+                <td>{new Date(order.lastUpdated).toLocaleString()}</td>
+
+                <td>
+                  <td>
+                    {order.Completed === false ? (
+                      <FontAwesomeIcon
+                        icon={faBan}
+                        className="text-danger"
+                        onClick={() => handleCompleteOrder(order._id)}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faCheckCircle}
+                        className="text-success"
+                        onClick={() => handleCompleteOrder(order._id)}
+                      />
+                    )}
+                  </td>
+                </td>
+                <td>
+                  <MdDelete
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleDeleteOrder(order._id)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    </>
+  )
+}
 
   const renderUsersTable = () => {
     return (
       <>
         <br />
-        <div className="tables">
-          <table className="table" id="recps">
+        <div className="tables " style={{marginLeft:"16%",marginTop:"-55%",width:"140%",fontSize: "1.9vh" }} >
+          <table className="table" >
             <thead>
               <th
                 scope="col"
@@ -209,6 +364,8 @@ const AdminDasboard = () => {
             </tbody>
           </table>
         </div>
+        <ToastContainer />
+
       </>
     );
   };
@@ -216,8 +373,9 @@ const AdminDasboard = () => {
   const renderRecipesTable = () => {
     return (
       <>
-        <div className="row ">
-          <table className="table " id="recps">
+      <br />
+        <div className="row  " style={{marginLeft:"16%",marginTop:"-55%",width:"140%",fontSize: "1.9vh" }} >
+          <table className="table "  >
             <thead>
               <th
                 scope="col"
@@ -229,7 +387,7 @@ const AdminDasboard = () => {
               </th>
               <tr>
                 <th scope="col">#</th>
-                <th scope="col">Id</th>
+                <th scope="col">Name</th>
                 <th scope="col">Username</th>
                 <th scope="col">Email</th>
                 <th scope="col">Ingredients</th>
@@ -242,7 +400,7 @@ const AdminDasboard = () => {
               {allRecipes.map((details, index) => (
                 <tr key={index}>
                   <td>{index + 1}</td>
-                  <td>{details._id}</td>
+                  <td>{details.name}</td>
                   <td>{details.userName}</td>
                   <td>{details.email}</td>
                   <td>{details.ingredients}</td>
@@ -267,9 +425,9 @@ const AdminDasboard = () => {
   const renderFeedbackTable = () => {
     return (
       <>
-        <div className="row fdb">
-          <div className="container py-5 ">
-            <Table striped bordered hover responsive className="table">
+        <div className="row fdb" style={{marginLeft:"30%",marginTop:"-55%",fontSize: "1.9vh" }} >
+          <div className="container p-3 ">
+            <Table striped bordered hover responsive className="table" style={{width:"90%"}}>
               <thead className="thead-dark">
                 <tr>
                   <th
@@ -317,16 +475,76 @@ const AdminDasboard = () => {
             </Table>
           </div>
         </div>
+        <ToastContainer />
+
       </>
     );
   };
-
+const renderIngredient =()=>{
+  return(
+    <>
+    <div className="container " id="ingredientss " style={{marginLeft:"30%",marginTop:"34%"}} >
+      <div className="row ingred" >
+      {allIngredients.map((ingredient, index) => (  
+         <div key={index} className="col-md-6 mb-3 ">       
+            <MDBCard>
+              <div className="card-body ">
+                <img src={ingredient.image} alt="" srcSet="" />
+                <hr />
+                <h5 className="card-title">
+                  Pack Name: {ingredient.packName}
+                </h5>
+                <h6 className="card-title" color="black">
+                  <b>Recipe Name:</b> {ingredient.recipeName}
+                </h6>
+                <button
+                  onClick={() => handleDeleteIngredient(ingredient._id)}
+                  className="btn btn-danger  "
+                >
+                  Delete
+                </button>
+                <hr />
+                <p className="card-text">
+                  <b>Quantity:</b> {ingredient.totalProducts}
+                  ,&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b>Price:</b> {ingredient.totalPrice}
+                  <br />
+                  <b>Seller:</b> {ingredient.seller}&nbsp;&nbsp;&nbsp;&nbsp;
+                  <b>Discount</b> {ingredient.discount}%
+                </p>
+                <b>Details:</b> {ingredient.details} <br />
+                <b>Product Id:</b> {ingredient._id}
+                {ingredient.ingredients.map(
+                  (nestedIngredient, nestedIndex) => (
+                    <div key={nestedIndex}>
+                      <p>
+                        <b>Ingredient:</b> {nestedIngredient.name}
+                      </p>
+                    </div>
+                  )
+                )}
+                <div className="d-flex justify-content-between">
+                  {/* <button onClick={() => onViewDetails(ingredient._id)} color="primary"  type="button" class="btn btn-primary">Details</button> */}
+                </div>
+              </div>
+            </MDBCard>
+          </div>
+        ))}
+      </div>
+    </div>
+  </>
+  );
+}
   return (
     <>
       <CDBSidebar
         className="CDBSidebar"
-        style={{ background: "#001827", height: "100vh" }}
-      >
+        style={{
+          background: "  #001827",
+          height: "110%",
+          maxHeight: "11900vh",
+          overflowY: "auto",
+        }}      >
         <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>
           Admin Dasbaord
         </CDBSidebarHeader>
@@ -334,7 +552,7 @@ const AdminDasboard = () => {
           <CDBSidebarMenu>
             <CDBSidebarMenuItem
               onClick={() => setSelectedTable("users")}
-              icon="th-large"
+              icon="users"
             >
               Users
             </CDBSidebarMenuItem>
@@ -351,6 +569,21 @@ const AdminDasboard = () => {
             >
               Feedback
             </CDBSidebarMenuItem>
+            <CDBSidebarMenuItem
+              onClick={() => setSelectedTable("Ingredient")}
+              icon="square"
+              iconType="solid"
+            >
+              Store Items
+            </CDBSidebarMenuItem>
+
+            <CDBSidebarMenuItem
+              onClick={() => setSelectedTable("Orders")}
+              icon="box"
+              iconType="solid"
+            >
+              Store Items
+            </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
         <hr />
@@ -359,12 +592,17 @@ const AdminDasboard = () => {
             <p>&copy; {new Date().getFullYear()} Zaika(The Recipie)</p>
           </div>
         </CDBSidebarFooter>
+        <hr />
       </CDBSidebar>
 
       <div style={{ padding: "20px" }} className="AdminContent">
         {selectedTable === "users" && renderUsersTable()}
         {selectedTable === "recipes" && renderRecipesTable()}
         {selectedTable === "feedback" && renderFeedbackTable()}
+        {selectedTable === "Ingredient" && renderIngredient()}
+        {selectedTable === "Orders" && renderorders()}
+
+
       </div>
 
       <ToastContainer />
