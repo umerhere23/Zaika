@@ -92,7 +92,35 @@ const Dasboard = () => {
 
   const [feedbackdetails, setFeedbackDetails] = useState([]);
   const [selectedTable, setSelectedTable] = useState("users");
-
+  const MEALS_DATA = {
+    Breakfast: [
+      { name: "Oatmeal", calories: "150" },
+      { name: "Pancakes", calories: "300" },
+      { name: "Scrambled Eggs", calories: "200" },
+      { name: "Greek Yogurt with Honey", calories: "180" },
+      { name: "Avocado Toast", calories: "250" },
+      { name: "Smoothie Bowl", calories: "220" },
+      { name: "French Toast", calories: "350" },
+    ],
+    Lunch: [
+      { name: "Salad", calories: "200" },
+      { name: "Burger", calories: "500" },
+      { name: "Sushi", calories: "300" },
+      { name: "Grilled Chicken Sandwich", calories: "400" },
+      { name: "Veggie Wrap", calories: "350" },
+      { name: "Pasta Salad", calories: "330" },
+      { name: "Quinoa Bowl", calories: "380" },
+    ],
+    Dinner: [
+      { name: "Pasta", calories: "400" },
+      { name: "Steak", calories: "600" },
+      { name: "Grilled Salmon", calories: "450" },
+      { name: "Vegetable Stir Fry", calories: "350" },
+      { name: "Chicken Curry", calories: "500" },
+      { name: "Beef Tacos", calories: "480" },
+      { name: "Stuffed Bell Peppers", calories: "410" },
+    ],
+  };
   const [formData, setFormData] = useState({
     recipeId: "",
     recipeName: "", // New field
@@ -152,7 +180,10 @@ const Dasboard = () => {
       console.error("Error fetching meals:", error);
     }
   };
-
+  const [mealOptions, setMealOptions] = useState([]);
+  useEffect(() => {
+    setMealOptions(MEALS_DATA[mealType]);
+  }, [mealType]);
   useEffect(() => {
     fetchAndSetMeals();
   }, [userName]);
@@ -1430,28 +1461,31 @@ const Dasboard = () => {
                 <Modal.Title>{EditMode ? "Edit Meal" : "Add Meal"}</Modal.Title>
               </Modal.Header>
               <Modal.Body>
-                <Form>
-                  <Form.Group controlId="formMealType">
-                    <Form.Label>Meal Type</Form.Label>
-                    <Form.Control
-                      as="select"
-                      value={mealType}
-                      onChange={(e) => setMealType(e.target.value)}
-                    >
-                      <option>Breakfast</option>
-                      <option>Lunch</option>
-                      <option>Dinner</option>
-                    </Form.Control>
-                  </Form.Group>
-                  <Form.Group controlId="formMealDescription">
-                    <Form.Label>Meal Description</Form.Label>
-                    <Form.Control
-                      type="text"
-                      value={mealDescription}
-                      onChange={(e) => setMealDescription(e.target.value)}
-                    />
-                  </Form.Group>
-                </Form>
+              <Form>
+      <Form.Group controlId="formMealType">
+        <Form.Label>Meal Type</Form.Label>
+        <Form.Control
+          as="select"
+          value={mealType}
+          onChange={(e) => setMealType(e.target.value)}
+        >
+          <option>Breakfast</option>
+          <option>Lunch</option>
+          <option>Dinner</option>
+        </Form.Control>
+      </Form.Group>
+
+      <Form.Group controlId="formMealDescription">
+        <Form.Label>Meal Description</Form.Label>
+        <Form.Control as="select">
+          {mealOptions.map((meal, index) => (
+            <option key={index}>
+              {meal.name} - {meal.calories} Calories
+            </option>
+          ))}
+        </Form.Control>
+      </Form.Group>
+    </Form>
               </Modal.Body>
               <Modal.Footer>
                 <Button variant="secondary" onClick={() => setShowModal(false)}>
