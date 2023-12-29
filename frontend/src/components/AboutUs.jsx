@@ -100,7 +100,7 @@ const Aboutus = () => {
           <div className="d-flex flex-column align-items-center team-member">
             <Image src={noni} alt="John" fluid />
             <div className="text-center">
-              <h2>Adnan</h2>
+              <h2>Adnan Noni</h2>
               <p className="title">Designer</p>
               <p>SP20-BSE-037</p>
               <p>noni@gmail.com</p>

@@ -49,7 +49,7 @@ const Footer = () => {
             <h5>Contact Us</h5>
             <address>
               <p>Cui atd</p>
-              <p>Abbottabad, Pkaistan</p>
+              <p>Abbottabad, Pakistan</p>
               <p>Email: omerjh5004@gamil.com</p>
             </address>
           </div>

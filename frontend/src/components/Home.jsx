@@ -20,7 +20,7 @@ const Home = () => {
             <h2>To The </h2>
             <h3>The ZAIKA !</h3>
             <h4>
-              Aloso Providing Ingredients <br /> Grab Your Discount &nbsp;
+              Also Providing Ingredients <br /> Grab Your Discount &nbsp;
               <span class="code">NewUser@</span>
             </h4>
             <p>
