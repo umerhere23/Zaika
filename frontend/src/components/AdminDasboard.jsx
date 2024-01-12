@@ -345,7 +345,6 @@ const renderorders =()=>{
           </tbody>
         </Table>
       </div>
-
       
     </>
   )
@@ -668,7 +667,7 @@ const renderIngredient =()=>{
               icon="box"
               iconType="solid"
             >
-              Store Items
+              Orders  Record
             </CDBSidebarMenuItem>
           </CDBSidebarMenu>
         </CDBSidebarContent>
