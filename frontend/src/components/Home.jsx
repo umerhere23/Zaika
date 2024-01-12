@@ -11,6 +11,8 @@ import "./img/style.css";
 import Footer from "./footer";
 
 const Home = () => {
+
+  
   return (
     <>
       <div class="wrapper">
@@ -108,7 +110,7 @@ const Home = () => {
       </div>
       <br />
       <br />
-
+     
       <Footer />
     </>
   );

@@ -86,3 +86,11 @@ width: 50%;
   margin-top: -65%;
   width: 50%;
 }
+.recpimage{
+  width: 60%;
+
+  gap:5px;
+  object-fit: cover;
+  border-radius: 15px;
+  transition: all ease 0.3s 100%;
+}

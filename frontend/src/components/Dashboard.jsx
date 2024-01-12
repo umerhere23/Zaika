@@ -69,6 +69,22 @@ import {
 const localizer = momentLocalizer(moment);
 
 const Dasboard = () => {
+  const [imageLink, setImageLink] = useState(null);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          setFormData({ ...formData, image: reader.result });
+        };
+      } catch (error) {
+        console.error("Error reading image:", error);
+      }
+    }
+  };
   const location = useLocation();
   const [filteredIngredients, setFilteredIngredients] = useState([]);
 
@@ -247,9 +263,27 @@ const Dasboard = () => {
     UserName,
     email,
   } = recipedata;
-  const handleChange = (e) => {
-    setRecipe({ ...recipedata, [e.target.name]: e.target.value });
+  const handleChange = async (e) => {
+    if (e.target.type === 'file') {
+      const selectedFile = e.target.files[0];
+  
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const dataUrl = event.target.result;
+  
+          setRecipe({ ...recipedata, [e.target.name]: dataUrl });
+  
+          setImageLink(dataUrl);
+        };
+        reader.readAsDataURL(selectedFile);
+      }
+    } else {
+      setRecipe({ ...recipedata, [e.target.name]: e.target.value });
+    }
   };
+  
+
 
   const fetchData1 = async () => {
     try {
@@ -285,7 +319,7 @@ const Dasboard = () => {
           name: "",
           ingredients: "",
           instructions: "",
-          image: "",
+          imageLink: imageLink,
           timeToCook: "",
           UserName: Uname,
           email: userEmail || "",
@@ -700,17 +734,8 @@ const Dasboard = () => {
                   <div className="invalid-feedback">{errors.timeToCook}</div>
                 )}
  
-                      <a
-                        href="https://www.atatus.com/tools/image-to-url"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Image Url Generator
-                      </a>{" "}
-                      <span className="text-danger">
-                        (Please Use this For Url Generation)
-                      </span>
-                <CDBInput
+                    
+                {/* <CDBInput
                   material
                   placeholder="Place Image  Url Here "
                   type="text"
@@ -721,7 +746,22 @@ const Dasboard = () => {
                 {errors.image && (
                   <div className="invalid-feedback">{errors.image}</div>
                 )}
-                
+                 */}
+               <div>
+      <CDBInput
+        material
+        type="file"
+        accept="image/*"
+        name="image"
+        onChange={(e) => handleChange(e)}
+        />
+      {imageLink && (
+        <div>
+        
+          <img src={imageLink} alt="Uploaded" className="recpimage" />
+        </div>
+      )}
+    </div>
 
                 <CDBInput
                   material
@@ -776,7 +816,7 @@ const Dasboard = () => {
             className="row justify-content-center "
             style={{ marginTop: "-88%" }}
           >
-            <div className="col-md-6">
+            <div className="col-md-8">
               <div className="" style={{ width: "100%" }}>
                 <div className="card-header text-center ">
                   <h5>
@@ -784,8 +824,8 @@ const Dasboard = () => {
                   </h5>
                   <hr />
                 </div>
-                <div className="card-body">
-                  <form>
+                <div className="card-body" >
+                  <form >
                     <div className="mb-3 ">
                       <label htmlFor="recipeId" className="form-label">
                         Recipe ID
@@ -794,6 +834,7 @@ const Dasboard = () => {
                         type="text"
                         className="form-control"
                         id="recipeId"
+                        style={{height:"40px"}}
                         value={formData.recipeId}
                         onChange={(e) =>
                           setFormData({ ...formData, recipeId: e.target.value })
@@ -810,6 +851,8 @@ const Dasboard = () => {
                         className="form-control"
                         id="recipeName"
                         value={formData.recipeName}
+                        style={{height:"40px"}}
+
                         onChange={(e) =>
                           setFormData({
                             ...formData,
@@ -825,6 +868,8 @@ const Dasboard = () => {
                       </label>
                       <input
                         type="text"
+                        style={{height:"40px"}}
+
                         className="form-control"
                         id="packName"
                         value={formData.packName}
@@ -839,6 +884,8 @@ const Dasboard = () => {
                         Discount
                       </label>
                       <input
+                                              style={{height:"40px"}}
+
                         type="number"
                         className="form-control"
                         id="discount"
@@ -850,8 +897,8 @@ const Dasboard = () => {
                       />
                     </div>
                     {formData.ingredients.map((ingredient, index) => (
-                      <div className="row mb-3" key={index}>
-                        <div className="col">
+                      <div className="row mb-3" key={index} >
+                        <div className="col" >
                           <label
                             htmlFor={`ingredientName${index}`}
                             className="form-label"
@@ -866,6 +913,7 @@ const Dasboard = () => {
                             value={ingredient.name}
                             onChange={(e) => handleInputChange(e, index)}
                             required
+                            
                           />
                         </div>
                         <div className="col">
@@ -919,6 +967,7 @@ const Dasboard = () => {
                       type="button"
                       className="btn btn-success"
                       onClick={handleAddIngredient}
+                      
                     >
                       Add Another Ingredient
                     </button>
@@ -938,6 +987,8 @@ const Dasboard = () => {
                           })
                         }
                         required
+                        style={{height:"40px"}}
+
                       />
                     </div>
                     <div className="mb-3">
@@ -947,7 +998,7 @@ const Dasboard = () => {
                       <textarea
                         className="form-control"
                         id="details"
-                        style={{ height: "100px" }}
+                        style={{ height: "70px" }}
                         value={formData.details}
                         onChange={(e) =>
                           setFormData({ ...formData, details: e.target.value })
@@ -961,16 +1012,18 @@ const Dasboard = () => {
                       </label>
                       <input
                         type="text"
-                        className="form-control"
+                        className="form-control "
                         id="seller"
                         value={formData.seller}
                         onChange={(e) =>
                           setFormData({ ...formData, seller: e.target.value })
                         }
-                        required
+                        disabled
+                        style={{height:"30px"}}
+
                       />
                     </div>
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                       <label htmlFor="image" className="form-label">
                         Image URL:
                       </label>
@@ -985,7 +1038,7 @@ const Dasboard = () => {
                         (Please Use this For Url Generation)
                       </span>
                       <input
-                        type="text"
+                        type="file"
                         className="form-control"
                         id="image"
                         name="image"
@@ -995,7 +1048,27 @@ const Dasboard = () => {
                         }
                         required
                       />
-                    </div>
+                    </div> */}
+
+<div className="mb-3">
+        <label htmlFor="image" className="form-label">
+          Image URL:
+        </label>
+        <input
+          type="file"
+          className="form-control"
+          id="image"
+          name="image"
+          onChange={handleImageChange}
+          accept="image/*" // Allow only image files
+          required
+        />
+        {formData.image && (
+          <div>
+            <img src={formData.image} alt="" srcset="" />
+          </div>
+        )}
+      </div>
                     <button
                       type="button"
                       className="btn btn-primary"
@@ -1281,6 +1354,7 @@ const Dasboard = () => {
       </>
     );
   };
+  
   const Showorders = () => {
     return (
       <div
@@ -1442,12 +1516,7 @@ const Dasboard = () => {
                     >
                       Delete
                     </Button>
-                    <Button
-                      variant="info"
-                      onClick={() => handleEditMeal(event)}
-                    >
-                      Edit
-                    </Button>
+                  
                   </div>
                 ),
                 timeSlotWrapper: ({ children }) => (
