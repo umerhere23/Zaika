@@ -21,6 +21,7 @@ export const getApplicant = async () => {
 }
 
 
+
 export const onAddRecipe = async (recipedata) => {
   try {
     const response = await axios.post(`${baseUrl}/AddRecipe`, recipedata);
